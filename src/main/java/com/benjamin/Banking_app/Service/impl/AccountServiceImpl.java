@@ -8,6 +8,9 @@ import com.benjamin.Banking_app.Repository.AccountRepo;
 import com.benjamin.Banking_app.Service.AccountService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -44,5 +47,35 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(total);
         Account savedAccount = accountRepo.save(account);
         return AccountMapper.MapToAccountDto(savedAccount);
+    }
+    @Override
+    public AccountDto withdraw(Long id, double amount) {
+
+        Account account = accountRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("account does not exist"));
+
+        if(amount > account.getBalance())
+            throw new RuntimeException("insufficient funds brokie");
+
+        double total = account.getBalance() - amount;
+        account.setBalance(total);
+        Account savedAccount = accountRepo.save(account);
+
+        return AccountMapper.MapToAccountDto(savedAccount);
+    }
+
+    @Override
+    public List<AccountDto> getAllAccounts() {
+        List<Account> accounts = accountRepo.findAll();
+        return accounts.stream().map((account) -> AccountMapper.MapToAccountDto(account)).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAccount(Long id) {
+        Account account = accountRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("account does not exist"));
+
+        accountRepo.deleteById(id);
     }
 }
