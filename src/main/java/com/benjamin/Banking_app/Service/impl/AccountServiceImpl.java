@@ -14,33 +14,30 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountRepo accountRepo; // create a dependency of AccountRepo class
+    private final AccountRepo accountRepo;
 
-    //we don't need @AutoWired because if spring finds a single constructor in our spring bean,
-    // spring will automatically inject the bean for us.
     public AccountServiceImpl(AccountRepo accountRepo) {
         this.accountRepo = accountRepo;
     }
 
-    @Override //we need to convert accountDto into account jpa then we'll save that account jpa into a db.
+    @Override
     public AccountDto createAccount(AccountDto accountDto) {
-        Account account = AccountMapper.MapToAccount(accountDto); // that why this method is static
-        Account savedAccount = accountRepo.save(account); //saving the account
-        return AccountMapper.MapToAccountDto(savedAccount);//return dto because entity has sensitive information
+        Account account = AccountMapper.MapToAccount(accountDto);
+        Account savedAccount = accountRepo.save(account);
+        return AccountMapper.MapToAccountDto(savedAccount);
     }
 
     @Override
     public AccountDto getAccountById(Long id) {
-         Account acc = accountRepo.findById(id)
-         .orElseThrow(() -> new RuntimeException("account does not exist"));
-         return AccountMapper.MapToAccountDto(acc);
+        Account acc = accountRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("account does not exist"));
+        return AccountMapper.MapToAccountDto(acc);
     }
 
     @Override
     public AccountDto deposit(Long id, double amount) {
-        //first check if the id given does exist as an account
-        Account account = accountRepo.findById(id).get();
-                //.orElseThrow(() -> new RuntimeException("account does not exist"));
+        Account account = accountRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("account does not exist"));
 
         //update the balance
         double total = account.getBalance() + amount;
@@ -48,13 +45,14 @@ public class AccountServiceImpl implements AccountService {
         Account savedAccount = accountRepo.save(account);
         return AccountMapper.MapToAccountDto(savedAccount);
     }
+
     @Override
     public AccountDto withdraw(Long id, double amount) {
 
         Account account = accountRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("account does not exist"));
 
-        if(amount > account.getBalance())
+        if (amount > account.getBalance())
             throw new RuntimeException("insufficient funds brokie");
 
         double total = account.getBalance() - amount;
@@ -67,8 +65,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDto> getAllAccounts() {
         List<Account> accounts = accountRepo.findAll();
-        return accounts.stream().map((account) -> AccountMapper.MapToAccountDto(account)).
-                collect(Collectors.toList());
+        return accounts.stream().map(AccountMapper::MapToAccountDto)
+                        .collect(Collectors.toList());
     }
 
     @Override
@@ -79,3 +77,4 @@ public class AccountServiceImpl implements AccountService {
         accountRepo.deleteById(id);
     }
 }
+

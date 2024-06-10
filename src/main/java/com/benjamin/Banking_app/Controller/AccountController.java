@@ -5,16 +5,15 @@ import com.benjamin.Banking_app.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("/api")
+@Controller
 public class AccountController {
 
-    //firstly, create a dependency
     private AccountService accountService;
 
     public AccountController(AccountService accountService) {
@@ -24,23 +23,18 @@ public class AccountController {
     @Autowired
     AccountRepo accountRepo;
 
-    //create a RESTAPI
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto accountDto) {
         return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
     }
 
-    //a get by id api
-    @GetMapping("/{id}")
+    @GetMapping("user/{id}")
     public ResponseEntity<AccountDto> getAccountById(@PathVariable Long id) {
         AccountDto accountDto = accountService.getAccountById(id);
         return ResponseEntity.ok(accountDto);
     }
 
-    //deposit api
-
-
-    @PutMapping("/{id}/deposit")
+    @PutMapping("user/{id}/deposit")
     public ResponseEntity<AccountDto> deposit(@PathVariable Long id,
                                               @RequestBody Map<String, Double> request ) {
         Double amount = request.get("amount");
@@ -48,8 +42,7 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    //withdraw
-    @PutMapping("{id}/withdraw")
+    @PutMapping("user/{id}/withdraw")
     public ResponseEntity<AccountDto> withdraw(@PathVariable Long id,
                                                @RequestBody Map<String, Double> request) {
         double amount = request.get("amount");
@@ -57,18 +50,25 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    // Get All Accounts REST API
-    @GetMapping("/get")
+    @GetMapping("get")
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
-
-    //delete REST API
-    @DeleteMapping("{id}")
+    @DeleteMapping("admin/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id){
         accountService.deleteAccount(id);
         return ResponseEntity.ok("account gone forever");
+    }
+
+    @GetMapping("/login")
+    public String handleLogin(){
+        return "login";
+    }
+
+    @GetMapping("/home")
+    public String usercall(){
+        return "home";
     }
 }
 
