@@ -1,4 +1,4 @@
-package com.benjamin.Banking_app.AccountDTO;
+package com.benjamin.Banking_app.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

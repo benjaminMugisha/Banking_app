@@ -1,7 +1,7 @@
 package com.benjamin.Banking_app.Mapper;
 
 
-import com.benjamin.Banking_app.AccountDTO.AccountDto;
+import com.benjamin.Banking_app.Dto.AccountDto;
 import com.benjamin.Banking_app.Entity.Account;
 
 public class AccountMapper {

@@ -1,5 +1,6 @@
 package com.benjamin.Banking_app.Controller;
-import com.benjamin.Banking_app.AccountDTO.AccountDto;
+import com.benjamin.Banking_app.Dto.AccountDto;
+import com.benjamin.Banking_app.Dto.TransferRequest;
 import com.benjamin.Banking_app.Repository.AccountRepo;
 import com.benjamin.Banking_app.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,12 @@ public class AccountController {
         double amount = request.get("amount");
         AccountDto accountDto = accountService.withdraw(id, amount);
         return ResponseEntity.ok(accountDto);
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transfer(@RequestBody TransferRequest transferRequest) {
+        accountService.transfer(transferRequest);
+        return ResponseEntity.ok("Transfer successful");
     }
 
     @GetMapping("get")

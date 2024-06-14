@@ -1,12 +1,14 @@
 package com.benjamin.Banking_app.Service.impl;
 
 
-import com.benjamin.Banking_app.AccountDTO.AccountDto;
+import com.benjamin.Banking_app.Dto.AccountDto;
+import com.benjamin.Banking_app.Dto.TransferRequest;
 import com.benjamin.Banking_app.Entity.Account;
 import com.benjamin.Banking_app.Mapper.AccountMapper;
 import com.benjamin.Banking_app.Repository.AccountRepo;
 import com.benjamin.Banking_app.Service.AccountService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +46,27 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(total);
         Account savedAccount = accountRepo.save(account);
         return AccountMapper.MapToAccountDto(savedAccount);
+    }
+
+    @Transactional
+    public void transfer(TransferRequest transferRequest) {
+        // Retrieve accounts
+        Account fromAccount = accountRepo.findById(transferRequest.getFromAccountId())
+                .orElseThrow(() -> new RuntimeException("From account not found"));
+        Account toAccount = accountRepo.findById(transferRequest.getToAccountId())
+                .orElseThrow(() -> new RuntimeException("To account not found"));
+
+        // Perform transfer logic
+        if (fromAccount.getBalance() < transferRequest.getAmount()) {
+            throw new RuntimeException("Insufficient balance");
+        }
+
+        fromAccount.setBalance(fromAccount.getBalance() - transferRequest.getAmount());
+        toAccount.setBalance(toAccount.getBalance() + transferRequest.getAmount());
+
+        // Save updated accounts
+        accountRepo.save(fromAccount);
+        accountRepo.save(toAccount);
     }
 
     @Override
