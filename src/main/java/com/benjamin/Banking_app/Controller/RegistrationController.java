@@ -20,7 +20,7 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register/user")
+    @PostMapping("/register/users")
     public MyUser createUser(@RequestBody MyUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return myUserRepository.save(user);

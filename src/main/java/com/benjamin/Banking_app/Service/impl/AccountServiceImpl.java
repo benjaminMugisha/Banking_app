@@ -41,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("account does not exist"));
 
-        //update the balance
         double total = account.getBalance() + amount;
         account.setBalance(total);
         Account savedAccount = accountRepo.save(account);
@@ -50,13 +49,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     public void transfer(TransferRequest transferRequest) {
-        // Retrieve accounts
         Account fromAccount = accountRepo.findById(transferRequest.getFromAccountId())
                 .orElseThrow(() -> new RuntimeException("From account not found"));
         Account toAccount = accountRepo.findById(transferRequest.getToAccountId())
                 .orElseThrow(() -> new RuntimeException("To account not found"));
 
-        // Perform transfer logic
         if (fromAccount.getBalance() < transferRequest.getAmount()) {
             throw new RuntimeException("Insufficient balance");
         }
@@ -64,7 +61,6 @@ public class AccountServiceImpl implements AccountService {
         fromAccount.setBalance(fromAccount.getBalance() - transferRequest.getAmount());
         toAccount.setBalance(toAccount.getBalance() + transferRequest.getAmount());
 
-        // Save updated accounts
         accountRepo.save(fromAccount);
         accountRepo.save(toAccount);
     }

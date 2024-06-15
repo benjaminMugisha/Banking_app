@@ -57,7 +57,7 @@ public class AccountController {
         return ResponseEntity.ok("Transfer successful");
     }
 
-    @GetMapping("get")
+    @GetMapping("admin/get")
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
