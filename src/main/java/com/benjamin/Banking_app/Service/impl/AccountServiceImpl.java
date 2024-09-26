@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new RuntimeException("account does not exist"));
 
         if (amount > account.getBalance())
-            throw new RuntimeException("insufficient funds brokie");
+            throw new RuntimeException("insufficient funds");
 
         double total = account.getBalance() - amount;
         account.setBalance(total);
