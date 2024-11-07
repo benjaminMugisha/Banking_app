@@ -1,7 +1,9 @@
 package com.benjamin.Banking_app.Controller;
 import com.benjamin.Banking_app.Dto.AccountDto;
 import com.benjamin.Banking_app.Dto.TransferRequest;
+import com.benjamin.Banking_app.Entity.Transaction;
 import com.benjamin.Banking_app.Repository.AccountRepo;
+import com.benjamin.Banking_app.Repository.TransactionRepository;
 import com.benjamin.Banking_app.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +19,11 @@ import java.util.Map;
 public class AccountController {
 
     private AccountService accountService;
+    private final TransactionRepository transactionRepository;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, TransactionRepository transactionRepository) {
         this.accountService = accountService;
+        this.transactionRepository = transactionRepository;
     }
 
     @Autowired
@@ -29,7 +34,7 @@ public class AccountController {
         return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<AccountDto> getAccountById(@PathVariable Long id) {
         AccountDto accountDto = accountService.getAccountById(id);
         return ResponseEntity.ok(accountDto);
@@ -37,7 +42,7 @@ public class AccountController {
 
     @PutMapping("{id}/deposit")
     public ResponseEntity<AccountDto> deposit(@PathVariable Long id,
-                                              @RequestBody Map<String, Double> request ) {
+                                              @RequestBody Map<String, Double> request) {
         Double amount = request.get("amount");
         AccountDto accountDto = accountService.deposit(id, amount);
         return ResponseEntity.ok(accountDto);
@@ -57,40 +62,24 @@ public class AccountController {
         return ResponseEntity.ok("Transfer successful");
     }
 
-    @GetMapping("get")
+    @GetMapping("accounts")
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
+
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
-        return ResponseEntity.ok("account gone forever");
+        return ResponseEntity.ok("account succesfully deleted");
     }
 
-    @GetMapping("/login")
-    public String handleLogin(){
-        return "login";
-    }
-
-    @GetMapping("/home")
-    public String usercall(){
-        return "home";
+    @GetMapping("/{accountId}/transactions")
+    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable Long accountId) {
+        List<Transaction> transactions = transactionRepository.findByAccountId(accountId);
+        if (transactions.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(transactions);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

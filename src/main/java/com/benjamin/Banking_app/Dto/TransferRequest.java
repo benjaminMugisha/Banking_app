@@ -8,5 +8,6 @@ import lombok.Setter;
 public class TransferRequest {
     private Long fromAccountId;
     private Long toAccountId;
-    private Long amount;
+    private Double amount;
+
 }
