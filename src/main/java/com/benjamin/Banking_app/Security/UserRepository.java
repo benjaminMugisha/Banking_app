@@ -1,10 +1,11 @@
-package com.benjamin.Banking_app.Repository;
+package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.Entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<Users, Integer> {
-    Users findByUsername(String username);
+    Optional<Users> findByEmail(String email);
 }

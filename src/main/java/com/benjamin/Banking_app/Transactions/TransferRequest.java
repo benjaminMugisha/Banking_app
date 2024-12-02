@@ -1,4 +1,4 @@
-package com.benjamin.Banking_app.Dto;
+package com.benjamin.Banking_app.Transactions;
 
 import lombok.Getter;
 import lombok.Setter;

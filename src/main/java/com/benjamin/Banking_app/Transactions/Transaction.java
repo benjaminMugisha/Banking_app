@@ -1,5 +1,6 @@
-package com.benjamin.Banking_app.Entity;
+package com.benjamin.Banking_app.Transactions;
 
+import com.benjamin.Banking_app.Accounts.Account;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,11 +19,8 @@ public class Transaction {
     private Account account;
 
     private String type;
-
     private Double amount;
-
     private LocalDateTime timestamp;
-
     private String description;
 
     // Optional fields for transfers

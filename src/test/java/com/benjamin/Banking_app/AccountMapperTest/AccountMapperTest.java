@@ -2,9 +2,9 @@ package com.benjamin.Banking_app.AccountMapperTest;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.benjamin.Banking_app.Dto.AccountDto;
-import com.benjamin.Banking_app.Entity.Account;
-import com.benjamin.Banking_app.Mapper.AccountMapper;
+import com.benjamin.Banking_app.Accounts.AccountDto;
+import com.benjamin.Banking_app.Accounts.Account;
+import com.benjamin.Banking_app.Accounts.AccountMapper;
 import org.junit.jupiter.api.Test;
 
     public class AccountMapperTest {

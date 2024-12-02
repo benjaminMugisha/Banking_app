@@ -1,8 +1,4 @@
-package com.benjamin.Banking_app.Mapper;
-
-
-import com.benjamin.Banking_app.Dto.AccountDto;
-import com.benjamin.Banking_app.Entity.Account;
+package com.benjamin.Banking_app.Accounts;
 
 public class AccountMapper {
     public static Account MapToAccount(AccountDto accountDto){

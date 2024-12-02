@@ -1,4 +1,4 @@
-package com.benjamin.Banking_app.Entity;
+package com.benjamin.Banking_app.Accounts;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
