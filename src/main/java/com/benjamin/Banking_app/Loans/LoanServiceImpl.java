@@ -2,8 +2,12 @@ package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Exception.EntityNotFoundException;
+import com.benjamin.Banking_app.Exception.InsufficientFundsException;
 import com.benjamin.Banking_app.Transactions.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,9 +20,11 @@ public class LoanServiceImpl implements LoanService{
     private final LoanRepository loanRepository;
     private final AccountRepository accountRepository;
     private final TransactionService transactionService;
+    private final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
 
     @Override
     public LoanResponse applyForLoan(LoanRequest request) {
+        logger.info("loan application initiated");
         long accountId = request.getAccountId();
         double income = request.getIncome(); //yearly income
         double principal = request.getPrincipal();
@@ -27,10 +33,11 @@ public class LoanServiceImpl implements LoanService{
         double yearlyPayment = monthlyPayment * 12;
 
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new EntityNotFoundException( "account with id: " + accountId + " not found"));
 
         // Check if the loan is affordable by checking if Debt-to-Income (DTI) ratio exceeds 40%
         if (!isLoanAffordable(income, yearlyPayment, accountId)) {
+            logger.info("loan denied due to high dti");
             return new LoanResponse("Loan denied due to high debt-to-income ratio", null);
         }
 
@@ -56,6 +63,7 @@ public class LoanServiceImpl implements LoanService{
                 "LOAN ",
                 loan.getRemainingBalance(),
                 "loan created. the initial amount is: " + principal);
+        logger.info(" loan: {} created successfully",loan.getLoanId());
         return new LoanResponse("loan accepted: " , loan);
     }
 
@@ -66,8 +74,10 @@ public class LoanServiceImpl implements LoanService{
 
     @Override
     public Loan getLoanByLoanId(long loanId){
-        return loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("loan not found"));
+        logger.info("searching for loan: {}", loanId);
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
+        return loan;
     }
 
     //all loans including both active and fully repaid loans.
@@ -75,12 +85,12 @@ public class LoanServiceImpl implements LoanService{
     public List<Loan> getLoansByAccountId(long accountId) {
         return loanRepository.findByAccountId(accountId);
     }
+
     //repay the whole loan early
     @Override
     public LoanResponse repayLoanEarly(Long loanId, double paymentAmount) {
-        //List<Loan> activeLoan = loanRepository.findByAccountIdAndRemainingBalanceGreaterThan(accountId, 0);
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Loan not found"));
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
 
         double remainingBalance = loan.getRemainingBalance();
         if (paymentAmount < remainingBalance) {
@@ -105,13 +115,12 @@ public class LoanServiceImpl implements LoanService{
                 0,
                 "Loan repaid early with a penalty of " + penalty
         );
-
+        logger.info("loan: {} is fully repaid", loan.getLoanId());
         return new LoanResponse("Loan repaid early successfully, penalty applied: " + penalty, loan);
     }
 
     @Override
-    public void processMonthlyRepayments() { //YES
-
+    public void processMonthlyRepayments() {
         List<Loan> activeLoans = loanRepository.findByRemainingBalanceGreaterThan(0.0); // get all active loans
 
         for (Loan loan : activeLoans) {
@@ -141,7 +150,7 @@ public class LoanServiceImpl implements LoanService{
                         "Monthly repayment for loan ID: " + loan.getLoanId());
             } else {
                 // Optional: Handle insufficient funds (e.g., send a warning)
-                System.out.println("Insufficient funds for account ID: " + account.getId());
+                throw new InsufficientFundsException("insufficient funds to repay this month");
             }
         }
     }
@@ -150,11 +159,11 @@ public class LoanServiceImpl implements LoanService{
     public double calculateMonthlyInstallment(double principal, int monthsToRepay) {
         double annualInterestRate = 0.05 ; // 5% annual interest rate. 5/100
         double monthlyInterestRate = annualInterestRate / 12;
-        int n = monthsToRepay; // months to repay the loan
+        int m = monthsToRepay; // months to repay the loan
 
         // equated monthly instalment formula: EMI = [P x R x (1+R)^N]/[(1+R)^N-1].
-        double emi = (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, n))
-                / (Math.pow(1 + monthlyInterestRate, n) - 1);
+        double emi = (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, m))
+                / (Math.pow(1 + monthlyInterestRate, m) - 1);
 
         // Return the ceiling of EMI to ensure no underpayment
         return Math.ceil(emi);
@@ -163,7 +172,8 @@ public class LoanServiceImpl implements LoanService{
     @Override
     public void deleteLoan(long loanId) {
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("account does not exist"));
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
+
         loanRepository.deleteById(loanId);
         }
 

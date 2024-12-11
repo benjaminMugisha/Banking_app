@@ -1,0 +1,34 @@
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{10} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/banking-app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/banking-app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- Maximum size of each log file -->
+            <maxFileSize>100KB</maxFileSize>
+            <!-- Keep up to 7 days of logs -->
+            <maxHistory>7</maxHistory>
+            <!-- Total size cap for all archived logs -->
+            <totalSizeCap>20MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>"%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{10} - %msg%n"</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <!-- Send logs to both console and file -->
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

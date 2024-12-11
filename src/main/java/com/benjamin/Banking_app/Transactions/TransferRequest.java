@@ -9,5 +9,4 @@ public class TransferRequest {
     private Long fromAccountId;
     private Long toAccountId;
     private Double amount;
-
 }
