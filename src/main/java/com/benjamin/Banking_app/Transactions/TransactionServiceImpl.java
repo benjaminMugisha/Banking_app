@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionService {
+public class TransactionServiceImpl {
     private final TransactionRepository transactionRepository;
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
