@@ -14,14 +14,19 @@ import java.util.Map;
 @RequestMapping("api/v1/loan")
 public class LoanController {
     private final LoanServiceImpl service;
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Loan>> getAllLoans(){
-        List<Loan> loans = service.getAllLoans();
+    public ResponseEntity<LoanPageResponse> getAllLoans(
+            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        LoanPageResponse loans = service.getAllLoans(pageNo, pageSize);
         return ResponseEntity.ok(loans);
     }
+
+
     @PostMapping("apply")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<LoanResponse> applyForLoan(@RequestBody LoanRequest loanRequest) {
         LoanResponse response = service.applyForLoan(loanRequest);
         //loan denied:
@@ -30,37 +35,38 @@ public class LoanController {
         }
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @PostMapping("{id}/repay")
+
+    @PutMapping("{loanId}/repay")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<LoanResponse> repayLoanEarly(@PathVariable Long loanId,
-                                       @RequestBody Map<String, Double> request) {
-       double amount = request.get("amount");
-       return ResponseEntity.ok(service.repayLoanEarly(loanId, amount));
+    public ResponseEntity<LoanResponse> monthlyRepay(@PathVariable Long loanId,
+                                       @RequestBody(required = false) Map<String, Double> request) {
+    double amount;
+    //if request is null or empty, then (in the service class) we'll use the predefined default amount to repay each month
+    if(request == null || request.isEmpty() || !request.containsKey("amount")){
+        amount = 0;
+    } else {
+        amount = request.get("amount");
+    }
+       return ResponseEntity.ok(service.processMonthlyRepayment(loanId, amount));
     }
 
-    //to repay(monthly repayments not fully) all loans at the same time
-    @PutMapping("/admin/repay/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> process(){
-        service.processMonthlyRepayments();
-        return ResponseEntity.ok("all accounts monthly repayment was succesfuly done");
+    @PutMapping("/{loanId}/repayFull")
+    public ResponseEntity<LoanResponse> repayFullLoanEarly(@PathVariable Long loanId) {
+        return ResponseEntity.ok(service.repayLoanEarly(loanId));
     }
 
-    @DeleteMapping("/admin/delete/{accountId}")
+    @DeleteMapping("/delete/{loanId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteLoan(@PathVariable long accountId) {
-        service.deleteLoan(accountId);
+    public ResponseEntity<String> deleteLoan(@PathVariable long loanId) {
+        service.deleteLoan(loanId);
         return ResponseEntity.ok("loan successfully deleted");
     }
-
-    //get a particular loan
     @GetMapping("/{loanId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Loan> getLoanByLoanId(@PathVariable Long loanId){
        return new ResponseEntity<>( service.getLoanByLoanId(loanId), HttpStatus.FOUND);
     }
 
-    //get all loans of an account
     @GetMapping("/account/{accountId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<Loan>> getLoansByAccountId(@PathVariable Long accountId) {

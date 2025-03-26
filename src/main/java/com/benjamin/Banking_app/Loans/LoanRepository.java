@@ -9,7 +9,7 @@ import java.util.List;
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByAccountIdAndRemainingBalanceGreaterThan(long accountId, double balance); //for active loans
     List<Loan> findByAccountId(long accountId);
-   List<Loan> findByRemainingBalanceGreaterThan(double value);
+    List<Loan> findByRemainingBalanceGreaterThan(double value);
 
 }
 

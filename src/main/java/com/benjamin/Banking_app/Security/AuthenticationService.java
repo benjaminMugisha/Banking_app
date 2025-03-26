@@ -19,7 +19,6 @@ public class AuthenticationService {
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
-//    private  BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public AuthenticationResponse register(RegisterRequest request){
         //checking if the user's email already exists

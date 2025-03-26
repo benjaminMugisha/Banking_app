@@ -4,22 +4,31 @@ import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
-import com.benjamin.Banking_app.Transactions.TransactionService;
+import com.benjamin.Banking_app.Exception.LoanAlreadyPaidException;
+import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-public class LoanServiceImpl implements LoanService{
+public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
     private final AccountRepository accountRepository;
-    private final TransactionService transactionService;
+    private final TransactionServiceImpl transactionService;
     private final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
 
     @Override
@@ -33,7 +42,7 @@ public class LoanServiceImpl implements LoanService{
         double yearlyPayment = monthlyPayment * 12;
 
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException( "account with id: " + accountId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("account with id: " + accountId + " not found"));
 
         // Check if the loan is affordable by checking if Debt-to-Income (DTI) ratio exceeds 40%
         if (!isLoanAffordable(income, yearlyPayment, accountId)) {
@@ -42,42 +51,58 @@ public class LoanServiceImpl implements LoanService{
         }
 
         LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = startDate.plusMonths(monthsToRepay);
 
         // Create and save loan
         Loan loan = new Loan();
         loan.setAccount(account);
         loan.setPrincipal(principal);
-        loan.setLoanAmount(principal);
-        loan.setInterestRate(5); // Fixed interest rate of 5%
         loan.setRemainingBalance(principal);
-        loan.setAmountPaid(0);
         loan.setStartDate(startDate);
-        loan.setEndDate(endDate);
         loan.setAmountToPayEachMonth(monthlyPayment);
 
         loanRepository.save(loan);
 
         //save the loan transaction
         transactionService.recordTransaction(account,
-                "LOAN ",
+                "LOAN_APPLICATION",
                 loan.getRemainingBalance(),
-                "loan created. the initial amount is: " + principal);
-        logger.info(" loan: {} created successfully",loan.getLoanId());
-        return new LoanResponse("loan accepted: " , loan);
+                "loan created. the initial amount is: " + principal, null, null);
+        logger.info(" loan: {} created successfully belonging to account named: {} , with account id of: {}",
+                loan.getLoanId(), account.getAccountUsername(), account.getId());
+
+        scheduleFirstRepayment(loan);
+        return new LoanResponse("loan accepted: ", loan);
+    }
+    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    public void scheduleFirstRepayment(Loan loan) {
+        long initialDelay = ChronoUnit.MILLIS.between(LocalDateTime.now(), loan.getStartDate().plusDays(30));
+        long period = TimeUnit.DAYS.toMillis(30); // Run every 30 days
+
+        scheduler.scheduleAtFixedRate(() -> processMonthlyRepayment(loan.getLoanId(), loan.getAmountToPayEachMonth()),
+                initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
+    public LoanPageResponse getAllLoans(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Loan> loans = loanRepository.findAll(pageable);
+        List<Loan> content = loans.getContent();
+        LoanPageResponse response = new LoanPageResponse();
+        response.setContent(content);
+        response.setPageNo(loans.getNumber());
+        response.setPageSize(loans.getSize());
+        response.setTotalElements(loans.getTotalElements());
+        response.setTotalPages(loans.getTotalPages());
+        response.setLast(loans.isLast());
+
+        return response;
     }
 
     @Override
-    public Loan getLoanByLoanId(long loanId){
+    public Loan getLoanByLoanId(long loanId) {
         logger.info("searching for loan: {}", loanId);
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
-        return loan;
+        return loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
     }
 
     //all loans including both active and fully repaid loans.
@@ -86,96 +111,52 @@ public class LoanServiceImpl implements LoanService{
         return loanRepository.findByAccountId(accountId);
     }
 
-    //repay the whole loan early
+    //repay the whole loan early. comes with a penalty
     @Override
-    public LoanResponse repayLoanEarly(Long loanId, double paymentAmount) {
+    public LoanResponse repayLoanEarly(Long loanId) {
+
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
-
-        double remainingBalance = loan.getRemainingBalance();
-        if (paymentAmount < remainingBalance) {
-            return new LoanResponse("Payment amount is insufficient to clear the loan.", null);
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
+        Account account = loan.getAccount();
+        double accountBalance = account.getBalance();
+        if (loan.getRemainingBalance() > accountBalance) {
+            return new LoanResponse("insufficient funds to clear the loan.", null);
         }
 
-        double penalty = remainingBalance * 0.02; // 2% prepayment penalty
-        double totalPayment = remainingBalance + penalty;
-
-        if (paymentAmount < totalPayment) {
-            return new LoanResponse("Payment amount is insufficient to clear the loan with penalty.", null);
+        double totalPayment = loan.getRemainingBalance() * 0.02; //2% penalty
+        if (totalPayment > accountBalance) {
+            return new LoanResponse("insufficient funds to clear the loan with the 2% penalty included.", null);
         }
 
+        //loan fully repaid:
         loan.setRemainingBalance(0);
-        loan.setAmountPaid(loan.getAmountPaid() + remainingBalance);
-        loan.setEndDate(LocalDateTime.now()); // Update the end date to mark it as paid
         loanRepository.save(loan);
 
-        transactionService.recordTransaction(
-                loan.getAccount(),
-                "LOAN EARLY REPAYMENT",
-                0,
-                "Loan repaid early with a penalty of " + penalty
-        );
+        account.setBalance(accountBalance - totalPayment); //updating our user's balance.
+
         logger.info("loan: {} is fully repaid", loan.getLoanId());
-        return new LoanResponse("Loan repaid early successfully, penalty applied: " + penalty, loan);
-    }
-
-    @Override
-    public void processMonthlyRepayments() {
-        List<Loan> activeLoans = loanRepository.findByRemainingBalanceGreaterThan(0.0); // get all active loans
-
-        for (Loan loan : activeLoans) {
-            double monthlyRepayment = loan.getAmountToPayEachMonth();
-            double remainingBalance = loan.getRemainingBalance();
-            //double principal = loan.getPrincipal();
-            double amountPaid = loan.getAmountPaid();
-            Account account = loan.getAccount();
-
-            if (account.getBalance() >= monthlyRepayment) {
-                // Deduct the payment from the account balance
-                account.setBalance(account.getBalance() - monthlyRepayment);
-                accountRepository.save(account);
-
-                // Update the loan balance
-                loan.setRemainingBalance(remainingBalance - monthlyRepayment);
-                loan.setAmountPaid(amountPaid + monthlyRepayment);
-                if (remainingBalance < 0) {
-                    loan.setRemainingBalance(0); // Avoid negative balances
-                }
-                loanRepository.save(loan);
-
-                // Record the repayment as a transaction
-                transactionService.recordTransaction(account,
-                        "LOAN REPAYMENT",
-                        -monthlyRepayment,
-                        "Monthly repayment for loan ID: " + loan.getLoanId());
-            } else {
-                // Optional: Handle insufficient funds (e.g., send a warning)
-                throw new InsufficientFundsException("insufficient funds to repay this month");
-            }
-        }
+        return new LoanResponse("Loan of fully repaid early successfully, 2% penalty applied");
     }
 
     @Override
     public double calculateMonthlyInstallment(double principal, int monthsToRepay) {
-        double annualInterestRate = 0.05 ; // 5% annual interest rate. 5/100
-        double monthlyInterestRate = annualInterestRate / 12;
-        int m = monthsToRepay; // months to repay the loan
+        // annualInterestRate is 5 hence 0.05
+        double monthlyInterestRate = 0.005/12;
+        double timeInYears =  (monthsToRepay/12.0);
 
-        // equated monthly instalment formula: EMI = [P x R x (1+R)^N]/[(1+R)^N-1].
-        double emi = (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, m))
-                / (Math.pow(1 + monthlyInterestRate, m) - 1);
+        double totalLoan = principal + (principal * monthlyInterestRate * timeInYears );
 
-        // Return the ceiling of EMI to ensure no underpayment
-        return Math.ceil(emi);
+        // Return the ceiling to ensure no underpayment
+        return Math.ceil(totalLoan/monthsToRepay);
     }
 
     @Override
     public void deleteLoan(long loanId) {
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId +  " not found"));
+        loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
 
         loanRepository.deleteById(loanId);
-        }
+    }
 
     @Override
     public boolean isLoanAffordable(double yearlyIncome, double estimatedYearlyPayment, long accountId) {
@@ -197,4 +178,49 @@ public class LoanServiceImpl implements LoanService{
         return dti <= 40;
     }
 
+    @Override
+    public LoanResponse processMonthlyRepayment(Long loanId, double amount) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("Loan with id: " + loanId + " not found"));
+
+        Account account = loan.getAccount();
+
+        // Check if the loan is already fully paid
+        if (loan.getRemainingBalance() <= 0) {
+            logger.info("Loan already fully paid");
+            throw new LoanAlreadyPaidException("loan fully paid", HttpStatus.NOT_FOUND);
+        }
+        // using default if the amount <=0
+        double paymentAmount = (amount <= 0) ? loan.getAmountToPayEachMonth() : amount;
+
+        if (paymentAmount > loan.getRemainingBalance()){  //test  for this scenario only
+            paymentAmount = loan.getRemainingBalance();
+        }
+
+        // Check if the account has sufficient funds
+        if (account.getBalance() < loan.getAmountToPayEachMonth()) {
+            throw new InsufficientFundsException("Insufficient funds");
+        }
+
+        // update:
+        loan.setRemainingBalance(loan.getRemainingBalance() - paymentAmount);
+        account.setBalance(account.getBalance() - paymentAmount);
+//        loan.setAmountPaid(loan.getAmountPaid() + paymentAmount);
+
+        // Save the updated loan and account
+        loanRepository.save(loan);
+        accountRepository.save(account);
+
+        //recording the transaction.
+        transactionService.recordTransaction(account,
+                "LOAN_REPAYMENT",
+                paymentAmount,
+                "this month's loan repaid. the amount is: " + loan.getAmountToPayEachMonth()
+                , null, null);
+        logger.info(" loan: {} repaid for this month successfully", loan.getLoanId());
+
+//        return new LoanResponse("this month's Loan repaid successfully ");
+        return new LoanResponse("Loan repayment of " + paymentAmount + " processed successfully. Remaining balance is: "
+                + loan.getRemainingBalance());
+    }
 }

@@ -7,4 +7,8 @@ import lombok.Data;
 public class LoanResponse {
     private String message;
     private Loan loan;
+
+    public LoanResponse(String message) {
+        this.message = message;
+    }
 }

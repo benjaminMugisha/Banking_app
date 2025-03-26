@@ -1,6 +1,8 @@
 package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,20 +13,19 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long LoanId;
 
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_id", nullable = false) //foreign key reference
+    @JsonIgnore
     private Account account;
-    private double loanAmount;
-    private int interestRate;
-    private double amountPaid;
     private double remainingBalance;
+    @JsonFormat(pattern = "dd/MM/yyy ")
     private LocalDateTime startDate;
-    private LocalDateTime endDate; //when the loan will be fully repaid
-    private double Principal;
+    private double principal;
     private double amountToPayEachMonth;
 }

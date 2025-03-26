@@ -1,5 +1,6 @@
 package com.benjamin.Banking_app.Accounts;
 
+//to map entities into Dtos and vice versa.
 public class AccountMapper {
     public static Account MapToAccount(AccountDto accountDto){
 
@@ -7,21 +8,19 @@ public class AccountMapper {
             return null; // Handle null input
         }
 
-        Account account = new Account(accountDto.getId(),
+        return new Account(accountDto.getId(),
                                       accountDto.getAccountUsername(),
                                       accountDto.getBalance()
         );
-        return account;
     }
     public static AccountDto MapToAccountDto(Account account){
 
         if (account == null) {
-            return null; // Handle null input
+            return null;
         }
-        AccountDto accountDto = new AccountDto(account.getId(),
+        return new AccountDto(account.getId(),
                 account.getAccountUsername(),
                 account.getBalance()
         );
-        return accountDto;
     }
 }
