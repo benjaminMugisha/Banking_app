@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("api/v1/account")
 @RequiredArgsConstructor
 public class AccountController {
@@ -18,17 +18,12 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AccountResponse> getAllAccounts(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {
         return ResponseEntity.ok(accountService.getAllAccounts(pageNo, pageSize));
-    }
-
-    @PostMapping("/dd")
-    public ResponseEntity<String> directDebit(@RequestBody TransferRequest request){
-        accountService.directDebit(request);
-        return ResponseEntity.ok("Transfer successful");
     }
 
     @PostMapping("/create")
@@ -68,10 +63,22 @@ public class AccountController {
         return ResponseEntity.ok("Transfer successful");
     }
 
-    @DeleteMapping("/delete/{id}") //admin/
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.ok("account successfuly deleted");
+    }
+
+    @PostMapping("/dd/create")
+    public ResponseEntity<DirectDebit> CreateDirectDebit(@RequestBody DirectDebit dd){
+        accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
+        return ResponseEntity.ok(dd);
+    }
+
+    @PutMapping("dd/cancel/{id}")
+    public  ResponseEntity<String> cancelDirectDebit(@PathVariable Long id){
+        accountService.cancelDirectDebit(id);
+        return ResponseEntity.ok("succesfully deleted");
     }
 }

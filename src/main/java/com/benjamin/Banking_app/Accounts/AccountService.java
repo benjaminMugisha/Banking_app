@@ -1,9 +1,5 @@
 package com.benjamin.Banking_app.Accounts;
 
-
-import java.util.List;
-
-//implemented by AccountServiceImpl.java
 public interface AccountService {
     AccountDto createAccount(AccountDto account);
     AccountDto getAccountById(Long id);
@@ -13,5 +9,8 @@ public interface AccountService {
     AccountResponse getAllAccounts(int pageNo, int pageSize);
     void deleteAccount(Long id);
     void transfer(TransferRequest transferRequest);
-    void directDebit(TransferRequest transferRequest);
+    DirectDebit createDirectDebit(Long fromId, Long toId, Double amount);
+    void cancelDirectDebit(Long id);
+//    List<DirectDebit> getAllDD();
+
 }

@@ -20,7 +20,7 @@ public class Loan {
     private Long LoanId;
 
     @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false) //foreign key reference
+    @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore
     private Account account;
     private double remainingBalance;

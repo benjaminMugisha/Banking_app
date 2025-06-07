@@ -41,7 +41,7 @@ public class LoanController {
     public ResponseEntity<LoanResponse> monthlyRepay(@PathVariable Long loanId,
                                        @RequestBody(required = false) Map<String, Double> request) {
     double amount;
-    //if request is null or empty, then (in the service class) we'll use the predefined default amount to repay each month
+    //if request is null or empty, then we use the predefined default amount to repay each month
     if(request == null || request.isEmpty() || !request.containsKey("amount")){
         amount = 0;
     } else {

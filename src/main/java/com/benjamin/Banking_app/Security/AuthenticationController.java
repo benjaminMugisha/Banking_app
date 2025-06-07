@@ -23,7 +23,7 @@ public class AuthenticationController {
         userRepository.deleteById(id);
     }
 
-    @PutMapping("/authenticate")
+    @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(service.authenticate(request));

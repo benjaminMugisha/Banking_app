@@ -47,7 +47,6 @@ public class LoanRepositoryTest {
                account(account).principal(30.0)
                .build();
     }
-
     @Test
     public void FindByAccountId_ExistingAccount_ReturnListOfLoans(){
         loanRepo.saveAll(List.of(loan, loan2));
@@ -63,7 +62,7 @@ public class LoanRepositoryTest {
         Assertions.assertThat(loans.get(1).getPrincipal()).isEqualTo(loan2.getPrincipal());
     }
 
-    @Test //MethodName_StateUnderTest_ExpectedBehavior
+    @Test
     public void FindByAccountId_EmptyLoans_ReturnNothing(){
         List<Loan> loans = loanRepo.findByAccountId(account.getId());
 

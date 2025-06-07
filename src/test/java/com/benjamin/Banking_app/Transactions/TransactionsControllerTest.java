@@ -2,7 +2,6 @@ package com.benjamin.Banking_app.Transactions;
 
 import com.benjamin.Banking_app.Accounts.AccountController;
 import com.benjamin.Banking_app.Accounts.AccountService;
-import com.benjamin.Banking_app.Loans.LoanRepository;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

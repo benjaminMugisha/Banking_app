@@ -20,24 +20,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.awt.print.Pageable;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AccountController.class) // so we can test webmvc(api) controllers.
-@AutoConfigureMockMvc(addFilters = false) //circumvents spring security, so we don't need to add tokens to our controllers
-//@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(AccountController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-//@WebMvcTest(AccountController.class)
-
-//mockmvc makes it easy to perform get, post, delete and update actions on our actual controllers in a test environment.
-// so mockmvc performs CRUD on s method, then in return mockmvc gives us back a response object or result action object
-//then we can test this object to make sure it sent or received the correct info
-//mockmvc.perform(get/("api/endpoint") gives us an object back we can test and make sure it's the correct info back.
 
 public class AccountControllerTest {
-    @Autowired // Simulates HTTP requests.
+    @Autowired
     private MockMvc mockMvc;
     @MockBean
     private AccountServiceImpl accountService;
@@ -48,7 +46,6 @@ public class AccountControllerTest {
     @MockBean
     private UserRepository userRepository;
     @Autowired
-    // data binding between Java objects and JSON. so it plus in mockmvc and when we send data in api endpoint
     private ObjectMapper objectMapper;
 
     private Account account;
@@ -62,6 +59,41 @@ public class AccountControllerTest {
                 .build();
     }
 
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void getAllAccounts_ReturnsPagedAccounts() throws Exception {
+        AccountDto acc1 = new AccountDto(1L, "user1", 100.0);
+        AccountDto acc2 = new AccountDto(2L, "user2", 200.0);
+
+        AccountResponse accountResponse = new AccountResponse(
+                List.of(acc1, acc2), // accounts
+                0,                   // pageNo
+                2,                   // pageSize
+                2L,                  // totalElements
+                1,                   // totalPages
+                true                 // last page
+        );
+
+        when(accountService.getAllAccounts(0, 2)).thenReturn(accountResponse);
+
+        mockMvc.perform(get("/api/v1/account/all")
+                        .param("pageNo", "0")
+                        .param("pageSize", "2")) //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].id").value(1))
+                .andExpect(jsonPath("$.content[1].id").value(2))
+                .andExpect(jsonPath("$.pageNo").value(0))
+                .andExpect(jsonPath("$.pageSize").value(2))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.last").value(true));
+
+        verify(accountService, times(1)).getAllAccounts(0, 2);
+    }
+
+
     @Test
     public void createAccount_ValidAccount_ReturnCreatedAccount() throws Exception {
         given(accountService.createAccount(ArgumentMatchers.any()))
@@ -69,30 +101,13 @@ public class AccountControllerTest {
 
         ResultActions response = mockMvc.perform(post("/api/v1/account/create")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(accountDto))); //turns object into string so we dont worry about serialisation.
+                .content(objectMapper.writeValueAsString(accountDto)));
 
         response.andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.balance", CoreMatchers.is(accountDto.getBalance())));
+                .andExpect(jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername())))
+                .andExpect(jsonPath("$.balance", CoreMatchers.is(accountDto.getBalance())));
         verify(accountService, times(1)).createAccount(accountDto);
     }
-
-//    @Test
-//    @WithMockUser(username="admin",roles={"ADMIN"})
-//    public void getAllAccounts_ExistingAccounts_ReturnAccountsDto() throws Exception {
-//        List<AccountDto> accountDtos = List.of(
-//                accountDto,
-//                new AccountDto(2L, "Peter", 200.0)
-//        );
-//        when(accountService.getAllAccounts()).thenReturn(accountDtos);
-//
-//        mockMvc.perform(get("/api/v1/account/all"))
-//                .andExpect(status().isOk())//expect 200 OK
-//                .andExpect(jsonPath("$.size()").value(2))//expecting 2 accounts
-//                .andExpect(jsonPath("$[0].accountUsername").value("John"))
-//                .andExpect(jsonPath("$[1].accountUsername").value("Peter"));
-//        verify(accountService, times(1)).getAllAccounts();
-//    }
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
@@ -103,8 +118,8 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.balance", CoreMatchers.is(accountDto.getBalance())));
+                .andExpect(jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername())))
+                .andExpect(jsonPath("$.balance", CoreMatchers.is(accountDto.getBalance())));
         verify(accountService, times(1)).getAccountById(accountId);
     }
 
@@ -122,24 +137,25 @@ public class AccountControllerTest {
 
     @Test
     public void deposit_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
-        long accountId = 1L; // Test account ID
-        double depositAmount = 50.0; // Test deposit amount
+        long accountId = 1L;
+        double depositAmount = 50.0;
         double newBalance = accountDto.getBalance() + depositAmount;
         AccountDto updatedAccountDto = AccountDto.builder()
                 .accountUsername("John").balance(newBalance)
                 .build();
-        when(accountService.deposit(accountId, depositAmount)).thenReturn(updatedAccountDto); // Mock service method
+        when(accountService.deposit(accountId, depositAmount)).thenReturn(updatedAccountDto);
 
         ResultActions response = mockMvc.perform(put("/api/v1/account/{id}/deposit", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"amount\": " + depositAmount + "}")); // Sending the deposit amount in the request body
+                .content("{\"amount\": " + depositAmount + "}"));
 
         response.andExpect(status().isOk()) // Expecting 200 OK response
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername()))) // Verify account username
-                .andExpect(MockMvcResultMatchers.jsonPath("$.balance", CoreMatchers.is(updatedAccountDto.getBalance()))); // Verify updated balance
+                .andExpect(jsonPath("$.accountUsername", CoreMatchers.is(accountDto.getAccountUsername())))
+                .andExpect(jsonPath("$.balance", CoreMatchers.is(updatedAccountDto.getBalance())));
 
         verify(accountService, times(1)).deposit(accountId, depositAmount);
     }
+
     @Test
     @WithMockUser(username="user",roles={"USER"})
     public void withdraw_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
@@ -158,10 +174,11 @@ public class AccountControllerTest {
                 .content("{\"amount\": " + withdrawAmount + "}"));
 
         response.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountUsername", CoreMatchers.is(updatedAccountDto.getAccountUsername())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.balance", CoreMatchers.is(newBalance)));
+                .andExpect(jsonPath("$.accountUsername", CoreMatchers.is(updatedAccountDto.getAccountUsername())))
+                .andExpect(jsonPath("$.balance", CoreMatchers.is(newBalance)));
         verify(accountService, times(1)).withdraw(accountId, withdrawAmount);
     }
+
     @Test
     @WithMockUser(username="user",roles={"USER"})
     public void transfer_ValidRequest_ReturnsSuccessMessage() throws Exception {
@@ -171,10 +188,48 @@ public class AccountControllerTest {
 
         ResultActions response = mockMvc.perform(put("/api/v1/account/user/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(transferRequest))); // Convert to JSON
+                .content(objectMapper.writeValueAsString(transferRequest)));
 
-        response.andExpect(status().isOk()) // Expect HTTP 200
+        response.andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Transfer successful"));
         verify(accountService, times(1)).transfer(any(TransferRequest.class));
     }
+
+    @Test
+    public void createDirectDebit_ValidRequest_ReturnsDirectDebit() throws Exception {
+        DirectDebit dd = DirectDebit.builder()
+                .fromAccountId(1L).toAccountId(2L).amount(100.0)
+                .build();
+
+        when(accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount()))
+                .thenReturn(dd);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/account/dd/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dd)));
+
+        response.andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fromAccountId").value(dd.getFromAccountId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.toAccountId").value(dd.getToAccountId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.amount").value(dd.getAmount()));
+
+        verify(accountService, times(1)).createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void cancelDirectDebit_ValidId_ReturnsSuccessMessage() throws Exception {
+        Long id = 1L;
+
+        doNothing().when(accountService).cancelDirectDebit(id);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/account/dd/cancel/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("succesfully deleted"));
+
+        verify(accountService, times(1)).cancelDirectDebit(id);
+    }
+
 }

@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountMapperTest {
 
-    @Test //add it to make it a test. gives you the button to run the method as a single method
+    @Test
     public void mapToAccount_ShouldMapFieldsCorrectly_ReturnAccount() {
         AccountDto accountDto = AccountDto.builder()
                 .accountUsername("John").balance(1000.0)

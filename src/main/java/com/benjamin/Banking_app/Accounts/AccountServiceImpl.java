@@ -9,13 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +22,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final TransactionServiceImpl transactionService;
+    private final DirectDebitRepo directDebitRepo;
    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
@@ -69,11 +68,8 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("account to send the funds not found"));
         Account toAccount = accountRepository.findById(transferRequest.getToAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("account to receive the funds not found"));
-        logger.info("attempting to transfer Amount:{} from:{}, to: {} ",
-                transferRequest.getAmount(), fromAccount.getAccountUsername(), toAccount.getAccountUsername());
 
         if (fromAccount.getBalance() < transferRequest.getAmount()) {
-            logger.error(":{} has insufficient balance", fromAccount.getAccountUsername());
             throw new InsufficientFundsException("Insufficient balance");
         }
 
@@ -99,52 +95,64 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void directDebit(TransferRequest transferRequest) {
-        //schedule the existing transfer() to run every 28 days.
-        logger.info("setting up a direct debit from:{} to:{}, of: {}€ every month(28 days) ",
-                transferRequest.getFromAccountId(), transferRequest.getToAccountId(), transferRequest.getAmount());
-        //trigger the initial transfer
-        transfer(transferRequest);
-
-        // Schedule the next payment every 28 days (28 days * 24hrs * 60 mins * 60secs * 1000ms)
-        long delay = 28L * 24 * 60 * 60 * 1000;
-
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(() -> {
-            transfer(transferRequest); // Perform the transfer again
-        }, delay, delay, TimeUnit.MILLISECONDS); // Delay, then repeat after every 28 days
-    }
-
-    @Override
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
 
         if (amount > account.getBalance()){
-            logger.error("user has insufficient funds");
             throw new InsufficientFundsException("insufficient funds");
         }
         double total = account.getBalance() - amount;
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
 
-        transactionService.recordTransaction(account, "DEPOSIT", amount, "Deposit of " + amount,
+        transactionService.recordTransaction(account, "WITHDRAW", amount, "Withdraw of " + amount,
                 null, null);
 
         return AccountMapper.MapToAccountDto(savedAccount);
     }
+
+    //create and save the direct debit
+    @Override
+    public DirectDebit createDirectDebit(Long fromId, Long toId, Double amount) {
+        DirectDebit dd =  DirectDebit.builder()
+                .fromAccountId(fromId).toAccountId(toId).amount(amount).active(true)
+                .build();
+        return directDebitRepo.save(dd);
+    }
+    public void cancelDirectDebit(Long id){
+        DirectDebit dd = directDebitRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("direct debit not found"));
+            dd.setActive(false); //mark it inactive so we keep the record of it instead of deleting
+            directDebitRepo.save(dd);
+    }
+
+    @Scheduled(fixedDelay = 2419200000L) //28 days in ms
+    public void processDirectDebits(){
+        List<DirectDebit> activeDebits = directDebitRepo.findByActiveTrue();
+        for(DirectDebit dd : activeDebits){
+            try {
+                TransferRequest transferRequest = new TransferRequest(
+                        dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
+                transfer(transferRequest);
+            } catch (Exception e){
+                logger.error("failed to process the direct debit. from: {}, to: {}, Amount: {}" ,
+                        dd.getFromAccountId(), dd.getToAccountId(),  dd.getAmount());
+                throw new RuntimeException("failed to process the direct debit");
+            }
+        }
+    }
+
     @Override
     public AccountResponse getAllAccounts(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)
                 .collect(Collectors.toList());
-        AccountResponse accountResponse = AccountResponse.builder()
+        return AccountResponse.builder()
                 .content(content).pageNo(accounts.getNumber()).pageSize(accounts.getSize())
                 .totalElements(accounts.getTotalElements()).totalPages(accounts.getTotalPages())
                 .last(accounts.isLast()).build();
-
-        return accountResponse;
     }
     @Override
     public void deleteAccount(Long id) {

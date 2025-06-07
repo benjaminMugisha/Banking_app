@@ -64,7 +64,7 @@ public class LoanControllerTests {
                 .LoanId(1L).account(account).remainingBalance(10.0).startDate(LocalDateTime.now())
                 .principal(15.0).amountToPayEachMonth(1)
                 .build();
-        loan2 = Loan.builder().LoanId(2L).account(account).principal(2.0).build(); //basic loan for when we need a list of loans.
+        loan2 = Loan.builder().LoanId(2L).account(account).principal(2.0).build();
         account = Account.builder()
                 .id(1L).accountUsername("John").balance(100.0)
                 .build();
@@ -86,22 +86,6 @@ public class LoanControllerTests {
 
         verify(loanService, times(1)).applyForLoan(any(LoanRequest.class));
     }
-
-//    @Test
-//    @WithMockUser(username="admin",roles={"ADMIN"})
-//    public void getAllLoans_ReturnsListOfLoans() throws Exception {
-//        List<Loan> loans = List.of(loan, loan2);
-//
-//        when(loanService.getAllLoans()).thenReturn(loans);
-//
-//        mockMvc.perform(get("/api/v1/loan/all")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()) // 200 OK
-//                .andExpect(jsonPath("$.size()").value(2))
-//                .andExpect(jsonPath("$[0].principal").value(15.0))
-//                .andExpect(jsonPath("$[1].principal").value(2.0));
-//        verify(loanService, times(1)).getAllLoans();
-//    }
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
@@ -131,7 +115,6 @@ public class LoanControllerTests {
                 .andExpect(jsonPath("$.loanId").value(1L))
                 .andExpect(jsonPath("$.principal").value(15.0));
 
-        // Verify the service method was called
         verify(loanService, times(1)).getLoanByLoanId(1L);
     }
 

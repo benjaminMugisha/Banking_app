@@ -5,6 +5,7 @@ import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,6 +30,8 @@ public class AccountServiceImplTest {
     private AccountRepository accountRepo;
     @Mock
     private TransactionServiceImpl transactionService;
+    @Mock
+    private DirectDebitRepo directDebitRepo;
     @InjectMocks
     private AccountServiceImpl accountService;
     private Account account;
@@ -42,6 +45,7 @@ public class AccountServiceImplTest {
                 .id(1L).accountUsername("John").balance(50000.0)
                 .build();
     }
+
     @Test
     public void getAllAccounts_ExistingAccountDtos_ShouldReturnAccountsDtos(){
         Account account2 = new Account(2L, "Peter", 200.0);
@@ -50,35 +54,32 @@ public class AccountServiceImplTest {
         Page<Account> accountPage = new PageImpl<>(accountList, PageRequest.of(0, 2), accountList.size());
 
         when(accountRepo.findAll(any(Pageable.class))).thenReturn(accountPage);
-        // Act
         AccountResponse result = accountService.getAllAccounts(0, 2);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(2);
-        assertEquals(0, result.getPageNo()); // First page
+        assertEquals(0, result.getPageNo());
         assertEquals(2, result.getPageSize());
         assertEquals(2, result.getTotalElements());
-        assertEquals(1, result.getTotalPages()); // we requested 2 per page
+        assertEquals(1, result.getTotalPages());
         assertTrue(result.isLast());
     }
+
     @Test
     public void getAllAccounts_NonExistingAccounts_ShouldReturnEmptyPagedResponse() {
-        // Arrange
         Page<Account> emptyPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 2), 0);
 
         when(accountRepo.findAll(any(Pageable.class))).thenReturn(emptyPage);
 
-        // Act
         AccountResponse result = accountService.getAllAccounts(0, 2);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getContent()).isEmpty();
         assertEquals(0, result.getTotalElements());
         assertEquals(0, result.getTotalPages());
-        assertTrue(result.isLast()); // Should be last since it's empty
+        assertTrue(result.isLast());
     }
+
     @Test
     public void createAccount_ValidAccountDto_ShouldReturnSavedAccountDto() {
         Account mappedAccount = AccountMapper.MapToAccount(accountDto);
@@ -93,6 +94,7 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(1)).save(mappedAccount);
     }
+
     @Test
     public void createAccount_WhenAccountDtoIsInvalid_ShouldThrowException() {
 
@@ -102,6 +104,7 @@ public class AccountServiceImplTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Invalid account data");
     }
+
     @Test
     public void getAccountById_ExistingAccountDto_ShouldReturnAccountDto() {
         when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
@@ -115,6 +118,7 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(1)).findById(account.getId());
     }
+
     @Test
     public void getAccountById_NonExistingAccount_ShouldThrowException() {
         when(accountRepo.findById(account.getId())).thenReturn(Optional.empty());
@@ -123,6 +127,7 @@ public class AccountServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("account not found");
     }
+
     @Test
     public void deposit_ExistingAccount_ShouldUpdateBalance() {
         long accountId = account.getId();
@@ -146,6 +151,7 @@ public class AccountServiceImplTest {
         verify(accountRepo, times(1)).findById(accountId);
         verify(accountRepo, times(1)).save(account);
     }
+
     @Test
     public void deposit_NonExistingAccount_ShouldThrowException() {
         double depositAmount = 500.0;
@@ -157,8 +163,9 @@ public class AccountServiceImplTest {
                 .hasMessage("account used not found");
 
         verify(accountRepo, times(1)).findById(account.getId());
-        verify(accountRepo, times(0)).save(any(Account.class));  // Ensure save is not called
+        verify(accountRepo, times(0)).save(any(Account.class));
     }
+
     @Test
     public void transfer_ExistingAccountAndBalanceIsSufficient_ShouldTransferAmount() {
         Long toAccountId = 2L;
@@ -179,6 +186,7 @@ public class AccountServiceImplTest {
         verify(accountRepo, times(1)).save(account);
         verify(accountRepo, times(1)).save(toAccount);
     }
+
     @Test
     public void transfer_NonExistingAccount_ShouldThrowException() {
         Long toAccountId = 2L;
@@ -194,9 +202,10 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(0)).save(any(Account.class));
     }
+
     @Test
     public void transfer_NotFoundAccount_ShouldThrowException() {
-        Long toAccountId = 2L; //fromAccount = account
+        Long toAccountId = 2L;
         double transferAmount = 500.0;
 
         TransferRequest transferRequest = new TransferRequest(account.getId(), toAccountId, transferAmount);
@@ -210,6 +219,7 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(0)).save(any(Account.class));
     }
+
     @Test
     public void transfer_InsufficientBalance_ShouldThrowException() {
         long toAccountId = 2L;
@@ -228,6 +238,7 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(0)).save(any(Account.class));
     }
+
     @Test
     public void withdraw_AccountExistsAndFundsAreSufficient_ShouldReduceBalance() {
         double withdrawalAmount = 500.0;
@@ -248,6 +259,7 @@ public class AccountServiceImplTest {
         verify(accountRepo, times(1)).findById(account.getId());
         verify(accountRepo, times(1)).save(account);
     }
+
     @Test
     public void withdraw_InsufficientFunds_ShouldThrowException() {
         double withdrawalAmount = 9999999999.0;
@@ -260,6 +272,7 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(0)).save(any(Account.class));
     }
+
     @Test
     public void withdraw_AccountNotFound_ShouldThrowException() {
         double withdrawalAmount = 500.0;
@@ -269,33 +282,7 @@ public class AccountServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("account not found");
     }
-//    @Test
-//    public void getAllAccounts_ExistingAccountDtos_ShouldReturnAccountsDtos(){
-//        Account account2 = new Account(2L, "Peter", 20000.0);
-//
-//        when(accountRepo.findAll()).thenReturn(List.of(account, account2));
-//        List<AccountDto> result = accountService.getAllAccounts();
-//
-//        assertThat(result).isNotNull();
-//        assertEquals(2, result.size());
-//
-//        assertEquals("John", result.get(0).getAccountUsername());
-//        assertEquals(50000.0, result.get(0).getBalance());
-//        assertEquals("Peter", result.get(1).getAccountUsername());
-//        assertEquals(20000.0, result.get(1).getBalance());
-//    }
-//    @Test
-//    public void getAllAccounts_NonExistingAccounts_ShouldReturnEmptyList() {
-//        // Arrange
-//        when(accountRepo.findAll()).thenReturn(Collections.emptyList());
-//
-//        // Act
-//        List<AccountDto> result = accountService.getAllAccounts();
-//
-//        // Assert
-//        assertThat(result).isNotNull();
-//        assertThat(result).isEmpty();
-//    }
+
     @Test
     public void deleteAccount_AccountExists_ShouldDeleteAccount() {
     Long accountId = 1L;
@@ -314,5 +301,101 @@ public class AccountServiceImplTest {
         assertThatThrownBy(()-> accountService.deleteAccount(account.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("account not found");
+    }
+
+    @Test
+    void createDirectDebit_ShouldSaveAndReturnDirectDebit() {
+        Long fromId = 1L;
+        Long toId = 2L;
+        Double amount = 100.0;
+
+        DirectDebit mockDD = DirectDebit.builder()
+                .fromAccountId(fromId).toAccountId(toId).amount(amount).active(true)
+                .build();
+
+        when(directDebitRepo.save(any(DirectDebit.class))).thenReturn(mockDD);
+
+        DirectDebit result = accountService.createDirectDebit(fromId, toId, amount);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getFromAccountId()).isEqualTo(fromId);
+        assertThat(result.getToAccountId()).isEqualTo(toId);
+        assertThat(result.getAmount()).isEqualTo(amount);
+        assertThat(result.isActive()).isTrue();
+    }
+
+    @Test
+    void cancelDirectDebit_NonExistingId_ShouldThrowException() {
+        Long id = 42L;
+        when(directDebitRepo.findById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.cancelDirectDebit(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("direct debit not found");
+    }
+
+    @Test
+    public void createDirectDebit_ValidInputs_ShouldSaveAndReturnDirectDebit() {
+        Long fromId = 1L;
+        Long toId = 2L;
+        Double amount = 100.0;
+
+        DirectDebit savedDebit = DirectDebit.builder()
+                .id(1L).fromAccountId(fromId).toAccountId(toId).amount(amount).active(true)
+                .build();
+
+        when(directDebitRepo.save(any(DirectDebit.class))).thenReturn(savedDebit);
+
+        DirectDebit result = accountService.createDirectDebit(fromId, toId, amount);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getFromAccountId()).isEqualTo(fromId);
+        assertThat(result.getToAccountId()).isEqualTo(toId);
+        assertThat(result.getAmount()).isEqualTo(amount);
+        assertThat(result.isActive()).isTrue();
+
+        verify(directDebitRepo, times(1)).save(any(DirectDebit.class));
+    }
+
+    @Test
+    public void cancelDirectDebit_ExistingDebit_ShouldSetActiveToFalse() {
+        Long debitId = 1L;
+        DirectDebit existingDebit = DirectDebit.builder()
+                .id(debitId).active(true)
+                .build();
+
+        when(directDebitRepo.findById(debitId)).thenReturn(Optional.of(existingDebit));
+
+        accountService.cancelDirectDebit(debitId);
+
+        assertThat(existingDebit.isActive()).isFalse();
+        verify(directDebitRepo).save(existingDebit);
+    }
+
+    @Test
+    public void cancelDirectDebit_NonExistingDebit_ShouldThrowException() {
+        Long debitId = 1L;
+
+        when(directDebitRepo.findById(debitId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.cancelDirectDebit(debitId))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("direct debit not found");
+
+        verify(directDebitRepo, never()).save(any());
+    }
+
+    @Test
+    public void processDirectDebits_TransferFails_ShouldLogAndThrowRuntimeException() {
+        DirectDebit dd = DirectDebit.builder()
+                .id(1L).fromAccountId(1L).toAccountId(2L).amount(999999999.0).active(true)
+                .build();
+        when(directDebitRepo.findByActiveTrue()).thenReturn(List.of(dd));
+        when(accountRepo.findById(1L)).thenReturn(Optional.of(account));
+        when(accountRepo.findById(2L)).thenReturn(Optional.of(new Account(2L, "toUser", 100.0)));
+
+        assertThatThrownBy(() -> accountService.processDirectDebits())
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("failed to process the direct debit");
     }
 }

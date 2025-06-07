@@ -55,29 +55,8 @@ class LoanServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("account with id: 1 not found");
 
-        verify(loanRepo, times(0)).save(any(Loan.class)); // Ensure save() was never called
+        verify(loanRepo, times(0)).save(any(Loan.class));
     }
-//    @Test
-//    public void getAllLoans_ExistingLoans_ShouldReturnAllLoans() {
-//        List<Loan> loans = Arrays.asList(loan1, loan2);
-//        when(loanRepo.findAll()).thenReturn(loans);
-//
-//        List<Loan> result = loanService.getAllLoans();
-//
-//        assertThat(result).isNotNull();
-//        assertThat(result).hasSize(2);
-//        assertThat(result.get(0).getPrincipal()).isEqualTo(10.0);
-//        assertThat(result.get(1).getPrincipal()).isEqualTo(15.0);
-//    }
-//    @Test
-//    public void getAllLoans_NonExistingLoans_ShouldReturnEmptyList() {
-//        when(loanRepo.findAll()).thenReturn(Collections.emptyList());
-//
-//        List<Loan> result = loanService.getAllLoans();
-//
-//        assertThat(result).isNotNull(); //we expect an empty list not null
-//        assertThat(result).isEmpty(); //list should have no elements. should be empty []
-//    }
     @Test
     public void getLoanByLoanId_NonExistingLoans_ShouldReturnLoan() {
         when(loanRepo.findById(loan1.getLoanId())).thenReturn(Optional.of(loan1));
@@ -89,6 +68,7 @@ class LoanServiceImplTest {
         assertThat(result.getPrincipal()).isEqualTo(10.0);
         verify(loanRepo, times(1)).findById(loan1.getLoanId());
     }
+
     @Test
     public void getLoanByLoanId_NonExistingLoans_ShouldThrowException() {
         when(loanRepo.findById(loan1.getLoanId())).thenReturn(Optional.empty());
@@ -155,7 +135,7 @@ class LoanServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("loan with id: " + loan1.getLoanId() +" not found");
 
-        verify(loanRepo, never()).deleteById(anyLong()); //check if .delete() wasn't called since loan is not found.
+        verify(loanRepo, never()).deleteById(anyLong());
     }
     @Test
     void processMonthlyRepayment_SufficientFunds_ShouldRepaySuccessfully() {
@@ -165,7 +145,7 @@ class LoanServiceImplTest {
 
         assertThat(response.getMessage()).contains("Loan repayment of " + loan1.getAmountToPayEachMonth() + " processed successfully. Remaining balance is: "
         + loan1.getRemainingBalance());
-        assertThat(loan1.getRemainingBalance()).isEqualTo(9.0); //9.0 because Original remainingBalance(10.0) - amount(1.0)
+        assertThat(loan1.getRemainingBalance()).isEqualTo(9.0);
         verify(loanRepo, times(1)).save(loan1);
     }
     @Test
@@ -184,10 +164,8 @@ class LoanServiceImplTest {
         when(accountRepository.save(any(Account.class))).thenReturn(account);
         when(loanRepo.save(any(Loan.class))).thenReturn(loan1);
 
-        //attempt to pay 150
         LoanResponse response = loanService.processMonthlyRepayment(1L, 150.0);
 
-        //assert: ensure only 10.0(remaining balance was deducted)
         assertThat(loan1.getRemainingBalance()).isEqualTo(0);
         assertThat(account.getBalance()).isEqualTo(4990.0); // 5000 - 10.0
         assertThat(response.getMessage()).contains("Loan repayment of 10.0 processed successfully");

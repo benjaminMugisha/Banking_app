@@ -15,16 +15,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest // spring to know repo tests are here.
-//DataJpaTest does not mock dependencies. so verify() wont work here
-//MockBean are only for service tests not repositories
-//starts up an embedded database and configures Spring Data JPA. real database interactions in this integration test
-
-// testing a custom query in LoanRepositoryTest    =>    LoanRepository_FindByAccountId_ReturnListOfLoans()
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) //h2 in memory db
+@DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class AccountRepositoryTests {
 
-    @Autowired //since we're testing we don't worry about constructor too much.
+    @Autowired
     private AccountRepository accountRepo;
 
     @Autowired
@@ -34,8 +29,7 @@ public class AccountRepositoryTests {
     private Account account1;
     @BeforeEach
     void setUp() {
-        account = Account.builder() //id should be set automatically by JPA. we dont define id in repos since we're working
-                //directly with the db.
+        account = Account.builder()
                 .accountUsername("John").balance(100.0)
                 .build();
         account1 = Account.builder()
@@ -47,7 +41,6 @@ public class AccountRepositoryTests {
     public void save_SaveValidAccount_ReturnsSavedAccount(){
         Account savedAccount = accountRepo.save(account);
 
-        //Assert
         Assertions.assertThat(savedAccount).isNotNull();
         Assertions.assertThat(savedAccount.getId()).isGreaterThan(0);
         Assertions.assertThat(savedAccount.getAccountUsername()).isEqualTo("John");
@@ -73,7 +66,7 @@ public class AccountRepositoryTests {
         Account savedAccount = accountRepo.save(account);
         Optional<Account> returnedAcc = accountRepo.findById(account.getId());
 
-        Assertions.assertThat(returnedAcc).isPresent(); //check if optional exists before calling .get()
+        Assertions.assertThat(returnedAcc).isPresent();
         Account returnedAccount = returnedAcc.get();
         Assertions.assertThat(returnedAccount).isNotNull();
         Assertions.assertThat(returnedAccount.getId()).isEqualTo(savedAccount.getId());
@@ -97,7 +90,7 @@ public class AccountRepositoryTests {
     public void findAll_NoLoansExist_ShouldReturnEmptyList() {
         List<Account> accounts = accountRepo.findAll();
 
-        Assertions.assertThat(accounts).isNotNull(); //we expect an empty list
+        Assertions.assertThat(accounts).isNotNull();
         Assertions.assertThat(accounts).isEmpty();
     }
 
@@ -117,7 +110,6 @@ public class AccountRepositoryTests {
         accountRepo.save(account1);
         accountRepo.deleteById(savedAccount.getId());
 
-        // Assert - Ensure only "account" is deleted
         Optional<Account> deletedAccount = accountRepo.findById(savedAccount.getId());
         List<Account> remainingLoans = accountRepo.findAll();
 

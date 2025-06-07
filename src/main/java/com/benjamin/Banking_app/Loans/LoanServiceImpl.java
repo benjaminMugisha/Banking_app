@@ -46,7 +46,6 @@ public class LoanServiceImpl implements LoanService {
 
         // Check if the loan is affordable by checking if Debt-to-Income (DTI) ratio exceeds 40%
         if (!isLoanAffordable(income, yearlyPayment, accountId)) {
-            logger.info("loan denied due to high dti");
             return new LoanResponse("Loan denied due to high debt-to-income ratio", null);
         }
 
@@ -67,8 +66,6 @@ public class LoanServiceImpl implements LoanService {
                 "LOAN_APPLICATION",
                 loan.getRemainingBalance(),
                 "loan created. the initial amount is: " + principal, null, null);
-        logger.info(" loan: {} created successfully belonging to account named: {} , with account id of: {}",
-                loan.getLoanId(), account.getAccountUsername(), account.getId());
 
         scheduleFirstRepayment(loan);
         return new LoanResponse("loan accepted: ", loan);
@@ -134,7 +131,6 @@ public class LoanServiceImpl implements LoanService {
 
         account.setBalance(accountBalance - totalPayment); //updating our user's balance.
 
-        logger.info("loan: {} is fully repaid", loan.getLoanId());
         return new LoanResponse("Loan of fully repaid early successfully, 2% penalty applied");
     }
 
@@ -187,7 +183,6 @@ public class LoanServiceImpl implements LoanService {
 
         // Check if the loan is already fully paid
         if (loan.getRemainingBalance() <= 0) {
-            logger.info("Loan already fully paid");
             throw new LoanAlreadyPaidException("loan fully paid", HttpStatus.NOT_FOUND);
         }
         // using default if the amount <=0
