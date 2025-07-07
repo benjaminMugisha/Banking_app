@@ -127,7 +127,7 @@ public class AccountServiceImpl implements AccountService {
             directDebitRepo.save(dd);
     }
 
-    @Scheduled(fixedDelay = 2419200000L) //28 days in ms
+    @Scheduled(initialDelay = 2419200000L, fixedDelay = 2419200000L) //28 days in ms
     public void processDirectDebits(){
         List<DirectDebit> activeDebits = directDebitRepo.findByActiveTrue();
         for(DirectDebit dd : activeDebits){
