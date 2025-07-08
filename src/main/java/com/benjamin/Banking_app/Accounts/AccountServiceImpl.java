@@ -1,5 +1,6 @@
 package com.benjamin.Banking_app.Accounts;
 
+import com.benjamin.Banking_app.Exception.BadCredentialsException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
@@ -11,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.BadCredentialsException;
+//import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,8 @@ public class AccountServiceImpl implements AccountService {
         if (accountDto == null || accountDto.getAccountUsername() == null || accountDto.getBalance() <= 0) {
             throw new BadRequestException("Invalid account data");
         }
-        if (accountRepository.existsByAccountUsername(accountDto.getAccountUsername())) {
+        if (accountRepository.findByAccountUsername(accountDto.getAccountUsername()).isPresent()) {
+//            if (accountRepository.existsByAccountUsername(accountDto.getAccountUsername())) {
             throw new BadCredentialsException("username already exists");
         }
 

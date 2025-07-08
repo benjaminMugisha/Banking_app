@@ -1,11 +1,12 @@
 package com.benjamin.Banking_app.Accounts;
 
+import com.benjamin.Banking_app.Exception.BadCredentialsException;
+import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -101,8 +102,28 @@ public class AccountServiceImplTest {
         AccountDto invalidAccountDto = new AccountDto(0, null, -100.0);
 
         assertThatThrownBy(() -> accountService.createAccount(invalidAccountDto))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage("Invalid account data");
+    }
+
+    @Test
+    public void createAccount_WhenSecondUserHasDuplicateUsername_ShouldThrowException() {
+        when(accountRepo.findByAccountUsername("John"))
+                .thenReturn(Optional.empty())      // for first user
+                .thenReturn(Optional.of(account)); // for second user where username is taken.
+
+        when(accountRepo.save(any(Account.class))).thenReturn(account);
+
+        accountService.createAccount(accountDto);
+
+        AccountDto duplicateUser = AccountDto.builder()
+                .id(2L).accountUsername("John").balance(30000.0).build();
+
+        assertThatThrownBy(() -> accountService.createAccount(duplicateUser))
+                .isInstanceOf(BadCredentialsException.class)
+                .hasMessage("username already exists");
+
+        verify(accountRepo, times(1)).save(any(Account.class));
     }
 
     @Test
