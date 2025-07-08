@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -84,5 +85,14 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handleBadRequest(BadRequestException badRequestException) {
+        ApiError error = new ApiError(
+                badRequestException.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

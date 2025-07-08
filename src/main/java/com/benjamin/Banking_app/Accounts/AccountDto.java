@@ -14,6 +14,6 @@ public class AccountDto {
 
     @NotBlank(message = "username cannot be empty")
     private String accountUsername;
-    @Min(message = "balance cannot be less than one euros",value = 1)
+    @Min(message = "balance cannot be less than one euro", value = 1)
     private double balance;
 }

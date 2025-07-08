@@ -1,624 +1,209 @@
-"2025-07-07 18:46:22 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 18:46:22 [INFO] c.b.B.App - Starting App using Java 21 with PID 29322 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:46:22 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:46:23 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:46:23 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 38 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:46:23 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
-""2025-07-07 18:46:23 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-""2025-07-07 18:46:23 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2025-07-07 18:46:23 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2025-07-07 18:46:23 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2025-07-07 18:46:23 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1348 ms
-""2025-07-07 18:46:23 [ERROR] o.s.b.w.e.t.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-""2025-07-07 18:46:23 [INFO] o.a.c.c.StandardService - Stopping service [Tomcat]
-""2025-07-07 18:46:23 [WARN] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
-""2025-07-07 18:46:23 [INFO] o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-""2025-07-07 18:46:23 [ERROR] o.s.b.SpringApplication - Application run failed
-"org.springframework.context.ApplicationContextException: Unable to start web server
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:618)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
-	at com.benjamin.Banking_app.App.main(App.java:13)
-Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:145)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:105)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:499)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:218)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
-	... 8 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1355)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:210)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:173)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:168)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:153)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:86)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
-	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
-	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4880)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
-	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:845)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
-	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:240)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:433)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:921)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:126)
-	... 13 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1355)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:409)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 54 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1685)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1434)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:599)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 77 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaSharedEM_entityManagerFactory': Cannot resolve reference to bean 'entityManagerFactory' while setting constructor argument
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorArguments(ConstructorResolver.java:682)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:509)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 91 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceScriptDatabaseInitializer' defined in class path resource [org/springframework/boot/autoconfigure/sql/init/DataSourceInitializationConfiguration.class]: Unsatisfied dependency expressed through method 'dataSourceScriptDatabaseInitializer' parameter 0: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:542)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:313)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 103 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:636)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 115 common frames omitted
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:644)
-	... 129 common frames omitted
-Caused by: java.lang.IllegalArgumentException: URL must start with 'jdbc'
-	at org.springframework.util.Assert.isTrue(Assert.java:111)
-	at org.springframework.boot.jdbc.DatabaseDriver.fromJdbcUrl(DatabaseDriver.java:288)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceProperties.determineDriverClassName(DataSourceProperties.java:180)
-	at org.springframework.boot.autoconfigure.jdbc.PropertiesJdbcConnectionDetails.getDriverClassName(PropertiesJdbcConnectionDetails.java:49)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration.createDataSource(DataSourceConfiguration.java:55)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari.dataSource(DataSourceConfiguration.java:117)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
-	... 130 common frames omitted
-"2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl - loan application initiated
-""2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 1
-""2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 1
-""2025-07-07 18:47:08 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:47:08 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanControllerTests]: LoanControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:09 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanControllerTests
-""2025-07-07 18:47:09 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 18:47:09 [INFO] c.b.B.L.LoanControllerTests - Starting LoanControllerTests using Java 21 with PID 29456 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:47:09 [INFO] c.b.B.L.LoanControllerTests - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:47:10 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@40fee459, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@bcd9ed6, org.springframework.security.web.context.SecurityContextHolderFilter@20163008, org.springframework.security.web.header.HeaderWriterFilter@10f10230, org.springframework.web.filter.CorsFilter@3ffa0f38, org.springframework.security.web.authentication.logout.LogoutFilter@361b3ca6, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@4f4d05b3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3436d3d7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3f40568e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@13cc31df, org.springframework.security.web.session.SessionManagementFilter@68550d86, org.springframework.security.web.access.ExceptionTranslationFilter@6be80629, org.springframework.security.web.access.intercept.AuthorizationFilter@2dacda9a]
-""2025-07-07 18:47:10 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:47:10 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:47:10 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-""2025-07-07 18:47:10 [INFO] c.b.B.L.LoanControllerTests - Started LoanControllerTests in 1.524 seconds (process running for 3.5)
-""2025-07-07 18:47:10 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanRepositoryTest]: LoanRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:10 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanRepositoryTest
-""2025-07-07 18:47:10 [INFO] c.b.B.L.LoanRepositoryTest - Starting LoanRepositoryTest using Java 21 with PID 29456 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:47:10 [INFO] c.b.B.L.LoanRepositoryTest - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:47:11 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:47:11 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:47:11 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
-""2025-07-07 18:47:11 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:99ebcc6e-8d5b-4816-82fa-a3e6bf6a7d3c;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-""2025-07-07 18:47:11 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 18:47:11 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2025-07-07 18:47:11 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 18:47:11 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 18:47:12 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 18:47:12 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:47:12 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6b127d96, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5a4929f5, org.springframework.security.web.context.SecurityContextHolderFilter@92537b5, org.springframework.security.web.header.HeaderWriterFilter@5271c49b, org.springframework.security.web.authentication.logout.LogoutFilter@2c73a332, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@71af3c7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@43b89b4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58b2c0b4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4146577c, org.springframework.security.web.session.SessionManagementFilter@66b65360, org.springframework.security.web.access.ExceptionTranslationFilter@1233f419, org.springframework.security.web.access.intercept.AuthorizationFilter@3a24306e]
-""2025-07-07 18:47:12 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
-""2025-07-07 18:47:12 [INFO] c.b.B.L.LoanRepositoryTest - Started LoanRepositoryTest in 1.825 seconds (process running for 5.589)
-""2025-07-07 18:47:12 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 5
-""2025-07-07 18:47:12 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.BankingAppApplicationTests]: BankingAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:12 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.BankingAppApplicationTests
-""2025-07-07 18:47:12 [INFO] c.b.B.BankingAppApplicationTests - Starting BankingAppApplicationTests using Java 21 with PID 29456 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:47:12 [INFO] c.b.B.BankingAppApplicationTests - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:47:13 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:47:13 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 19 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:47:13 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 18:47:13 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 18:47:13 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 18:47:13 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2025-07-07 18:47:13 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn14: url=jdbc:h2:mem:testdb user=SA
-""2025-07-07 18:47:13 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2025-07-07 18:47:13 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 18:47:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:47:13 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2025-07-07 18:47:13 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@112aa99c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@74d76660, org.springframework.security.web.context.SecurityContextHolderFilter@7e389cd6, org.springframework.security.web.header.HeaderWriterFilter@6a651151, org.springframework.web.filter.CorsFilter@5308b244, org.springframework.security.web.authentication.logout.LogoutFilter@40b4a59c, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@7fa0f739, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@45c812b4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7657cc5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26d38b98, org.springframework.security.web.session.SessionManagementFilter@246b2469, org.springframework.security.web.access.ExceptionTranslationFilter@5edca2ff, org.springframework.security.web.access.intercept.AuthorizationFilter@69438db0]
-""2025-07-07 18:47:14 [INFO] c.b.B.BankingAppApplicationTests - Started BankingAppApplicationTests in 1.138 seconds (process running for 6.913)
-""2025-07-07 18:47:14 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionsControllerTest]: TransactionsControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:14 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionsControllerTest
-""2025-07-07 18:47:14 [INFO] c.b.B.T.TransactionsControllerTest - Starting TransactionsControllerTest using Java 21 with PID 29456 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:47:14 [INFO] c.b.B.T.TransactionsControllerTest - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:47:14 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@36bc3c49, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1bebe505, org.springframework.security.web.context.SecurityContextHolderFilter@4cbac3f, org.springframework.security.web.header.HeaderWriterFilter@78ffe38, org.springframework.web.filter.CorsFilter@36f3f2a8, org.springframework.security.web.authentication.logout.LogoutFilter@17d745ae, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@346c568d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7862e409, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@e4bb03, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@721e04f1, org.springframework.security.web.session.SessionManagementFilter@5cf24f99, org.springframework.security.web.access.ExceptionTranslationFilter@38388db2, org.springframework.security.web.access.intercept.AuthorizationFilter@5d63295e]
-""2025-07-07 18:47:14 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:47:14 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:47:14 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2025-07-07 18:47:14 [INFO] c.b.B.T.TransactionsControllerTest - Started TransactionsControllerTest in 0.41 seconds (process running for 7.35)
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountServiceImpl - transaction history of: 1 requested
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountServiceImpl - Returned 0 transactions for account ID: 1
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountServiceImpl - transaction history of: 1 requested
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountServiceImpl - Returned 2 transactions for account ID: 1
-""2025-07-07 18:47:14 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionRepositoryTest]: TransactionRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:14 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionRepositoryTest
-""2025-07-07 18:47:14 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountControllerTest]: AccountControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:14 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountControllerTest
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountControllerTest - Starting AccountControllerTest using Java 21 with PID 29456 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountControllerTest - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:47:14 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@442adf14, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@26ceca00, org.springframework.security.web.context.SecurityContextHolderFilter@32ab4aec, org.springframework.security.web.header.HeaderWriterFilter@6f4809ae, org.springframework.web.filter.CorsFilter@6dd1e22, org.springframework.security.web.authentication.logout.LogoutFilter@14decb0a, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@cd64c60, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@30cbba6b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1fe1d0a5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1b9df329, org.springframework.security.web.session.SessionManagementFilter@66c0a115, org.springframework.security.web.access.ExceptionTranslationFilter@23c424c6, org.springframework.security.web.access.intercept.AuthorizationFilter@68deb060]
-""2025-07-07 18:47:14 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:47:14 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:47:14 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-""2025-07-07 18:47:14 [INFO] c.b.B.A.AccountControllerTest - Started AccountControllerTest in 0.27 seconds (process running for 7.736)
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl -  account: Account(id=1, accountUsername=John, balance=50000.0) created successfully
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl -  searched account: Account(id=1, accountUsername=John, balance=50000.0) returned successfuly 
-""2025-07-07 18:47:15 [ERROR] c.b.B.A.AccountServiceImpl - failed to process the direct debit. from: 1, to: 2, Amount: 9.99999999E8
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl - funds transferred successfully. from: John, to: toUser, Amount: 500.0
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl - Deposit successful. AccountId: 1, Amount: 500.0, New Balance: 50500.0
-""2025-07-07 18:47:15 [INFO] c.b.B.A.AccountServiceImpl - account: 1 deleted successfully
-""2025-07-07 18:47:15 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountRepositoryTests]: AccountRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:47:15 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountRepositoryTests
-""2025-07-07 18:47:15 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:47:15 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:47:15 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
-""2025-07-07 18:47:15 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
-""2025-07-07 18:48:10 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 18:48:10 [INFO] c.b.B.App - Starting App using Java 21 with PID 29630 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:48:10 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:48:11 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:48:11 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 66 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:48:12 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
-""2025-07-07 18:48:12 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-""2025-07-07 18:48:12 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2025-07-07 18:48:12 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2025-07-07 18:48:12 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2025-07-07 18:48:12 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1531 ms
-""2025-07-07 18:48:12 [ERROR] o.s.b.w.e.t.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-""2025-07-07 18:48:12 [INFO] o.a.c.c.StandardService - Stopping service [Tomcat]
-""2025-07-07 18:48:12 [WARN] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
-""2025-07-07 18:48:12 [INFO] o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-""2025-07-07 18:48:12 [ERROR] o.s.b.SpringApplication - Application run failed
-"org.springframework.context.ApplicationContextException: Unable to start web server
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:618)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
-	at com.benjamin.Banking_app.App.main(App.java:13)
-Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:145)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:105)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:499)
-	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:218)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
-	... 8 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1355)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:210)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:173)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:168)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:153)
-	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:86)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
-	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
-	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4880)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
-	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:845)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
-	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
-	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
-	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
-	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:240)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:433)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:921)
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
-	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437)
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:126)
-	... 13 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'applicationConfig' defined in file [/Users/ben/Desktop/Banking_app/target/classes/com/benjamin/Banking_app/Security/ApplicationConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1355)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:409)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 54 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'userRepository' defined in com.benjamin.Banking_app.Security.UserRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1685)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1434)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:599)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 77 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaSharedEM_entityManagerFactory': Cannot resolve reference to bean 'entityManagerFactory' while setting constructor argument
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorArguments(ConstructorResolver.java:682)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:509)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 91 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceScriptDatabaseInitializer' defined in class path resource [org/springframework/boot/autoconfigure/sql/init/DataSourceInitializationConfiguration.class]: Unsatisfied dependency expressed through method 'dataSourceScriptDatabaseInitializer' parameter 0: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:542)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:313)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
-	... 103 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:636)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1335)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1165)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
-	... 115 common frames omitted
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: URL must start with 'jdbc'
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:644)
-	... 129 common frames omitted
-Caused by: java.lang.IllegalArgumentException: URL must start with 'jdbc'
-	at org.springframework.util.Assert.isTrue(Assert.java:111)
-	at org.springframework.boot.jdbc.DatabaseDriver.fromJdbcUrl(DatabaseDriver.java:288)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceProperties.determineDriverClassName(DataSourceProperties.java:180)
-	at org.springframework.boot.autoconfigure.jdbc.PropertiesJdbcConnectionDetails.getDriverClassName(PropertiesJdbcConnectionDetails.java:49)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration.createDataSource(DataSourceConfiguration.java:55)
-	at org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari.dataSource(DataSourceConfiguration.java:117)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
-	... 130 common frames omitted
-"2025-07-07 18:49:45 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 18:49:45 [INFO] c.b.B.App - Starting App using Java 21 with PID 29856 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:49:45 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:49:46 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:49:46 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 52 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:49:46 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
-""2025-07-07 18:49:46 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-""2025-07-07 18:49:46 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2025-07-07 18:49:46 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2025-07-07 18:49:46 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2025-07-07 18:49:46 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1377 ms
-""2025-07-07 18:49:47 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2025-07-07 18:49:47 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@585513a8
-""2025-07-07 18:49:47 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2025-07-07 18:49:47 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 18:49:47 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2025-07-07 18:49:47 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 18:49:47 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 18:49:48 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 18:49:48 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:49:48 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2025-07-07 18:49:48 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3da12ba4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@64b0ec4a, org.springframework.security.web.context.SecurityContextHolderFilter@67cd1db3, org.springframework.security.web.header.HeaderWriterFilter@1483c738, org.springframework.web.filter.CorsFilter@1b949de4, org.springframework.security.web.authentication.logout.LogoutFilter@7fd3197b, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@1ecf784f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@53630682, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@71e2ddd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2981064d, org.springframework.security.web.session.SessionManagementFilter@2e76ade9, org.springframework.security.web.access.ExceptionTranslationFilter@14c7ab73, org.springframework.security.web.access.intercept.AuthorizationFilter@98a0842]
-""2025-07-07 18:49:49 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-""2025-07-07 18:49:49 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
-""2025-07-07 18:49:49 [INFO] c.b.B.App - Started App in 4.361 seconds (process running for 5.058)
-""2025-07-07 18:49:49 [ERROR] c.b.B.A.AccountServiceImpl - failed to process the direct debit. from: 35, to: 36, Amount: 1.1
-""2025-07-07 18:49:49 [ERROR] o.s.s.s.TaskUtils$LoggingErrorHandler - Unexpected error occurred in scheduled task
-"java.lang.RuntimeException: failed to process the direct debit
-	at com.benjamin.Banking_app.Accounts.AccountServiceImpl.processDirectDebits(AccountServiceImpl.java:141)
+"2025-07-08 15:05:32 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2025-07-08 15:05:32 [INFO] c.b.B.App - Starting App using Java 21 with PID 38102 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
+""2025-07-08 15:05:32 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2025-07-08 15:05:32 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2025-07-08 15:05:32 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 48 ms. Found 5 JPA repository interfaces.
+""2025-07-08 15:05:33 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2025-07-08 15:05:33 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:05:33 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2025-07-08 15:05:33 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2025-07-08 15:05:33 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2025-07-08 15:05:33 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1280 ms
+""2025-07-08 15:05:33 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2025-07-08 15:05:33 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2025-07-08 15:05:33 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2025-07-08 15:05:33 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2025-07-08 15:05:33 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2025-07-08 15:05:33 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6dd20ec9
+""2025-07-08 15:05:33 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2025-07-08 15:05:34 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2025-07-08 15:05:34 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2025-07-08 15:05:35 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2025-07-08 15:05:35 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@23263586, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4e2ad1f2, org.springframework.security.web.context.SecurityContextHolderFilter@48dc06a9, org.springframework.security.web.header.HeaderWriterFilter@25639668, org.springframework.web.filter.CorsFilter@2e0de20d, org.springframework.security.web.authentication.logout.LogoutFilter@73c6ebec, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@36ce9eaf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@726ee6cf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a83d61c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@121f97fb, org.springframework.security.web.session.SessionManagementFilter@6b8683b8, org.springframework.security.web.access.ExceptionTranslationFilter@757ad227, org.springframework.security.web.access.intercept.AuthorizationFilter@25291901]
+""2025-07-08 15:05:35 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:05:35 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2025-07-08 15:05:35 [INFO] c.b.B.App - Started App in 3.987 seconds (process running for 4.581)
+""2025-07-08 15:05:39 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2025-07-08 15:05:39 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2025-07-08 15:05:39 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 1 ms
+""2025-07-08 15:05:39 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
+""2025-07-08 15:05:39 [ERROR] o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: username already exists] with root cause
+"java.lang.IllegalArgumentException: username already exists
+	at com.benjamin.Banking_app.Accounts.AccountServiceImpl.createAccount(AccountServiceImpl.java:37)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:716)
-	at com.benjamin.Banking_app.Accounts.AccountServiceImpl$$SpringCGLIB$$0.processDirectDebits(<generated>)
+	at com.benjamin.Banking_app.Accounts.AccountServiceImpl$$SpringCGLIB$$0.createAccount(<generated>)
+	at com.benjamin.Banking_app.Accounts.AccountController.createAccount(AccountController.java:32)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124)
-	at io.micrometer.observation.Observation.observe(Observation.java:499)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
-	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:358)
-	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:716)
+	at com.benjamin.Banking_app.Accounts.AccountController$$SpringCGLIB$$0.createAccount(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.benjamin.Banking_app.Security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-"2025-07-07 18:51:32 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanControllerTests]: LoanControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:32 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanControllerTests
-""2025-07-07 18:51:32 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 18:51:32 [INFO] c.b.B.L.LoanControllerTests - Starting LoanControllerTests using Java 21 with PID 30108 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:51:32 [INFO] c.b.B.L.LoanControllerTests - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:51:34 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6fbc7853, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@733fa95c, org.springframework.security.web.context.SecurityContextHolderFilter@5b6cc344, org.springframework.security.web.header.HeaderWriterFilter@49a06087, org.springframework.web.filter.CorsFilter@3b2c8bda, org.springframework.security.web.authentication.logout.LogoutFilter@15a484a9, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@79604abe, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@83e635f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@61d011e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@688d619c, org.springframework.security.web.session.SessionManagementFilter@5af40e45, org.springframework.security.web.access.ExceptionTranslationFilter@27a90ce5, org.springframework.security.web.access.intercept.AuthorizationFilter@2cc61b3b]
-""2025-07-07 18:51:34 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:51:34 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:51:34 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2025-07-07 18:51:34 [INFO] c.b.B.L.LoanControllerTests - Started LoanControllerTests in 2.558 seconds (process running for 4.022)
-""2025-07-07 18:51:35 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.BankingAppApplicationTests]: BankingAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:35 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.BankingAppApplicationTests
-""2025-07-07 18:51:35 [INFO] c.b.B.BankingAppApplicationTests - Starting BankingAppApplicationTests using Java 21 with PID 30108 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:51:35 [INFO] c.b.B.BankingAppApplicationTests - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:51:35 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:51:35 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 34 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:51:35 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 18:51:35 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2025-07-07 18:51:35 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 18:51:35 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 18:51:35 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2025-07-07 18:51:36 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-""2025-07-07 18:51:36 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2025-07-07 18:51:36 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 18:51:36 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:51:37 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2025-07-07 18:51:37 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@11b975cc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d3a7025, org.springframework.security.web.context.SecurityContextHolderFilter@6068e9d9, org.springframework.security.web.header.HeaderWriterFilter@3095a6e0, org.springframework.web.filter.CorsFilter@634de03e, org.springframework.security.web.authentication.logout.LogoutFilter@71b6886, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@5a7e2f07, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@681285ec, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@75ad8ca8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5ca29f17, org.springframework.security.web.session.SessionManagementFilter@1f79536b, org.springframework.security.web.access.ExceptionTranslationFilter@1263422a, org.springframework.security.web.access.intercept.AuthorizationFilter@620bab73]
-""2025-07-07 18:51:37 [INFO] c.b.B.BankingAppApplicationTests - Started BankingAppApplicationTests in 2.443 seconds (process running for 6.789)
-""2025-07-07 18:51:37 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountControllerTest]: AccountControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:37 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountControllerTest
-""2025-07-07 18:51:37 [INFO] c.b.B.A.AccountControllerTest - Starting AccountControllerTest using Java 21 with PID 30108 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:51:37 [INFO] c.b.B.A.AccountControllerTest - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:51:37 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@67954442, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7bb5c602, org.springframework.security.web.context.SecurityContextHolderFilter@5c8b6b4d, org.springframework.security.web.header.HeaderWriterFilter@27e4ca66, org.springframework.web.filter.CorsFilter@714ab3a1, org.springframework.security.web.authentication.logout.LogoutFilter@79acb200, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@315f5ffb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b0ad007, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7abc82fa, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4aa8504f, org.springframework.security.web.session.SessionManagementFilter@36c6509c, org.springframework.security.web.access.ExceptionTranslationFilter@d4fe4d, org.springframework.security.web.access.intercept.AuthorizationFilter@4a3e3ce3]
-""2025-07-07 18:51:38 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:51:38 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:51:38 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2025-07-07 18:51:38 [INFO] c.b.B.A.AccountControllerTest - Started AccountControllerTest in 0.482 seconds (process running for 7.293)
-""2025-07-07 18:51:38 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountRepositoryTests]: AccountRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:38 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountRepositoryTests
-""2025-07-07 18:51:38 [INFO] c.b.B.A.AccountRepositoryTests - Starting AccountRepositoryTests using Java 21 with PID 30108 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:51:38 [INFO] c.b.B.A.AccountRepositoryTests - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:51:38 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 18:51:38 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 5 JPA repository interfaces.
-""2025-07-07 18:51:38 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
-""2025-07-07 18:51:38 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:4fe73ca4-9d43-4f52-b1ca-e16f1a4cf464;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-""2025-07-07 18:51:38 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 18:51:38 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 18:51:38 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 18:51:38 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 18:51:38 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:51:38 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@129b75c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b054614, org.springframework.security.web.context.SecurityContextHolderFilter@3f67d229, org.springframework.security.web.header.HeaderWriterFilter@60cc749d, org.springframework.security.web.authentication.logout.LogoutFilter@1dece75a, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@400a5164, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4a25da63, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@49ce2726, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7476c5c2, org.springframework.security.web.session.SessionManagementFilter@40f2ae53, org.springframework.security.web.access.ExceptionTranslationFilter@4b77d80e, org.springframework.security.web.access.intercept.AuthorizationFilter@41313f58]
-""2025-07-07 18:51:38 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
-""2025-07-07 18:51:38 [INFO] c.b.B.A.AccountRepositoryTests - Started AccountRepositoryTests in 0.387 seconds (process running for 7.954)
-""2025-07-07 18:51:38 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionRepositoryTest]: TransactionRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:38 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionRepositoryTest
-""2025-07-07 18:51:38 [INFO] c.b.B.L.LoanServiceImpl - loan application initiated
-""2025-07-07 18:51:38 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:51:38 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:51:38 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 1
-""2025-07-07 18:51:38 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 1
-""2025-07-07 18:51:39 [INFO] c.b.B.L.LoanServiceImpl -  loan: 1 repaid for this month successfully
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl -  account: Account(id=1, accountUsername=John, balance=50000.0) created successfully
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl -  searched account: Account(id=1, accountUsername=John, balance=50000.0) returned successfuly 
-""2025-07-07 18:51:39 [ERROR] c.b.B.A.AccountServiceImpl - failed to process the direct debit. from: 1, to: 2, Amount: 9.99999999E8
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - funds transferred successfully. from: John, to: toUser, Amount: 500.0
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - Deposit successful. AccountId: 1, Amount: 500.0, New Balance: 50500.0
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - account: 1 deleted successfully
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - transaction history of: 1 requested
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - Returned 0 transactions for account ID: 1
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - transaction history of: 1 requested
-""2025-07-07 18:51:39 [INFO] c.b.B.A.AccountServiceImpl - Returned 2 transactions for account ID: 1
-""2025-07-07 18:51:39 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanRepositoryTest]: LoanRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:39 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanRepositoryTest
-""2025-07-07 18:51:39 [INFO] c.b.B.L.LoanServiceImpl - searching for loan: 5
-""2025-07-07 18:51:39 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionsControllerTest]: TransactionsControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2025-07-07 18:51:39 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionsControllerTest
-""2025-07-07 18:51:39 [INFO] c.b.B.T.TransactionsControllerTest - Starting TransactionsControllerTest using Java 21 with PID 30108 (started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 18:51:39 [INFO] c.b.B.T.TransactionsControllerTest - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 18:51:39 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7ef32321, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e7aa2c9, org.springframework.security.web.context.SecurityContextHolderFilter@5f8b60f3, org.springframework.security.web.header.HeaderWriterFilter@622ec92a, org.springframework.web.filter.CorsFilter@2232c745, org.springframework.security.web.authentication.logout.LogoutFilter@72364ff1, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@9215bfb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5881d8da, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4cf22d79, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@40009de0, org.springframework.security.web.session.SessionManagementFilter@620b0fad, org.springframework.security.web.access.ExceptionTranslationFilter@737e8e66, org.springframework.security.web.access.intercept.AuthorizationFilter@7963767d]
-""2025-07-07 18:51:39 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2025-07-07 18:51:39 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2025-07-07 18:51:39 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2025-07-07 18:51:39 [INFO] c.b.B.T.TransactionsControllerTest - Started TransactionsControllerTest in 0.26 seconds (process running for 8.936)
-""2025-07-07 18:51:39 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 18:51:39 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
-""2025-07-07 18:51:39 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
-""2025-07-07 18:51:39 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 19:00:37 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 19:00:37 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
-""2025-07-07 19:00:37 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
-""2025-07-07 19:00:41 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2025-07-07 19:00:41 [INFO] c.b.B.App - Starting App using Java 21 with PID 31263 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
-""2025-07-07 19:00:41 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
-""2025-07-07 19:00:42 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2025-07-07 19:00:42 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 42 ms. Found 5 JPA repository interfaces.
-""2025-07-07 19:00:42 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
-""2025-07-07 19:00:42 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-""2025-07-07 19:00:42 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2025-07-07 19:00:42 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2025-07-07 19:00:42 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2025-07-07 19:00:42 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1311 ms
-""2025-07-07 19:00:42 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2025-07-07 19:00:43 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7b18658a
-""2025-07-07 19:00:43 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2025-07-07 19:00:43 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2025-07-07 19:00:43 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2025-07-07 19:00:43 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2025-07-07 19:00:43 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2025-07-07 19:00:44 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2025-07-07 19:00:44 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2025-07-07 19:00:45 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2025-07-07 19:00:45 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@64b0ec4a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1b949de4, org.springframework.security.web.context.SecurityContextHolderFilter@7ccfed46, org.springframework.security.web.header.HeaderWriterFilter@66c91224, org.springframework.web.filter.CorsFilter@2981064d, org.springframework.security.web.authentication.logout.LogoutFilter@1d2ce035, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@34376069, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@71e2ddd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8318808, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1dc9e4d2, org.springframework.security.web.session.SessionManagementFilter@7a3ab73a, org.springframework.security.web.access.ExceptionTranslationFilter@4fcb796f, org.springframework.security.web.access.intercept.AuthorizationFilter@56f569e]
-""2025-07-07 19:00:45 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-""2025-07-07 19:00:45 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
-""2025-07-07 19:00:45 [INFO] c.b.B.App - Started App in 4.631 seconds (process running for 5.332)
+"2025-07-08 15:06:01 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2025-07-08 15:06:01 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2025-07-08 15:06:01 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2025-07-08 15:06:05 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2025-07-08 15:06:05 [INFO] c.b.B.App - Starting App using Java 21 with PID 38197 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
+""2025-07-08 15:06:05 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2025-07-08 15:06:05 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2025-07-08 15:06:06 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 5 JPA repository interfaces.
+""2025-07-08 15:06:06 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2025-07-08 15:06:06 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:06:06 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2025-07-08 15:06:06 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2025-07-08 15:06:06 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2025-07-08 15:06:06 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1390 ms
+""2025-07-08 15:06:06 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2025-07-08 15:06:06 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2025-07-08 15:06:06 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2025-07-08 15:06:07 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2025-07-08 15:06:07 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2025-07-08 15:06:07 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7ed8b44
+""2025-07-08 15:06:07 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2025-07-08 15:06:07 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2025-07-08 15:06:08 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2025-07-08 15:06:08 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2025-07-08 15:06:08 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@685e5967, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@106387cf, org.springframework.security.web.context.SecurityContextHolderFilter@5ff12345, org.springframework.security.web.header.HeaderWriterFilter@6e4ac3f5, org.springframework.web.filter.CorsFilter@3d3c14c3, org.springframework.security.web.authentication.logout.LogoutFilter@701996e9, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@5ca006ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74fda9ed, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a9fd482, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@599fab92, org.springframework.security.web.session.SessionManagementFilter@4628f386, org.springframework.security.web.access.ExceptionTranslationFilter@6b8683b8, org.springframework.security.web.access.intercept.AuthorizationFilter@59b43e35]
+""2025-07-08 15:06:08 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:06:09 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2025-07-08 15:06:09 [INFO] c.b.B.App - Started App in 4.151 seconds (process running for 4.795)
+""2025-07-08 15:06:14 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2025-07-08 15:06:14 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2025-07-08 15:06:14 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 2 ms
+""2025-07-08 15:06:15 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
+""2025-07-08 15:07:37 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2025-07-08 15:07:37 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2025-07-08 15:07:37 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2025-07-08 15:16:22 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2025-07-08 15:16:23 [INFO] c.b.B.App - Starting App using Java 21 with PID 39616 (/Users/ben/Desktop/Banking_app/target/classes started by ben in /Users/ben/Desktop/Banking_app)
+""2025-07-08 15:16:23 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2025-07-08 15:16:23 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2025-07-08 15:16:23 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 5 JPA repository interfaces.
+""2025-07-08 15:16:24 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2025-07-08 15:16:24 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:16:24 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2025-07-08 15:16:24 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2025-07-08 15:16:24 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2025-07-08 15:16:24 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1260 ms
+""2025-07-08 15:16:24 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2025-07-08 15:16:24 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2025-07-08 15:16:24 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2025-07-08 15:16:24 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2025-07-08 15:16:24 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2025-07-08 15:16:24 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4d4b019e
+""2025-07-08 15:16:24 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2025-07-08 15:16:25 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2025-07-08 15:16:25 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2025-07-08 15:16:26 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2025-07-08 15:16:26 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@685e5967, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@106387cf, org.springframework.security.web.context.SecurityContextHolderFilter@5ff12345, org.springframework.security.web.header.HeaderWriterFilter@6e4ac3f5, org.springframework.web.filter.CorsFilter@3d3c14c3, org.springframework.security.web.authentication.logout.LogoutFilter@701996e9, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@5039c2cf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74fda9ed, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a9fd482, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@599fab92, org.springframework.security.web.session.SessionManagementFilter@4628f386, org.springframework.security.web.access.ExceptionTranslationFilter@6b8683b8, org.springframework.security.web.access.intercept.AuthorizationFilter@59b43e35]
+""2025-07-08 15:16:26 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2025-07-08 15:16:26 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2025-07-08 15:16:26 [INFO] c.b.B.App - Started App in 4.134 seconds (process running for 4.905)
+""2025-07-08 15:16:30 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2025-07-08 15:16:30 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2025-07-08 15:16:30 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 2 ms
+""2025-07-08 15:16:30 [INFO] c.b.B.A.AccountServiceImpl -  creating an account...
 "
