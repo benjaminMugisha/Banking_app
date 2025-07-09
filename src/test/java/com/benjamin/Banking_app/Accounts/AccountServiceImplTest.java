@@ -1,8 +1,10 @@
 package com.benjamin.Banking_app.Accounts;
 
-import com.benjamin.Banking_app.Exception.BadCredentialsException;
+import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
+import com.benjamin.Banking_app.Roles.Role;
+import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +42,7 @@ public class AccountServiceImplTest {
     private AccountServiceImpl accountService;
     private Account account;
     private AccountDto accountDto;
+    private Users user;
 
     @BeforeEach
     void setUp() {
@@ -45,6 +51,20 @@ public class AccountServiceImplTest {
         account = Account.builder()
                 .id(1L).accountUsername("John").balance(50000.0)
                 .build();
+        user = Users.builder()
+                .password("password").email("John@gmail.com")
+                .build();
+        account.setUser(user);
+    }
+
+    private void mockAuthenticatedUser(String email) {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(email);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
@@ -120,7 +140,7 @@ public class AccountServiceImplTest {
                 .id(2L).accountUsername("John").balance(30000.0).build();
 
         assertThatThrownBy(() -> accountService.createAccount(duplicateUser))
-                .isInstanceOf(BadCredentialsException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage("username already exists");
 
         verify(accountRepo, times(1)).save(any(Account.class));
@@ -128,6 +148,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void getAccountById_ExistingAccountDto_ShouldReturnAccountDto() {
+        mockAuthenticatedUser("John@gmail.com");
         when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
 
         AccountDto result = accountService.getAccountById(account.getId());
@@ -151,6 +172,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void deposit_ExistingAccount_ShouldUpdateBalance() {
+        mockAuthenticatedUser("John@gmail.com");
         long accountId = account.getId();
         double depositAmount = 500.0;
         double expectedBalance = account.getBalance() + depositAmount;
@@ -189,6 +211,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void transfer_ExistingAccountAndBalanceIsSufficient_ShouldTransferAmount() {
+        mockAuthenticatedUser("John@gmail.com");
         Long toAccountId = 2L;
         double transferAmount = 500.0;
 
@@ -243,6 +266,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void transfer_InsufficientBalance_ShouldThrowException() {
+        mockAuthenticatedUser("John@gmail.com");
         long toAccountId = 2L;
         double transferAmount = 99999999.9;
 
@@ -262,6 +286,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void withdraw_AccountExistsAndFundsAreSufficient_ShouldReduceBalance() {
+        mockAuthenticatedUser("John@gmail.com");
         double withdrawalAmount = 500.0;
         double expectedBalance = account.getBalance() - withdrawalAmount;
 
@@ -283,6 +308,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void withdraw_InsufficientFunds_ShouldThrowException() {
+        mockAuthenticatedUser("John@gmail.com");
         double withdrawalAmount = 9999999999.0;
 
         when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
@@ -419,4 +445,27 @@ public class AccountServiceImplTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("failed to process the direct debit");
     }
+
+    @Test
+    public void getAccountById_WhenUserNotOwner_ShouldThrowAccessDenied() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("user@gmail.com");
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Users otherUser = new Users();
+        otherUser.setEmail("user2@gmail.com");
+
+        Account account = new Account();
+        account.setId(1L);
+        account.setUser(otherUser);
+
+        when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
+
+        assertThatThrownBy(() -> accountService.getAccountById(account.getId()))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessage("not the owner of the account");
+    }
+
 }

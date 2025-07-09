@@ -1,6 +1,6 @@
 package com.benjamin.Banking_app.Accounts;
 
-import com.benjamin.Banking_app.Exception.BadCredentialsException;
+import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
@@ -12,10 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
-//import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto createAccount(AccountDto accountDto) {
         logger.info(" creating an account...");
-
         if (accountDto == null || accountDto.getAccountUsername() == null || accountDto.getBalance() <= 0) {
             throw new BadRequestException("Invalid account data");
         }
         if (accountRepository.findByAccountUsername(accountDto.getAccountUsername()).isPresent()) {
 //            if (accountRepository.existsByAccountUsername(accountDto.getAccountUsername())) {
-            throw new BadCredentialsException("username already exists");
+            logger.warn("attempt to create an account with a duplicate username");
+            throw new BadRequestException("username already exists");
         }
 
         Account account = AccountMapper.MapToAccount(accountDto);
@@ -51,6 +52,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
+        authorizeAccess( account);
         logger.info(" searched account: {} returned successfuly " ,account );
         return AccountMapper.MapToAccountDto(account);
     }
@@ -60,6 +62,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("account used not found"));
 
+        authorizeAccess( account);
         double total = account.getBalance() + amount;
         account.setBalance(total); //updating the account's balance
         Account savedAccount = accountRepository.save(account); //persist it so it updates the balance
@@ -71,12 +74,11 @@ public class AccountServiceImpl implements AccountService {
          }
     @Transactional
     public void transfer(TransferRequest transferRequest) {
-
         Account fromAccount = accountRepository.findById(transferRequest.getFromAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("account to send the funds not found"));
         Account toAccount = accountRepository.findById(transferRequest.getToAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("account to receive the funds not found"));
-
+        authorizeAccess( fromAccount);
         if (fromAccount.getBalance() < transferRequest.getAmount()) {
             throw new InsufficientFundsException("Insufficient balance");
         }
@@ -106,7 +108,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
-
+        authorizeAccess(account);
         if (amount > account.getBalance()){
             throw new InsufficientFundsException("insufficient funds");
         }
@@ -169,5 +171,11 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.deleteById(id);
         logger.info("account: {} deleted successfully", id);
+    }
+    public void authorizeAccess(Account account){
+        String authenticatedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!account.getUser().getEmail().equals(authenticatedUser)){
+            throw new AccessDeniedException("not the owner of the account");
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.benjamin.Banking_app.Security;
 
+import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
-import com.benjamin.Banking_app.Exception.BadCredentialsException;
+import com.benjamin.Banking_app.Exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,20 +23,29 @@ public class AuthenticationService {
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     public AuthenticationResponse register(RegisterRequest request){
-        //checking if the user's email already exists
         if(userRepository.existsByEmail(request.getEmail())){
             logger.warn("attempt to register with duplicate email: {}", request.getEmail());
-            throw new BadCredentialsException ("email already in use");
+            throw new BadRequestException("email already in use.");
         }
         var user = Users.builder()
-                .firstname(request.getFirstName()) //getting user's details
+                .firstname(request.getFirstName())
                 .lastname(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())  //assigning role
+                .role(request.getRole())  
                 .build();
+
+        //creating an account linked to the user:
+        var account = Account.builder()
+                .accountUsername(request.getAccountUsername())
+                .balance(request.getBalance())
+                .user(user)
+                .build();
+
+        user.setAccount(account); //connecting account to user
+
         try {
-            userRepository.save(user);
+            userRepository.save(user); // saves both user and account due to cascade
             logger.info("user: {} successfully registered", request.getEmail());
         } catch (Exception e) {
             logger.error("failed to register user: {}, error: {}", request.getEmail(), e.getMessage());

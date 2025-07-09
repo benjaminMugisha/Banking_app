@@ -1,11 +1,9 @@
 package com.benjamin.Banking_app.Security;
 
+import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Roles.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,15 +24,16 @@ public class Users implements UserDetails {
 
     private String firstname;
     private String lastname;
-
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Account account;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //maping roles to spring security's ROLE_ format
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 

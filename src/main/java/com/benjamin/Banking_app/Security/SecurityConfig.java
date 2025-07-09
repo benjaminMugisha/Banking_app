@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
 
-                        .anyRequest().permitAll()   //.authenticated() TODO
+                        .anyRequest().authenticated()
                          )
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -42,7 +42,7 @@ public class SecurityConfig {
          return http.build();
     }
 
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.authenticationProvider(authenticationProvider);
-    }
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception{
+//        auth.authenticationProvider(authenticationProvider);
+//    }
 }
