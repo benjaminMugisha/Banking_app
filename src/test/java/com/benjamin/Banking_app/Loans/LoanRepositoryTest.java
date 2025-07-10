@@ -48,7 +48,7 @@ public class LoanRepositoryTest {
                .build();
     }
     @Test
-    public void FindByAccountId_ExistingAccount_ReturnListOfLoans(){
+    void FindByAccountId_ExistingAccount_ReturnListOfLoans(){
         loanRepo.saveAll(List.of(loan, loan2));
 
         List<Loan> loans = loanRepo.findByAccountId(account.getId());
@@ -63,7 +63,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void FindByAccountId_EmptyLoans_ReturnNothing(){
+    void FindByAccountId_EmptyLoans_ReturnNothing(){
         List<Loan> loans = loanRepo.findByAccountId(account.getId());
 
         Assertions.assertThat(loans).isNotNull();
@@ -71,7 +71,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void SaveLoan_ToExistingAccount_ReturnsSavedAccount(){
+    void SaveLoan_ToExistingAccount_ReturnsSavedAccount(){
 
         Loan savedLoan = loanRepo.save(loan);
 
@@ -81,7 +81,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void findAll_ExistingLoans_ShouldReturnAllLoans() {
+    void findAll_ExistingLoans_ShouldReturnAllLoans() {
         loanRepo.saveAll(List.of(loan, loan2));
 
         List<Loan> loans = loanRepo.findAll();
@@ -93,7 +93,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void findAll_NonExistingLoans_ShouldReturnEmptyList() {
+    void findAll_NonExistingLoans_ShouldReturnEmptyList() {
         List<Loan> loans = loanRepo.findAll();
 
         Assertions.assertThat(loans).isNotNull();
@@ -101,7 +101,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void deleteById_ExistingLoan_ShouldRemoveLoan() {
+    void deleteById_ExistingLoan_ShouldRemoveLoan() {
         loanRepo.save(loan);
 
         loanRepo.deleteById(loan.getLoanId());
@@ -111,7 +111,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void deleteById_ExistingLoan_ShouldNotDeleteOtherLoans() {
+    void deleteById_ExistingLoan_ShouldNotDeleteOtherLoans() {
         Loan savedLoan = loanRepo.save(loan);
         loanRepo.save(loan2);
         loanRepo.deleteById(savedLoan.getLoanId());
@@ -126,7 +126,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void findById_ExistingLoan_ShouldReturnLoan() {
+    void findById_ExistingLoan_ShouldReturnLoan() {
         Loan savedLoan = loanRepo.save(loan);
         Optional<Loan> returnedLoan = loanRepo.findById(savedLoan.getLoanId());
 
@@ -136,7 +136,7 @@ public class LoanRepositoryTest {
     }
 
     @Test
-    public void findById_NonExistingLoan_ShouldReturnEmptyOptional() {
+    void findById_NonExistingLoan_ShouldReturnEmptyOptional() {
         Optional<Loan> returnedLoan = loanRepo.findById(5L);
         long loanId = 5L;
 

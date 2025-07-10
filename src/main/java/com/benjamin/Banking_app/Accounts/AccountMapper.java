@@ -1,6 +1,5 @@
 package com.benjamin.Banking_app.Accounts;
 
-//to map entities into Dtos and vice versa.
 public class AccountMapper {
     public static Account MapToAccount(AccountDto accountDto){
 

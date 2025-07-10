@@ -47,7 +47,7 @@ class LoanServiceImplTest {
         loan2 = new Loan(2L, account, 12, LocalDateTime.now(),15.0, 2.0);
     }
     @Test
-    public void applyForLoan_NonExistingAccount_ShouldThrowException() {
+    void applyForLoan_NonExistingAccount_ShouldThrowException() {
         LoanRequest request = new LoanRequest(loan1.getLoanId(), 5000.0, 10000.0, 12);
         when(accountRepository.findById(request.getAccountId())).thenReturn(Optional.empty());
 
@@ -58,7 +58,7 @@ class LoanServiceImplTest {
         verify(loanRepo, times(0)).save(any(Loan.class));
     }
     @Test
-    public void getLoanByLoanId_NonExistingLoans_ShouldReturnLoan() {
+    void getLoanByLoanId_NonExistingLoans_ShouldReturnLoan() {
         when(loanRepo.findById(loan1.getLoanId())).thenReturn(Optional.of(loan1));
 
         Loan result = loanService.getLoanByLoanId(loan1.getLoanId());
@@ -70,7 +70,7 @@ class LoanServiceImplTest {
     }
 
     @Test
-    public void getLoanByLoanId_NonExistingLoans_ShouldThrowException() {
+    void getLoanByLoanId_NonExistingLoans_ShouldThrowException() {
         when(loanRepo.findById(loan1.getLoanId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> loanService.getLoanByLoanId(loan1.getLoanId()))
@@ -80,7 +80,7 @@ class LoanServiceImplTest {
         verify(loanRepo, times(1)).findById(loan1.getLoanId());
     }
     @Test
-    public void getLoansByAccountId_ExistingLoans_ShouldReturnLoans() {
+    void getLoansByAccountId_ExistingLoans_ShouldReturnLoans() {
         List<Loan> loans = Arrays.asList(loan1, loan2);
 
         when(loanRepo.findByAccountId(account.getId())).thenReturn(loans);
@@ -92,7 +92,7 @@ class LoanServiceImplTest {
         verify(loanRepo, times(1)).findByAccountId(account.getId());
     }
     @Test
-    public void getLoansByAccountId_NonExistingLoans_ShouldReturnEmptyList() {
+    void getLoansByAccountId_NonExistingLoans_ShouldReturnEmptyList() {
         when(loanRepo.findByAccountId(account.getId())).thenReturn(Collections.emptyList());
 
         List<Loan> result = loanService.getLoansByAccountId(account.getId());

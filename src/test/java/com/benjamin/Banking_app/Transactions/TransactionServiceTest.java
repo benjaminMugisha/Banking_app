@@ -38,7 +38,7 @@ public class TransactionServiceTest {
 
 
     @Test
-    public void findByAccountId_ExistingTransactions_ShouldReturnMappedTransactions() {
+    void findByAccountId_ExistingTransactions_ShouldReturnMappedTransactions() {
         long accountId = 1L;
         int pageNo = 0, pageSize = 2;
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -58,7 +58,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void findByAccountId_nonExistingTransactions_ShouldReturnEmptyList() {
+    void findByAccountId_nonExistingTransactions_ShouldReturnEmptyList() {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 2;
         Pageable pageable = PageRequest.of(pageNo, pageSize);

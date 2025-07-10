@@ -6,6 +6,7 @@ import com.benjamin.Banking_app.Transactions.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -20,23 +21,23 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AccountController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Integration tests for accounts API endpoints")
 
 public class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    private static final String ACCOUNT_API = "/api/v1/account/";
     @MockBean
     private AccountServiceImpl accountService;
     @MockBean
@@ -59,10 +60,9 @@ public class AccountControllerTest {
                 .build();
     }
 
-
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void getAllAccounts_ReturnsPagedAccounts() throws Exception {
+    void getAllAccounts_ReturnsPagedAccounts() throws Exception {
         AccountDto acc1 = new AccountDto(1L, "user1", 100.0);
         AccountDto acc2 = new AccountDto(2L, "user2", 200.0);
 
@@ -77,7 +77,7 @@ public class AccountControllerTest {
 
         when(accountService.getAllAccounts(0, 2)).thenReturn(accountResponse);
 
-        mockMvc.perform(get("/api/v1/account/all")
+        mockMvc.perform( get(ACCOUNT_API + "all") //get("/api/v1/account/all")
                         .param("pageNo", "0")
                         .param("pageSize", "2")) //.andDo(print())
                 .andExpect(status().isOk())
@@ -95,11 +95,11 @@ public class AccountControllerTest {
 
 
     @Test
-    public void createAccount_ValidAccount_ReturnCreatedAccount() throws Exception {
+    void createAccount_ValidAccount_ReturnCreatedAccount() throws Exception {
         given(accountService.createAccount(ArgumentMatchers.any()))
                 .willAnswer(invocation -> invocation.getArgument(0));
 
-        ResultActions response = mockMvc.perform(post("/api/v1/account/create")
+        ResultActions response = mockMvc.perform(post(ACCOUNT_API + "create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(accountDto)));
 
@@ -111,10 +111,10 @@ public class AccountControllerTest {
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
-    public void getAccountById_ValidAccount_ReturnAccountDto() throws Exception {
+    void getAccountById_ValidAccount_ReturnAccountDto() throws Exception {
         Long accountId = 1L;
         when(accountService.getAccountById(accountId)).thenReturn(accountDto);
-        ResultActions response = mockMvc.perform(get("/api/v1/account/{id}", accountId)
+        ResultActions response = mockMvc.perform(get(ACCOUNT_API + "{id}", accountId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isOk())
@@ -125,10 +125,10 @@ public class AccountControllerTest {
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
-    public void deleteAccountById_ValidAccount_ReturnAccountDto() throws Exception {
+    void deleteAccountById_ValidAccount_ReturnAccountDto() throws Exception {
         long accountId = 1L;
         doNothing().when(accountService).deleteAccount(1L);
-        ResultActions response = mockMvc.perform(delete("/api/v1/account/delete/{id}", accountId)
+        ResultActions response = mockMvc.perform(delete( ACCOUNT_API + "delete/{id}", accountId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
@@ -136,7 +136,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    public void deposit_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
+    void deposit_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
         long accountId = 1L;
         double depositAmount = 50.0;
         double newBalance = accountDto.getBalance() + depositAmount;
@@ -145,7 +145,7 @@ public class AccountControllerTest {
                 .build();
         when(accountService.deposit(accountId, depositAmount)).thenReturn(updatedAccountDto);
 
-        ResultActions response = mockMvc.perform(put("/api/v1/account/{id}/deposit", accountId)
+        ResultActions response = mockMvc.perform(put( ACCOUNT_API + "{id}/deposit", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"amount\": " + depositAmount + "}"));
 
@@ -158,7 +158,7 @@ public class AccountControllerTest {
 
     @Test
     @WithMockUser(username="user",roles={"USER"})
-    public void withdraw_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
+    void withdraw_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
         long accountId = 1L;
         double initialBalance = 200.0;
         double withdrawAmount = 50.0;
@@ -169,7 +169,7 @@ public class AccountControllerTest {
                 .build();
         when(accountService.withdraw(accountId, withdrawAmount)).thenReturn(updatedAccountDto);
 
-        ResultActions response = mockMvc.perform(put("/api/v1/account/{id}/withdraw", accountId)
+        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "{id}/withdraw", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"amount\": " + withdrawAmount + "}"));
 
@@ -181,12 +181,12 @@ public class AccountControllerTest {
 
     @Test
     @WithMockUser(username="user",roles={"USER"})
-    public void transfer_ValidRequest_ReturnsSuccessMessage() throws Exception {
+    void transfer_ValidRequest_ReturnsSuccessMessage() throws Exception {
         TransferRequest transferRequest =new TransferRequest(1L, 2L, 10.0);
 
         doNothing().when(accountService).transfer(any(TransferRequest.class));
 
-        ResultActions response = mockMvc.perform(put("/api/v1/account/user/transfer")
+        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "user/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferRequest)));
 
@@ -195,8 +195,9 @@ public class AccountControllerTest {
         verify(accountService, times(1)).transfer(any(TransferRequest.class));
     }
 
+
     @Test
-    public void createDirectDebit_ValidRequest_ReturnsDirectDebit() throws Exception {
+    void createDirectDebit_ValidRequest_ReturnsDirectDebit() throws Exception {
         DirectDebit dd = DirectDebit.builder()
                 .fromAccountId(1L).toAccountId(2L).amount(100.0)
                 .build();
@@ -204,7 +205,7 @@ public class AccountControllerTest {
         when(accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount()))
                 .thenReturn(dd);
 
-        ResultActions response = mockMvc.perform(post("/api/v1/account/dd/create")
+        ResultActions response = mockMvc.perform(post(ACCOUNT_API + "dd/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dd)));
 
@@ -217,13 +218,12 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void cancelDirectDebit_ValidId_ReturnsSuccessMessage() throws Exception {
+    void cancelDirectDebit_ValidId_ReturnsSuccessMessage() throws Exception {
         Long id = 1L;
 
         doNothing().when(accountService).cancelDirectDebit(id);
 
-        ResultActions response = mockMvc.perform(put("/api/v1/account/dd/cancel/{id}", id)
+        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "dd/cancel/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isOk())
@@ -231,5 +231,4 @@ public class AccountControllerTest {
 
         verify(accountService, times(1)).cancelDirectDebit(id);
     }
-
 }

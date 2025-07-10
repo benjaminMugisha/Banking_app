@@ -46,7 +46,7 @@ public class TransactionRepositoryTest {
     }
 
     @Test
-    public void SaveTransaction_ValidTransaction_ReturnsSavedTransaction() {
+    void SaveTransaction_ValidTransaction_ReturnsSavedTransaction() {
         Transaction savedTransaction = transactionRepo.save(transaction1);
 
         Assertions.assertThat(savedTransaction).isNotNull();
@@ -55,7 +55,7 @@ public class TransactionRepositoryTest {
     }
 
     @Test
-    public void FindByAccountId_ExistingTransactions_ReturnPagedListOfTransactions() {
+    void FindByAccountId_ExistingTransactions_ReturnPagedListOfTransactions() {
         int pageNo = 0, pageSize = 2;
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
@@ -74,7 +74,7 @@ public class TransactionRepositoryTest {
     }
 
     @Test
-    public void FindByAccountId_EmptyTransactions_ReturnEmptyPage() {
+    void FindByAccountId_EmptyTransactions_ReturnEmptyPage() {
         int pageNo = 0, pageSize = 2;
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 

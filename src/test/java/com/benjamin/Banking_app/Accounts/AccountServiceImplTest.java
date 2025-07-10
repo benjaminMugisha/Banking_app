@@ -6,28 +6,33 @@ import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Roles.Role;
 import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +43,11 @@ public class AccountServiceImplTest {
     private TransactionServiceImpl transactionService;
     @Mock
     private DirectDebitRepo directDebitRepo;
+    @Mock
+    private Authentication authentication;
+    @Mock
+    private SecurityContext securityContext;
+
     @InjectMocks
     private AccountServiceImpl accountService;
     private Account account;
@@ -58,17 +68,12 @@ public class AccountServiceImplTest {
     }
 
     private void mockAuthenticatedUser(String email) {
-        Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(email);
-
-        SecurityContext securityContext = mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-
         SecurityContextHolder.setContext(securityContext);
     }
-
     @Test
-    public void getAllAccounts_ExistingAccountDtos_ShouldReturnAccountsDtos(){
+    void getAllAccounts_ExistingAccountDtos_ShouldReturnAccountsDtos(){
         Account account2 = new Account(2L, "Peter", 200.0);
         List<Account> accountList = List.of(account, account2);
 
@@ -87,7 +92,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void getAllAccounts_NonExistingAccounts_ShouldReturnEmptyPagedResponse() {
+    void getAllAccounts_NonExistingAccounts_ShouldReturnEmptyPagedResponse() {
         Page<Account> emptyPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 2), 0);
 
         when(accountRepo.findAll(any(Pageable.class))).thenReturn(emptyPage);
@@ -102,10 +107,10 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void createAccount_ValidAccountDto_ShouldReturnSavedAccountDto() {
+    void createAccount_ValidAccountDto_ShouldReturnSavedAccountDto() {
         Account mappedAccount = AccountMapper.MapToAccount(accountDto);
 
-        when(accountRepo.save(mappedAccount)).thenReturn(account);
+        when(accountRepo.save(any(Account.class))).thenReturn(account);
         AccountDto result = accountService.createAccount(accountDto);
         assertThat(result).isNotNull();
         assertEquals(mappedAccount.getAccountUsername(), account.getAccountUsername());
@@ -113,11 +118,11 @@ public class AccountServiceImplTest {
         assertThat(result.getAccountUsername()).isEqualTo("John");
         assertThat(result.getBalance()).isEqualTo(50000.0);
 
-        verify(accountRepo, times(1)).save(mappedAccount);
+        verify(accountRepo, times(1)).save(any(Account.class));
     }
 
     @Test
-    public void createAccount_WhenAccountDtoIsInvalid_ShouldThrowException() {
+    void createAccount_WhenAccountDtoIsInvalid_ShouldThrowException() {
 
         AccountDto invalidAccountDto = new AccountDto(0, null, -100.0);
 
@@ -127,7 +132,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void createAccount_WhenSecondUserHasDuplicateUsername_ShouldThrowException() {
+    void createAccount_WhenSecondUserHasDuplicateUsername_ShouldThrowException() {
         when(accountRepo.findByAccountUsername("John"))
                 .thenReturn(Optional.empty())      // for first user
                 .thenReturn(Optional.of(account)); // for second user where username is taken.
@@ -147,7 +152,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void getAccountById_ExistingAccountDto_ShouldReturnAccountDto() {
+    void getAccountById_ExistingAccountDto_ShouldReturnAccountDto() {
         mockAuthenticatedUser("John@gmail.com");
         when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
 
@@ -162,7 +167,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void getAccountById_NonExistingAccount_ShouldThrowException() {
+    void getAccountById_NonExistingAccount_ShouldThrowException() {
         when(accountRepo.findById(account.getId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(()-> accountService.getAccountById(account.getId()))
@@ -171,8 +176,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void deposit_ExistingAccount_ShouldUpdateBalance() {
-        mockAuthenticatedUser("John@gmail.com");
+    void deposit_ExistingAccount_ShouldUpdateBalance() {
         long accountId = account.getId();
         double depositAmount = 500.0;
         double expectedBalance = account.getBalance() + depositAmount;
@@ -196,7 +200,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void deposit_NonExistingAccount_ShouldThrowException() {
+    void deposit_NonExistingAccount_ShouldThrowException() {
         double depositAmount = 500.0;
 
         when(accountRepo.findById(account.getId())).thenReturn(Optional.empty());
@@ -210,7 +214,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void transfer_ExistingAccountAndBalanceIsSufficient_ShouldTransferAmount() {
+    void transfer_ExistingAccountAndBalanceIsSufficient_ShouldTransferAmount() {
         mockAuthenticatedUser("John@gmail.com");
         Long toAccountId = 2L;
         double transferAmount = 500.0;
@@ -232,7 +236,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void transfer_NonExistingAccount_ShouldThrowException() {
+    void transfer_NonExistingAccount_ShouldThrowException() {
         Long toAccountId = 2L;
         double transferAmount = 500.0;
 
@@ -248,7 +252,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void transfer_NotFoundAccount_ShouldThrowException() {
+    void transfer_NotFoundAccount_ShouldThrowException() {
         Long toAccountId = 2L;
         double transferAmount = 500.0;
 
@@ -265,7 +269,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void transfer_InsufficientBalance_ShouldThrowException() {
+    void transfer_InsufficientBalance_ShouldThrowException() {
         mockAuthenticatedUser("John@gmail.com");
         long toAccountId = 2L;
         double transferAmount = 99999999.9;
@@ -283,9 +287,32 @@ public class AccountServiceImplTest {
 
         verify(accountRepo, times(0)).save(any(Account.class));
     }
+    @Test
+    void transfer_WhenUserIsNotAccountOwner_ShouldThrowAccessDeniedException() {
+        Long toAccountId = 2L;
+        TransferRequest transferRequest = new TransferRequest(account.getId(), toAccountId, 100.0);
+
+        mockAuthenticatedUser("fake@gmail.com"); //mocking a fake user.
+
+        Users accountOwner = Users.builder().email("owner@gmail.com").build();
+
+        Account fromAccount = Account.builder()
+                .id(account.getId()).user(accountOwner).balance(500.0).build();
+        Account toAccount =  Account.builder().id(toAccountId).build();
+
+        when(accountRepo.findById(account.getId())).thenReturn(Optional.of(fromAccount));
+        when(accountRepo.findById(toAccountId)).thenReturn(Optional.of(toAccount));
+
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class, () -> {
+            accountService.transfer(transferRequest);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("only the account owner can perform this action");
+        verify(accountRepo, never()).save(any());
+    }
 
     @Test
-    public void withdraw_AccountExistsAndFundsAreSufficient_ShouldReduceBalance() {
+    void withdraw_AccountExistsAndFundsAreSufficient_ShouldReduceBalance() {
         mockAuthenticatedUser("John@gmail.com");
         double withdrawalAmount = 500.0;
         double expectedBalance = account.getBalance() - withdrawalAmount;
@@ -307,7 +334,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void withdraw_InsufficientFunds_ShouldThrowException() {
+    void withdraw_InsufficientFunds_ShouldThrowException() {
         mockAuthenticatedUser("John@gmail.com");
         double withdrawalAmount = 9999999999.0;
 
@@ -321,7 +348,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void withdraw_AccountNotFound_ShouldThrowException() {
+    void withdraw_AccountNotFound_ShouldThrowException() {
         double withdrawalAmount = 500.0;
         when(accountRepo.findById(account.getId())).thenReturn(Optional.empty());
 
@@ -331,19 +358,19 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void deleteAccount_AccountExists_ShouldDeleteAccount() {
-    Long accountId = 1L;
-    Account account = new Account(accountId, "user123", 1000.0);
+    void deleteAccount_AccountExists_ShouldDeleteAccount() {
+        Long accountId = 1L;
+        Account account = new Account(accountId, "user123", 1000.0);
 
-    when(accountRepo.findById(accountId)).thenReturn(Optional.of(account));
+        when(accountRepo.findById(accountId)).thenReturn(Optional.of(account));
 
-    accountService.deleteAccount(accountId);
+        accountService.deleteAccount(accountId);
 
-    verify(accountRepo, times(1)).findById(accountId);
-    verify(accountRepo, times(1)).deleteById(accountId);
+        verify(accountRepo, times(1)).findById(accountId);
+        verify(accountRepo, times(1)).deleteById(accountId);
     }
     @Test
-    public void deleteAccount_NonExistingAccount_ShouldThrowException() {
+    void deleteAccount_NonExistingAccount_ShouldThrowException() {
 
         assertThatThrownBy(()-> accountService.deleteAccount(account.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -382,7 +409,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void createDirectDebit_ValidInputs_ShouldSaveAndReturnDirectDebit() {
+    void createDirectDebit_ValidInputs_ShouldSaveAndReturnDirectDebit() {
         Long fromId = 1L;
         Long toId = 2L;
         Double amount = 100.0;
@@ -405,7 +432,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void cancelDirectDebit_ExistingDebit_ShouldSetActiveToFalse() {
+    void cancelDirectDebit_ExistingDebit_ShouldSetActiveToFalse() {
         Long debitId = 1L;
         DirectDebit existingDebit = DirectDebit.builder()
                 .id(debitId).active(true)
@@ -447,7 +474,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void getAccountById_WhenUserNotOwner_ShouldThrowAccessDenied() {
+    void getAccountById_WhenUserNotOwner_ShouldThrowAccessDenied() {
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn("user@gmail.com");
 

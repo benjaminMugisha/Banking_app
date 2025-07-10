@@ -38,7 +38,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void save_SaveValidAccount_ReturnsSavedAccount(){
+    void save_SaveValidAccount_ReturnsSavedAccount(){
         Account savedAccount = accountRepo.save(account);
 
         Assertions.assertThat(savedAccount).isNotNull();
@@ -47,7 +47,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void getAll_GetExistingAccounts_ShouldReturnAccount() {
+    void getAll_GetExistingAccounts_ShouldReturnAccount() {
         accountRepo.save(account);
         accountRepo.save(account1);
         List<Account> accountList = accountRepo.findAll();
@@ -62,7 +62,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void findById_ExistingAccount_ShouldReturnAccount() {
+    void findById_ExistingAccount_ShouldReturnAccount() {
         Account savedAccount = accountRepo.save(account);
         Optional<Account> returnedAcc = accountRepo.findById(account.getId());
 
@@ -75,7 +75,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void findAll_ExistingAccounts_ShouldReturnAllAccounts() {
+    void findAll_ExistingAccounts_ShouldReturnAllAccounts() {
         accountRepo.saveAll(List.of(account, account1));
 
         List<Account> accounts = accountRepo.findAll();
@@ -87,7 +87,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void findAll_NoLoansExist_ShouldReturnEmptyList() {
+    void findAll_NoLoansExist_ShouldReturnEmptyList() {
         List<Account> accounts = accountRepo.findAll();
 
         Assertions.assertThat(accounts).isNotNull();
@@ -95,7 +95,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void deleteById_ExistingAccount_ShouldRemoveAccount() {
+    void deleteById_ExistingAccount_ShouldRemoveAccount() {
         Account savedAccount = accountRepo.save(account);
 
         accountRepo.deleteById(savedAccount.getId());
@@ -105,7 +105,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void deleteById_ExistingAccount_ShouldNotDeleteOtherAccounts() {
+    void deleteById_ExistingAccount_ShouldNotDeleteOtherAccounts() {
         Account savedAccount = accountRepo.save(account);
         accountRepo.save(account1);
         accountRepo.deleteById(savedAccount.getId());
@@ -119,7 +119,7 @@ public class AccountRepositoryTests {
     }
 
     @Test
-    public void findById_ShouldReturnEmptyOptional_WhenLoanDoesNotExist() {
+    void findById_ShouldReturnEmptyOptional_WhenLoanDoesNotExist() {
         Optional<Account> returnedAccount = accountRepo.findById(5L);
         Long notRealId = 5L;
 

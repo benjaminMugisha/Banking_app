@@ -22,15 +22,6 @@ import java.util.function.Function;
 public class JWTService {
     @Value("${jwt.secret}")
     private String secretkey;
-//    public JWTService() {
-//        try {
-//            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-//            SecretKey sk = keyGen.generateKey();
-//            secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
@@ -72,4 +63,3 @@ public class JWTService {
         return extractClaim(token, Claims::getExpiration);
     }
 }
-

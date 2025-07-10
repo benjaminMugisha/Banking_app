@@ -12,11 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +36,6 @@ public class AccountServiceImpl implements AccountService {
             throw new BadRequestException("Invalid account data");
         }
         if (accountRepository.findByAccountUsername(accountDto.getAccountUsername()).isPresent()) {
-//            if (accountRepository.existsByAccountUsername(accountDto.getAccountUsername())) {
             logger.warn("attempt to create an account with a duplicate username");
             throw new BadRequestException("username already exists");
         }
@@ -52,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
-        authorizeAccess( account);
+        authorizeAccess(account);
         logger.info(" searched account: {} returned successfuly " ,account );
         return AccountMapper.MapToAccountDto(account);
     }
@@ -61,10 +60,8 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto deposit(Long accountId, double amount) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("account used not found"));
-
-        authorizeAccess( account);
         double total = account.getBalance() + amount;
-        account.setBalance(total); //updating the account's balance
+        account.setBalance(total);
         Account savedAccount = accountRepository.save(account); //persist it so it updates the balance
 
         transactionService.recordTransaction(account, "DEPOSIT", amount, "Deposit of " + amount, null, null);
@@ -78,7 +75,8 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("account to send the funds not found"));
         Account toAccount = accountRepository.findById(transferRequest.getToAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("account to receive the funds not found"));
-        authorizeAccess( fromAccount);
+//        authorizeAccess( fromAccount);
+        authorizeAccountOwnerOnly(fromAccount);
         if (fromAccount.getBalance() < transferRequest.getAmount()) {
             throw new InsufficientFundsException("Insufficient balance");
         }
@@ -108,7 +106,8 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
-        authorizeAccess(account);
+//        authorizeAccess(account);
+        authorizeAccountOwnerOnly(account);
         if (amount > account.getBalance()){
             throw new InsufficientFundsException("insufficient funds");
         }
@@ -172,10 +171,23 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.deleteById(id);
         logger.info("account: {} deleted successfully", id);
     }
-    public void authorizeAccess(Account account){
-        String authenticatedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!account.getUser().getEmail().equals(authenticatedUser)){
+    public void authorizeAccess(Account account) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUser = authentication.getName();
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        boolean isOwner = account.getUser().getEmail().equals(authenticatedUser);
+
+        if (!isOwner && !isAdmin) {
             throw new AccessDeniedException("not the owner of the account");
+        }
+    }
+    public void authorizeAccountOwnerOnly(Account account) {
+        String authenticatedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!account.getUser().getEmail().equals(authenticatedUser)) {
+            throw new AccessDeniedException("only the account owner can perform this action");
         }
     }
 }

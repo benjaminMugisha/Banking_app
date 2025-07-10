@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AccountMapperTest {
 
     @Test
-    public void mapToAccount_ShouldMapFieldsCorrectly_ReturnAccount() {
+    void mapToAccount_ShouldMapFieldsCorrectly_ReturnAccount() {
         AccountDto accountDto = AccountDto.builder()
                 .accountUsername("John").balance(1000.0)
                 .build();
@@ -23,7 +23,7 @@ public class AccountMapperTest {
     }
 
     @Test
-    public void mapToAccountDto_ShouldMapFieldsCorrectly_ReturnAccountDto() {
+    void mapToAccountDto_ShouldMapFieldsCorrectly_ReturnAccountDto() {
         Account account = Account.builder()
                 .accountUsername("Peter").balance(50.0)
                 .build();
@@ -39,13 +39,13 @@ public class AccountMapperTest {
     }
 
     @Test
-    public void mapToAccount_ShouldHandleNullAccountDto_ReturnNothing() {
+    void mapToAccount_ShouldHandleNullAccountDto_ReturnNothing() {
         Account nullAccount = AccountMapper.MapToAccount(null);
         assertThat(nullAccount).isNull();
     }
 
     @Test
-    public void mapToAccountDto_ShouldHandleNullAccount_ReturnNothing() {
+    void mapToAccountDto_ShouldHandleNullAccount_ReturnNothing() {
         AccountDto nullAccountDto = AccountMapper.MapToAccountDto(null);
         assertThat(nullAccountDto).isNull();
     }

@@ -49,7 +49,7 @@ public class TransactionsControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    public void getTransactionHistory_AccountHasTransactions_ReturnsTransactions() throws Exception {
+    void getTransactionHistory_AccountHasTransactions_ReturnsTransactions() throws Exception {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 10;
 
@@ -87,7 +87,7 @@ public class TransactionsControllerTest {
     }
 
     @Test
-    public void getTransactionHistory_AccountHasNoTransactions_ReturnsNotFound() throws Exception {
+    void getTransactionHistory_AccountHasNoTransactions_ReturnsNotFound() throws Exception {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 10;
 

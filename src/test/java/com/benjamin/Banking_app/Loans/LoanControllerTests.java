@@ -71,7 +71,7 @@ public class LoanControllerTests {
     }
     @Test
     @WithMockUser(username="User",roles={"USER"})
-    public void applyForLoan_ValidRequest_ReturnsCreated() throws Exception {
+    void applyForLoan_ValidRequest_ReturnsCreated() throws Exception {
         LoanRequest request = new LoanRequest(1L, 100.0, 1.0, 12);
         LoanResponse response = new LoanResponse("loan accepted", loan);
 
@@ -89,7 +89,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
-    public void getAllLoans_ReturnsListOfLoans() throws Exception {
+    void getAllLoans_ReturnsListOfLoans() throws Exception {
 
         List<Loan> loans = List.of(loan, loan2);
         LoanPageResponse pageResponse = LoanPageResponse.builder().pageSize(10).last(true).pageNo(1)
@@ -107,7 +107,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="admin", roles={"ADMIN", "USER"})
-    public void getLoanByLoanId_LoanExists_ReturnsLoan() throws Exception {
+    void getLoanByLoanId_LoanExists_ReturnsLoan() throws Exception {
         when(loanService.getLoanByLoanId(1L)).thenReturn(loan);
 
         mockMvc.perform(get("/api/v1/loan/{id}", 1L)
@@ -120,7 +120,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="admin", roles={"ADMIN", "USER"})
-    public void getLoansByAccountId_LoansExist_ReturnsLoans() throws Exception {
+    void getLoansByAccountId_LoansExist_ReturnsLoans() throws Exception {
         long accountId = 1L;
         List<Loan> loans = List.of(loan, loan2);
 
@@ -136,7 +136,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="user",roles={"USER"})
-    public void monthlyRepay_ValidAmount_ReturnsLoanResponse() throws Exception {
+    void monthlyRepay_ValidAmount_ReturnsLoanResponse() throws Exception {
         double amount = 500.0;
         LoanResponse loanResponse = new LoanResponse("Loan repayment successful", null);
 
@@ -154,7 +154,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="admin",roles ={"ADMIN"})
-    public void deleteLoan_LoanExists_ReturnsSuccessMessage() throws Exception {
+    void deleteLoan_LoanExists_ReturnsSuccessMessage() throws Exception {
         doNothing().when(loanService).deleteLoan(loanId);
 
         mockMvc.perform(delete("/api/v1/loan/delete/{loanId}", loanId)
@@ -167,7 +167,7 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
-    public void deleteLoan_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
+    void deleteLoan_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException("loan with id: " + loanId + " not found"))
                 .when(loanService).deleteLoan(loanId);
 
@@ -180,7 +180,7 @@ public class LoanControllerTests {
     }
 
     @Test
-    public void repayFullLoanEarly_LoanExists_SuccessfulRepayment() throws Exception {
+    void repayFullLoanEarly_LoanExists_SuccessfulRepayment() throws Exception {
         LoanResponse loanResponse = new LoanResponse("Loan fully repaid early successfully, 2% penalty applied");
         when(loanService.repayLoanEarly(loanId)).thenReturn(loanResponse);
 
@@ -193,7 +193,7 @@ public class LoanControllerTests {
     }
 
     @Test
-    public void repayFullLoanEarly_LoanExists_InsufficientFunds() throws Exception {
+    void repayFullLoanEarly_LoanExists_InsufficientFunds() throws Exception {
         loan.setRemainingBalance(1000);
 
         LoanResponse loanResponse =
@@ -209,7 +209,7 @@ public class LoanControllerTests {
     }
 
     @Test
-    public void repayFullLoanEarly_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
+    void repayFullLoanEarly_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
         when(loanService.repayLoanEarly(loanId)).thenThrow(new EntityNotFoundException("loan with id: " + loanId + " not found"));
 
         mockMvc.perform(put("/api/v1/loan/{loanId}/repayFull", loanId)

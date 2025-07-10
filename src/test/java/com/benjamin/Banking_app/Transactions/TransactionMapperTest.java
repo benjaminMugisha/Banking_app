@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TransactionMapperTest {
 
     @Test
-    public void mapToTransaction_ShouldMapFieldsCorrectly_ReturnTransaction() {
+    void mapToTransaction_ShouldMapFieldsCorrectly_ReturnTransaction() {
         TransactionDto transactionDto = new TransactionDto(1L, new Account(), "DEPOSIT", 500.0,
                 LocalDateTime.now(), "Salary payment", new Account());
 
@@ -28,7 +28,7 @@ public class TransactionMapperTest {
     }
 
     @Test
-    public void mapToTransactionDto_ShouldMapFieldsCorrectly_ReturnTransactionDto() {
+    void mapToTransactionDto_ShouldMapFieldsCorrectly_ReturnTransactionDto() {
         Transaction transaction = new Transaction(2L, new Account(), "WITHDRAWAL", 200.0,
                 LocalDateTime.now(), "Cash withdrawal", new Account());
 
@@ -45,13 +45,13 @@ public class TransactionMapperTest {
     }
 
     @Test
-    public void mapToTransaction_ShouldHandleNullTransactionDto_ReturnNull() {
+    void mapToTransaction_ShouldHandleNullTransactionDto_ReturnNull() {
         Transaction transaction = TransactionMapper.MapToTransaction(null);
         assertThat(transaction).isNull();
     }
 
     @Test
-    public void mapToTransactionDto_ShouldHandleNullTransaction_ReturnNull() {
+    void mapToTransactionDto_ShouldHandleNullTransaction_ReturnNull() {
         TransactionDto transactionDto = TransactionMapper.MapToTransactionDto(null);
         assertThat(transactionDto).isNull();
     }
