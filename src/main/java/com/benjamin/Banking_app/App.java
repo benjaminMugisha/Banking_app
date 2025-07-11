@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = "com.benjamin.Banking_app")
 public class App {
 	public static void main(String[] args) {
-
 		SpringApplication.run(App.class, args);
 	}
 }

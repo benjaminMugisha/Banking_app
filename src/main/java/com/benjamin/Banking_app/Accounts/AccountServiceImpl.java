@@ -48,6 +48,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public AccountResponse getAllAccounts(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Account> accounts = accountRepository.findAll(pageable);
+        List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)
+                .collect(Collectors.toList());
+        return AccountResponse.builder()
+                .content(content).pageNo(accounts.getNumber()).pageSize(accounts.getSize())
+                .totalElements(accounts.getTotalElements()).totalPages(accounts.getTotalPages())
+                .last(accounts.isLast()).build();
+    }
+
+    @Override
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
@@ -75,7 +87,6 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("account to send the funds not found"));
         Account toAccount = accountRepository.findById(transferRequest.getToAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("account to receive the funds not found"));
-//        authorizeAccess( fromAccount);
         authorizeAccountOwnerOnly(fromAccount);
         if (fromAccount.getBalance() < transferRequest.getAmount()) {
             throw new InsufficientFundsException("Insufficient balance");
@@ -152,17 +163,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Override
-    public AccountResponse getAllAccounts(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Account> accounts = accountRepository.findAll(pageable);
-        List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)
-                .collect(Collectors.toList());
-        return AccountResponse.builder()
-                .content(content).pageNo(accounts.getNumber()).pageSize(accounts.getSize())
-                .totalElements(accounts.getTotalElements()).totalPages(accounts.getTotalPages())
-                .last(accounts.isLast()).build();
-    }
+
     @Override
     public void deleteAccount(Long id) {
         accountRepository.findById(id)

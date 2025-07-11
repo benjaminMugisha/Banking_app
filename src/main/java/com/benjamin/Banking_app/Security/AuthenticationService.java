@@ -35,17 +35,16 @@ public class AuthenticationService {
                 .role(request.getRole())  
                 .build();
 
-        //creating an account linked to the user:
         var account = Account.builder()
                 .accountUsername(request.getAccountUsername())
                 .balance(request.getBalance())
                 .user(user)
                 .build();
 
-        user.setAccount(account); //connecting account to user
+        user.setAccount(account);
 
         try {
-            userRepository.save(user); // saves both user and account due to cascade
+            userRepository.save(user);
             logger.info("user: {} successfully registered", request.getEmail());
         } catch (Exception e) {
             logger.error("failed to register user: {}, error: {}", request.getEmail(), e.getMessage());
@@ -54,6 +53,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .account(account)
                 .build();
     }
 

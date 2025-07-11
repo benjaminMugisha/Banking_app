@@ -1,8 +1,6 @@
 package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Roles.Role;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +27,6 @@ public class RegisterRequest {
     @Email(message = "invalid email format")
     private String email;
     @NotBlank(message = "password is required")
-//    @Size(min=5, max = 10, message = "Password must be between 8-15 characters long")
     private String password;
     private Role role;
 }
