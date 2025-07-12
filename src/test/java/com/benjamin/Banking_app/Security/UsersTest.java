@@ -68,11 +68,8 @@ class UsersTest {
     void testUserBuilder_ReturnsUser() {
         Users user = Users.builder()
                 .id(1)
-                .firstname("John")
-                .lastname("Doe")
-                .email("john.doe@example.com")
-                .password("securePassword")
-                .role(Role.USER)
+                .firstname("John").lastname("Doe").email("john.doe@example.com")
+                .password("securePassword").role(Role.USER)
                 .build();
 
         assertEquals(1, user.getId());
@@ -102,9 +99,7 @@ class UsersTest {
     @Test
     void testUserDetailsImplementation() {
         Users user = Users.builder()
-                .email("user@example.com")
-                .password("testPassword")
-                .role(Role.USER)
+                .email("user@example.com").password("testPassword").role(Role.USER)
                 .build();
 
         assertEquals("user@example.com", user.getUsername());

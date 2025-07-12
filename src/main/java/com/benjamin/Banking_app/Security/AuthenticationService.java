@@ -59,12 +59,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         try {
+            var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AccessDeniedException("user not found. try again"));
             authManager.
                     authenticate(new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()));
-            var user = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new AccessDeniedException("user not found. try again"));
 
             var jwtToken = jwtService.generateToken(user);
             logger.info("User: {} logged in successfully.", request.getEmail());

@@ -3,29 +3,22 @@ package com.benjamin.Banking_app.Accounts;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
-import com.benjamin.Banking_app.Roles.Role;
 import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -134,8 +127,8 @@ public class AccountServiceImplTest {
     @Test
     void createAccount_WhenSecondUserHasDuplicateUsername_ShouldThrowException() {
         when(accountRepo.findByAccountUsername("John"))
-                .thenReturn(Optional.empty())      // for first user
-                .thenReturn(Optional.of(account)); // for second user where username is taken.
+                .thenReturn(Optional.empty())
+                .thenReturn(Optional.of(account));
 
         when(accountRepo.save(any(Account.class))).thenReturn(account);
 
@@ -494,5 +487,4 @@ public class AccountServiceImplTest {
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessage("not the owner of the account");
     }
-
 }

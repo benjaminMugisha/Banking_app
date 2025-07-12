@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("api/v1/loan")
 public class LoanController {
     private final LoanServiceImpl service;
-    @GetMapping("/all")
+    @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LoanPageResponse> getAllLoans(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
@@ -24,6 +24,11 @@ public class LoanController {
         return ResponseEntity.ok(loans);
     }
 
+    @GetMapping("/account/{accountId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<Loan>> getLoansByAccountId(@PathVariable Long accountId) {
+        return new ResponseEntity<>(service.getLoansByAccountId(accountId), HttpStatus.FOUND);
+    }
 
     @PostMapping("apply")
     @PreAuthorize("hasRole('USER')")
@@ -67,9 +72,5 @@ public class LoanController {
        return new ResponseEntity<>( service.getLoanByLoanId(loanId), HttpStatus.FOUND);
     }
 
-    @GetMapping("/account/{accountId}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<Loan>> getLoansByAccountId(@PathVariable Long accountId) {
-        return new ResponseEntity<>(service.getLoansByAccountId(accountId), HttpStatus.FOUND);
-    }
+
 }

@@ -1,8 +1,6 @@
 package com.benjamin.Banking_app.Accounts;
 
-import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
-import com.benjamin.Banking_app.Security.SecurityConfig;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.benjamin.Banking_app.Transactions.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,22 +14,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Integration tests for accounts API endpoints")
-//@SpringBootTest
 @EnableMethodSecurity(prePostEnabled = true)
 public class AccountControllerTest {
     @Autowired
@@ -239,15 +230,4 @@ public class AccountControllerTest {
 
         verify(accountService, times(1)).cancelDirectDebit(id);
     }
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -89,14 +89,14 @@ public class LoanControllerTests {
 
     @Test
     @WithMockUser(username="admin",roles={"ADMIN"})
-    void getAllLoans_ReturnsListOfLoans() throws Exception {
+    void getAllLoans_WithAdmin_ReturnsListOfLoans() throws Exception {
 
         List<Loan> loans = List.of(loan, loan2);
         LoanPageResponse pageResponse = LoanPageResponse.builder().pageSize(10).last(true).pageNo(1)
                 .content(loans).build();
         when(loanService.getAllLoans(1, 10)).thenReturn(pageResponse);
 
-        ResultActions response = mockMvc.perform(get("/api/v1/loan/all")
+        ResultActions response = mockMvc.perform(get("/api/v1/loan/admin/all")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("pageNo", "1")
                 .param("pageSize", "10"));
@@ -104,6 +104,7 @@ public class LoanControllerTests {
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.content.size()").value(2));
     }
+
 
     @Test
     @WithMockUser(username="admin", roles={"ADMIN", "USER"})
@@ -147,7 +148,7 @@ public class LoanControllerTests {
                         .content("{\"amount\": " + amount + "}"))
                 .andExpect(status().isOk()) // Expecting status 200
                 .andExpect(jsonPath("$.message").value("Loan repayment successful"))
-                .andExpect(jsonPath("$.loan").isEmpty()); // Assuming loan field is empty in the response
+                .andExpect(jsonPath("$.loan").isEmpty());
 
         verify(loanService, times(1)).processMonthlyRepayment(loanId, amount);
     }
