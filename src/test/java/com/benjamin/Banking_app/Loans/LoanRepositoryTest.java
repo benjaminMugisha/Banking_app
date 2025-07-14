@@ -116,7 +116,6 @@ public class LoanRepositoryTest {
         loanRepo.save(loan2);
         loanRepo.deleteById(savedLoan.getLoanId());
 
-        // Assert - Ensure only loan1 is deleted
         Optional<Loan> deletedLoan = loanRepo.findById(savedLoan.getLoanId());
         List<Loan> remainingLoans = loanRepo.findAll();
 

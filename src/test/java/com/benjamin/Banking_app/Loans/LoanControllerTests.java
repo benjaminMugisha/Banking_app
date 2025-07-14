@@ -29,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @WebMvcTest(AccountController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +55,7 @@ public class LoanControllerTests {
     private Loan loan2;
     private Account account;
     private long loanId;
+    private static final String LOAN_API = "/api/v1/loan/";
 
     @BeforeEach
     void setUp() {
@@ -69,15 +69,63 @@ public class LoanControllerTests {
                 .id(1L).accountUsername("John").balance(100.0)
                 .build();
     }
+
     @Test
-    @WithMockUser(username="User",roles={"USER"})
+    @WithMockUser(roles={"ADMIN"})
+    void getAllLoans_WithAdmin_ReturnsListOfLoans() throws Exception {
+
+        List<Loan> loans = List.of(loan, loan2);
+        LoanPageResponse pageResponse = LoanPageResponse.builder().pageSize(10).last(true).pageNo(1)
+                .content(loans).build();
+        when(loanService.getAllLoans(1, 10)).thenReturn(pageResponse);
+
+        ResultActions response = mockMvc.perform(get(LOAN_API + "admin/all")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("pageNo", "1")
+                .param("pageSize", "10"));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.content.size()").value(2));
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN", "USER"})
+    void getLoansByLoanId_LoanExists_ReturnsLoan() throws Exception {
+        when(loanService.getLoanByLoanId(1L)).thenReturn(loan);
+
+        mockMvc.perform(get(LOAN_API + "{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.loanId").value(1L))
+                .andExpect(jsonPath("$.principal").value(15.0));
+
+        verify(loanService, times(1)).getLoanByLoanId(1L);
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN", "USER"})
+    void getLoansByAccountId_LoansExist_ReturnsLoans() throws Exception {
+        long accountId = 1L;
+        List<Loan> loans = List.of(loan, loan2);
+
+        when(loanService.getLoansByAccountId(accountId)).thenReturn(loans);
+        mockMvc.perform(get(LOAN_API + "account/{accountId}", accountId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].loanId").value(1L))
+                .andExpect(jsonPath("$[1].loanId").value(2L));
+
+        verify(loanService, times(1)).getLoansByAccountId(accountId);
+    }
+
+    @Test
+    @WithMockUser
     void applyForLoan_ValidRequest_ReturnsCreated() throws Exception {
         LoanRequest request = new LoanRequest(1L, 100.0, 1.0, 12);
         LoanResponse response = new LoanResponse("loan accepted", loan);
 
         when(loanService.applyForLoan(any(LoanRequest.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/loan/apply")
+        mockMvc.perform(post(LOAN_API + "apply")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -88,62 +136,14 @@ public class LoanControllerTests {
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"ADMIN"})
-    void getAllLoans_WithAdmin_ReturnsListOfLoans() throws Exception {
-
-        List<Loan> loans = List.of(loan, loan2);
-        LoanPageResponse pageResponse = LoanPageResponse.builder().pageSize(10).last(true).pageNo(1)
-                .content(loans).build();
-        when(loanService.getAllLoans(1, 10)).thenReturn(pageResponse);
-
-        ResultActions response = mockMvc.perform(get("/api/v1/loan/admin/all")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("pageNo", "1")
-                .param("pageSize", "10"));
-
-        response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.content.size()").value(2));
-    }
-
-
-    @Test
-    @WithMockUser(username="admin", roles={"ADMIN", "USER"})
-    void getLoanByLoanId_LoanExists_ReturnsLoan() throws Exception {
-        when(loanService.getLoanByLoanId(1L)).thenReturn(loan);
-
-        mockMvc.perform(get("/api/v1/loan/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.loanId").value(1L))
-                .andExpect(jsonPath("$.principal").value(15.0));
-
-        verify(loanService, times(1)).getLoanByLoanId(1L);
-    }
-
-    @Test
-    @WithMockUser(username="admin", roles={"ADMIN", "USER"})
-    void getLoansByAccountId_LoansExist_ReturnsLoans() throws Exception {
-        long accountId = 1L;
-        List<Loan> loans = List.of(loan, loan2);
-
-        when(loanService.getLoansByAccountId(accountId)).thenReturn(loans);
-        mockMvc.perform(get("/api/v1/loan/account/{accountId}", accountId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].loanId").value(1L))
-                .andExpect(jsonPath("$[1].loanId").value(2L));
-
-        verify(loanService, times(1)).getLoansByAccountId(accountId);
-    }
-
-    @Test
-    @WithMockUser(username="user",roles={"USER"})
+    @WithMockUser
     void monthlyRepay_ValidAmount_ReturnsLoanResponse() throws Exception {
         double amount = 500.0;
         LoanResponse loanResponse = new LoanResponse("Loan repayment successful", null);
 
         when(loanService.processMonthlyRepayment(loanId, amount)).thenReturn(loanResponse);
 
-        mockMvc.perform(put("/api/v1/loan/{loanId}/repay", loanId)
+        mockMvc.perform(put(LOAN_API + "{loanId}/repay", loanId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"amount\": " + amount + "}"))
                 .andExpect(status().isOk()) // Expecting status 200
@@ -154,11 +154,11 @@ public class LoanControllerTests {
     }
 
     @Test
-    @WithMockUser(username="admin",roles ={"ADMIN"})
+    @WithMockUser(roles ={"ADMIN"})
     void deleteLoan_LoanExists_ReturnsSuccessMessage() throws Exception {
         doNothing().when(loanService).deleteLoan(loanId);
 
-        mockMvc.perform(delete("/api/v1/loan/delete/{loanId}", loanId)
+        mockMvc.perform(delete(LOAN_API + "delete/{loanId}", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Expecting status 200
                 .andExpect(content().string("loan successfully deleted"));
@@ -167,12 +167,12 @@ public class LoanControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void deleteLoan_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException("loan with id: " + loanId + " not found"))
                 .when(loanService).deleteLoan(loanId);
 
-        mockMvc.perform(delete("/api/v1/loan/delete/{loanId}", loanId)
+        mockMvc.perform(delete(LOAN_API + "delete/{loanId}", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()) // Expecting status 404
                 .andExpect(jsonPath("$.message").value("loan with id: " + loanId + " not found"));
@@ -185,7 +185,7 @@ public class LoanControllerTests {
         LoanResponse loanResponse = new LoanResponse("Loan fully repaid early successfully, 2% penalty applied");
         when(loanService.repayLoanEarly(loanId)).thenReturn(loanResponse);
 
-        mockMvc.perform(put("/api/v1/loan/{loanId}/repayFull", loanId)
+        mockMvc.perform(put(LOAN_API + "{loanId}/repayFull", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Expecting status 200
                 .andExpect(jsonPath("$.message").value("Loan fully repaid early successfully, 2% penalty applied"));
@@ -201,7 +201,7 @@ public class LoanControllerTests {
                 new LoanResponse("insufficient funds to clear the loan with the 2% penalty included.", null);
         when(loanService.repayLoanEarly(loanId)).thenReturn(loanResponse);
 
-        mockMvc.perform(put("/api/v1/loan/{loanId}/repayFull", loanId)
+        mockMvc.perform(put(LOAN_API + "{loanId}/repayFull", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Expecting status 200
                 .andExpect(jsonPath("$.message").value("insufficient funds to clear the loan with the 2% penalty included."));
@@ -213,7 +213,7 @@ public class LoanControllerTests {
     void repayFullLoanEarly_LoanNotFound_ThrowsEntityNotFoundException() throws Exception {
         when(loanService.repayLoanEarly(loanId)).thenThrow(new EntityNotFoundException("loan with id: " + loanId + " not found"));
 
-        mockMvc.perform(put("/api/v1/loan/{loanId}/repayFull", loanId)
+        mockMvc.perform(put(LOAN_API + "{loanId}/repayFull", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()) // Expecting status 404
                 .andExpect(jsonPath("$.message").value("loan with id: " + loanId + " not found"));

@@ -167,6 +167,27 @@ public class AccountServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("account not found");
     }
+    @Test
+    void getAccountById_WhenUserNotOwner_ShouldThrowAccessDenied() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("user@gmail.com");
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Users otherUser = new Users();
+        otherUser.setEmail("user2@gmail.com");
+
+        Account account = new Account();
+        account.setId(1L);
+        account.setUser(otherUser);
+
+        when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
+
+        assertThatThrownBy(() -> accountService.getAccountById(account.getId()))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessage("not the owner of the account");
+    }
 
     @Test
     void deposit_ExistingAccount_ShouldUpdateBalance() {
@@ -464,27 +485,5 @@ public class AccountServiceImplTest {
         assertThatThrownBy(() -> accountService.processDirectDebits())
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("failed to process the direct debit");
-    }
-
-    @Test
-    void getAccountById_WhenUserNotOwner_ShouldThrowAccessDenied() {
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.getName()).thenReturn("user@gmail.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        Users otherUser = new Users();
-        otherUser.setEmail("user2@gmail.com");
-
-        Account account = new Account();
-        account.setId(1L);
-        account.setUser(otherUser);
-
-        when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
-
-        assertThatThrownBy(() -> accountService.getAccountById(account.getId()))
-                .isInstanceOf(AccessDeniedException.class)
-                .hasMessage("not the owner of the account");
     }
 }

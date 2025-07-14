@@ -71,6 +71,4 @@ public class LoanController {
     public ResponseEntity<Loan> getLoanByLoanId(@PathVariable Long loanId){
        return new ResponseEntity<>( service.getLoanByLoanId(loanId), HttpStatus.FOUND);
     }
-
-
 }

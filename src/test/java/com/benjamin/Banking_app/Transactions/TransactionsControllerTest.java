@@ -47,7 +47,7 @@ public class TransactionsControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser(username = "user", roles = "USER")
+    @WithMockUser
     void getTransactionHistory_AccountHasTransactions_ReturnsTransactions() throws Exception {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 10;

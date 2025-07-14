@@ -6,7 +6,6 @@ import com.benjamin.Banking_app.Transactions.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -33,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AccountController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Integration tests for accounts API endpoints")
 @EnableMethodSecurity(prePostEnabled = true)
 public class AccountControllerTest {
     @Autowired
@@ -47,12 +45,11 @@ public class AccountControllerTest {
     private TransactionRepository transactionRepository;
     @MockBean
     private UserRepository userRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
-
     private Account account;
     private AccountDto accountDto;
-
     @BeforeEach
     void setUp() {
         account = Account.builder().accountUsername("John").balance(100.0)
@@ -62,7 +59,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(roles = "ADMIN")
     void getAllAccounts_withAdminRole_ReturnsPagedAccounts() throws Exception {
         AccountDto acc2 = new AccountDto(2L, "user2", 200.0);
 
@@ -92,7 +89,6 @@ public class AccountControllerTest {
 
         verify(accountService, times(1)).getAllAccounts(0, 2);
     }
-
     @Test
     void createAccount_ValidAccountAndPublic_ReturnsCreatedAccount() throws Exception {
         given(accountService.createAccount(ArgumentMatchers.any()))
@@ -109,7 +105,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles={"ADMIN"})
+    @WithMockUser(roles="ADMIN")
     void getAccountById_ValidAccountWithAdminRole_ReturnAccountDto() throws Exception {
         Long accountId = 1L;
         when(accountService.getAccountById(accountId)).thenReturn(accountDto);
@@ -123,7 +119,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(roles = "ADMIN")
     void deleteAccountById_ValidAccount_ReturnAccountDto() throws Exception {
         long accountId = 1L;
         doNothing().when(accountService).deleteAccount(1L);
@@ -156,7 +152,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = ("USER"))
+    @WithMockUser
     void withdraw_ValidAccountAndAmount_ReturnUpdatedAccount() throws Exception {
         long accountId = 1L;
         double initialBalance = 200.0;
@@ -179,7 +175,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = ("USER"))
+    @WithMockUser
     void transfer_ValidRequest_ReturnsSuccessMessage() throws Exception {
         TransferRequest transferRequest = new TransferRequest(1L, 2L, 10.0);
 
