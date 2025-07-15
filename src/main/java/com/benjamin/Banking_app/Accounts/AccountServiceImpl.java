@@ -117,7 +117,6 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
-//        authorizeAccess(account);
         authorizeAccountOwnerOnly(account);
         if (amount > account.getBalance()){
             throw new InsufficientFundsException("insufficient funds");
@@ -138,7 +137,7 @@ public class AccountServiceImpl implements AccountService {
         DirectDebit dd =  DirectDebit.builder()
                 .fromAccountId(fromId).toAccountId(toId).amount(amount).active(true)
                 .build();
-        return directDebitRepo.save(dd);
+         return directDebitRepo.save(dd);
     }
     public void cancelDirectDebit(Long id){
         DirectDebit dd = directDebitRepo.findById(id)
@@ -162,7 +161,6 @@ public class AccountServiceImpl implements AccountService {
             }
         }
     }
-
 
     @Override
     public void deleteAccount(Long id) {

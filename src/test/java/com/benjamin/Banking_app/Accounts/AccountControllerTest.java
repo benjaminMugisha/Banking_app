@@ -45,7 +45,8 @@ public class AccountControllerTest {
     private TransactionRepository transactionRepository;
     @MockBean
     private UserRepository userRepository;
-
+    @MockBean
+    private DirectDebitRepo directDebitRepo;
     @Autowired
     private ObjectMapper objectMapper;
     private Account account;

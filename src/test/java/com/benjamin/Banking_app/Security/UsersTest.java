@@ -67,7 +67,7 @@ class UsersTest {
     @Test
     void testUserBuilder_ReturnsUser() {
         Users user = Users.builder()
-                .id(1)
+                .id(1L)
                 .firstname("John").lastname("Doe").email("john.doe@example.com")
                 .password("securePassword").role(Role.USER)
                 .build();

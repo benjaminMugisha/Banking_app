@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.Transactions;
 
 import com.benjamin.Banking_app.Accounts.AccountController;
 import com.benjamin.Banking_app.Accounts.AccountService;
+import com.benjamin.Banking_app.Accounts.DirectDebitRepo;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,8 @@ public class TransactionsControllerTest {
     private UserRepository userRepository;
     @MockBean
     private TransactionRepository transactionRepository;
+    @MockBean
+    private DirectDebitRepo directDebitRepo;
     @MockBean
     private TransactionServiceImpl transactionService;
     @Autowired

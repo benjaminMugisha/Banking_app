@@ -108,7 +108,7 @@ class LoanServiceImplTest {
 
         assertThat(response.getMessage()).contains("Loan of fully repaid early successfully, 2% penalty applied");
         assertThat(loan1.getRemainingBalance()).isEqualTo(0);
-        verify(loanRepo, times(1)).save(loan1); //ensure save() was called just once.
+        verify(loanRepo, times(1)).save(loan1);
     }
     @Test
     void repayLoanEarly_InsufficientFunds_ShouldReturnError() {
@@ -167,7 +167,7 @@ class LoanServiceImplTest {
         LoanResponse response = loanService.processMonthlyRepayment(1L, 150.0);
 
         assertThat(loan1.getRemainingBalance()).isEqualTo(0);
-        assertThat(account.getBalance()).isEqualTo(4990.0); // 5000 - 10.0
+        assertThat(account.getBalance()).isEqualTo(4990.0);
         assertThat(response.getMessage()).contains("Loan repayment of 10.0 processed successfully");
     }
     @Test

@@ -10,7 +10,7 @@ public class AccountMapperTest {
     @Test
     void mapToAccount_ShouldMapFieldsCorrectly_ReturnAccount() {
         AccountDto accountDto = AccountDto.builder()
-                .accountUsername("John").balance(1000.0)
+                .id(1L).accountUsername("John").balance(1000.0)
                 .build();
         Account account = AccountMapper.MapToAccount(accountDto);
 

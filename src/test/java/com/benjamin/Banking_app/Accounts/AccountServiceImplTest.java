@@ -117,7 +117,7 @@ public class AccountServiceImplTest {
     @Test
     void createAccount_WhenAccountDtoIsInvalid_ShouldThrowException() {
 
-        AccountDto invalidAccountDto = new AccountDto(0, null, -100.0);
+        AccountDto invalidAccountDto = new AccountDto(null, null, -100.0);
 
         assertThatThrownBy(() -> accountService.createAccount(invalidAccountDto))
                 .isInstanceOf(BadRequestException.class)

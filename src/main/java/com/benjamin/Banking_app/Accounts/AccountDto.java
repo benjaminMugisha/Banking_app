@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class AccountDto {
-    private long id;
+    private Long id;
 
     @NotBlank(message = "username cannot be empty")
     private String accountUsername;

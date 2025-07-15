@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -15,6 +16,7 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountService accountService;
+    private final DirectDebitRepo ddr;
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -71,8 +73,8 @@ public class AccountController {
 
     @PostMapping("/dd/create")
     public ResponseEntity<DirectDebit> CreateDirectDebit(@RequestBody DirectDebit dd){
-        accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
-        return ResponseEntity.ok(dd);
+        DirectDebit saved = accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("dd/cancel/{id}")

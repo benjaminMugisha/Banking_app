@@ -3,6 +3,7 @@ package com.benjamin.Banking_app.Security;
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
+import com.benjamin.Banking_app.Accounts.DirectDebitRepo;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
 import com.benjamin.Banking_app.Roles.Role;
 import com.benjamin.Banking_app.Transactions.TransactionRepository;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -27,7 +29,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AuthenticationController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -39,7 +40,8 @@ public class AuthenticationControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
+    @MockBean
+    private DirectDebitRepo directDebitRepo;
     @MockBean
     private AuthenticationService authenticationService;
     @MockBean

@@ -3,6 +3,7 @@ package com.benjamin.Banking_app.Loans;
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountController;
 import com.benjamin.Banking_app.Accounts.AccountService;
+import com.benjamin.Banking_app.Accounts.DirectDebitRepo;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.benjamin.Banking_app.Transactions.TransactionController;
@@ -44,6 +45,8 @@ public class LoanControllerTests {
     private UserRepository userRepository;
     @MockBean
     private LoanRepository loanRepository;
+    @MockBean
+    private DirectDebitRepo directDebitRepo;
     @MockBean
     private TransactionController transactionController;
     @MockBean
@@ -160,7 +163,7 @@ public class LoanControllerTests {
 
         mockMvc.perform(delete(LOAN_API + "delete/{loanId}", loanId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()) // Expecting status 200
+                .andExpect(status().isOk())
                 .andExpect(content().string("loan successfully deleted"));
 
         verify(loanService, times(1)).deleteLoan(loanId);
