@@ -46,7 +46,6 @@ public class AuthenticationControllerTest {
     private AuthenticationService authenticationService;
     @MockBean
     private AccountRepository accountRepository;
-
     @MockBean
     UserRepository userRepository;
     @MockBean
@@ -116,7 +115,7 @@ public class AuthenticationControllerTest {
 
     @Test
     void delete_ValidUserId_ReturnsOk() throws Exception {
-        int userId = 1;
+        Long userId = 1L;
         doNothing().when(userRepository).deleteById(userId);
 
         mockMvc.perform(put(AUTH_API + "{id}", userId))

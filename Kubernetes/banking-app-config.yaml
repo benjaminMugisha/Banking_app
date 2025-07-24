@@ -4,4 +4,3 @@ metadata:
   name: config
 data:
   SPRING_DATASOURCE_URL: jdbc:postgresql://banking-db.cj2gsumcsp2l.eu-west-1.rds.amazonaws.com:5432/banking
-# SPRING_DATASOURCE_URL: jdbc:postgresql:/<rds_endpoint>/banking

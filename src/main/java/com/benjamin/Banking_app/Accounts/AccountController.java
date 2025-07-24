@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,7 +39,7 @@ public class AccountController {
             return ResponseEntity.ok(accountDto);
     }
 
-    @PutMapping("/{id}/deposit")
+    @PatchMapping("/{id}/deposit")
     public ResponseEntity<AccountDto> deposit(@PathVariable Long id,
                                               @RequestBody Map<String, Double> request) {
         Double amount = request.get("amount");
@@ -48,7 +47,7 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    @PutMapping("/{id}/withdraw")
+    @PatchMapping("/{id}/withdraw")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AccountDto> withdraw(@PathVariable Long id,
                                                @RequestBody Map<String, Double> request) {
@@ -57,7 +56,7 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    @PutMapping("user/transfer")
+    @PatchMapping("user/transfer")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> transfer(@RequestBody TransferRequest transferRequest) {
         accountService.transfer(transferRequest);

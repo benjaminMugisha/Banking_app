@@ -50,7 +50,7 @@ public class TransactionsControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "ADMIN")
     void getTransactionHistory_AccountHasTransactions_ReturnsTransactions() throws Exception {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 10;
@@ -89,6 +89,7 @@ public class TransactionsControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getTransactionHistory_AccountHasNoTransactions_ReturnsNotFound() throws Exception {
         Long accountId = 1L;
         int pageNo = 0, pageSize = 10;

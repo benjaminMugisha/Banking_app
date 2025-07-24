@@ -46,14 +46,14 @@ resource "aws_iam_role_policy_attachment" "worker_node_policies" {
 
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
-  version = "1.28"
+  version  = "1.28"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = var.private_subnet_ids
+    subnet_ids              = var.private_subnet_ids
     endpoint_public_access  = true
     endpoint_private_access = true
-    public_access_cidrs     =  ["0.0.0.0/0"]
+    public_access_cidrs     = ["0.0.0.0/0"]
   }
   depends_on = [aws_iam_role_policy_attachment.eks_cluster_AmazonEKSClusterPolicy]
 }
@@ -65,9 +65,9 @@ resource "aws_eks_node_group" "this" {
   subnet_ids      = var.private_subnet_ids
 
   scaling_config {
-    desired_size  = 2
-    max_size      = 3
-    min_size      = 1
+    desired_size = var.desired_size
+    max_size     = var.max_size
+    min_size     = var.min_size
   }
 
   depends_on = [

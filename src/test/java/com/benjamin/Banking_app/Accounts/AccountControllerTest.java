@@ -141,7 +141,7 @@ public class AccountControllerTest {
                 .build();
         when(accountService.deposit(accountId, depositAmount)).thenReturn(updatedAccountDto);
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "{id}/deposit", accountId)
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "{id}/deposit", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"amount\": " + depositAmount + "}"));
 
@@ -165,7 +165,7 @@ public class AccountControllerTest {
                 .build();
         when(accountService.withdraw(accountId, withdrawAmount)).thenReturn(updatedAccountDto);
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "{id}/withdraw", accountId)
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "{id}/withdraw", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"amount\": " + withdrawAmount + "}"));
 
@@ -182,7 +182,7 @@ public class AccountControllerTest {
 
         doNothing().when(accountService).transfer(any(TransferRequest.class));
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "user/transfer")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "user/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferRequest)));
 

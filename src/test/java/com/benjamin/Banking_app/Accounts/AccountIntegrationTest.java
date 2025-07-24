@@ -138,7 +138,7 @@ public class AccountIntegrationTest {
         double expectedBalance = account.getBalance() + depositAmount;
         Map<String, Double> requestBody = Map.of("amount", depositAmount);
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + account.getId() + "/deposit")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + account.getId() + "/deposit")
                 .with(user(user1.getEmail()).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestBody)));
@@ -157,7 +157,7 @@ public class AccountIntegrationTest {
         double expectedBalance = account.getBalance() - withdrawAmount;
         Map<String, Double> requestBody = Map.of("amount", withdrawAmount);
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + account.getId() + "/withdraw")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + account.getId() + "/withdraw")
                 .with(user(user1.getEmail()).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestBody)));
@@ -179,7 +179,7 @@ public class AccountIntegrationTest {
         TransferRequest transferRequest = new TransferRequest(
                 account.getId(), account2.getId(), transferAmount);
 
-        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "user/transfer")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "user/transfer")
                 .with(user(user1.getEmail()).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferRequest)));

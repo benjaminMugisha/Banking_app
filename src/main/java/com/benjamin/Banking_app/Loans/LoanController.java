@@ -41,7 +41,7 @@ public class LoanController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("{loanId}/repay")
+    @PatchMapping("{loanId}/repay")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<LoanResponse> monthlyRepay(@PathVariable Long loanId,
                                        @RequestBody(required = false) Map<String, Double> request) {

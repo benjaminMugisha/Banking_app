@@ -11,9 +11,9 @@ resource "aws_db_instance" "this" {
   identifier         = var.identifier
   engine             = "postgres"
   engine_version     = "17.4"
-  instance_class     = "db.t3.micro"
-  allocated_storage  = 5
-  storage_type       = "gp2"
+  instance_class     = var.instance_class
+  allocated_storage  = var.allocated_storage
+  storage_type       = var.storage_type
 
   username           = var.username
   password           = var.password
@@ -24,8 +24,8 @@ resource "aws_db_instance" "this" {
 
   skip_final_snapshot = true
   publicly_accessible = false
-  multi_az            = false
-  deletion_protection = false #todo : should be true but i want you to be able to delete the infrastructure in one go
+  multi_az            = var.multi_az
+  deletion_protection = true
 }
 
 resource "aws_security_group" "rds_sg" {

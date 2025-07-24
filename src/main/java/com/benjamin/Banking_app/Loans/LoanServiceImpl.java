@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -32,6 +33,7 @@ public class LoanServiceImpl implements LoanService {
     private final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
 
     @Override
+    @Transactional
     public LoanResponse applyForLoan(LoanRequest request) {
         logger.info("loan application initiated");
         long accountId = request.getAccountId();
@@ -108,7 +110,7 @@ public class LoanServiceImpl implements LoanService {
         return loanRepository.findByAccountId(accountId);
     }
 
-    //repay the whole loan early. comes with a penalty
+    //repay the whole loan early. comes with a 2% penalty
     @Override
     public LoanResponse repayLoanEarly(Long loanId) {
 
@@ -125,7 +127,6 @@ public class LoanServiceImpl implements LoanService {
             return new LoanResponse("insufficient funds to clear the loan with the 2% penalty included.", null);
         }
 
-        //loan fully repaid:
         loan.setRemainingBalance(0);
         loanRepository.save(loan);
 
@@ -156,7 +157,6 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public boolean isLoanAffordable(double yearlyIncome, double estimatedYearlyPayment, long accountId) {
-        // Get all active loans for the account
         List<Loan> activeLoans = loanRepository.findByAccountIdAndRemainingBalanceGreaterThan(accountId, 0.0);
 
         // Calculate yearly payment for all existing loans
@@ -181,32 +181,25 @@ public class LoanServiceImpl implements LoanService {
 
         Account account = loan.getAccount();
 
-        // Check if the loan is already fully paid
         if (loan.getRemainingBalance() <= 0) {
             throw new LoanAlreadyPaidException("loan fully paid", HttpStatus.NOT_FOUND);
         }
-        // using default if the amount <=0
         double paymentAmount = (amount <= 0) ? loan.getAmountToPayEachMonth() : amount;
 
-        if (paymentAmount > loan.getRemainingBalance()){  //test  for this scenario only
+        if (paymentAmount > loan.getRemainingBalance()){
             paymentAmount = loan.getRemainingBalance();
         }
 
-        // Check if the account has sufficient funds
         if (account.getBalance() < loan.getAmountToPayEachMonth()) {
             throw new InsufficientFundsException("Insufficient funds");
         }
 
-        // update:
         loan.setRemainingBalance(loan.getRemainingBalance() - paymentAmount);
         account.setBalance(account.getBalance() - paymentAmount);
-//        loan.setAmountPaid(loan.getAmountPaid() + paymentAmount);
 
-        // Save the updated loan and account
         loanRepository.save(loan);
         accountRepository.save(account);
 
-        //recording the transaction.
         transactionService.recordTransaction(account,
                 "LOAN_REPAYMENT",
                 paymentAmount,
@@ -214,7 +207,6 @@ public class LoanServiceImpl implements LoanService {
                 , null, null);
         logger.info(" loan: {} repaid for this month successfully", loan.getLoanId());
 
-//        return new LoanResponse("this month's Loan repaid successfully ");
         return new LoanResponse("Loan repayment of " + paymentAmount + " processed successfully. Remaining balance is: "
                 + loan.getRemainingBalance());
     }

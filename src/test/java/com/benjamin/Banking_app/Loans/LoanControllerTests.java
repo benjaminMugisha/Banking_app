@@ -146,7 +146,7 @@ public class LoanControllerTests {
 
         when(loanService.processMonthlyRepayment(loanId, amount)).thenReturn(loanResponse);
 
-        mockMvc.perform(put(LOAN_API + "{loanId}/repay", loanId)
+        mockMvc.perform(patch(LOAN_API + "{loanId}/repay", loanId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"amount\": " + amount + "}"))
                 .andExpect(status().isOk()) // Expecting status 200
@@ -157,7 +157,7 @@ public class LoanControllerTests {
     }
 
     @Test
-    @WithMockUser(roles ={"ADMIN"})
+    @WithMockUser(roles = "ADMIN")
     void deleteLoan_LoanExists_ReturnsSuccessMessage() throws Exception {
         doNothing().when(loanService).deleteLoan(loanId);
 

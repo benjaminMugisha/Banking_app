@@ -1,7 +1,7 @@
 resource "aws_eip" "this" {
   domain = "vpc"
   tags = {
-    Name = "nat-eip"
+    Name = var.name
   }
 }
 

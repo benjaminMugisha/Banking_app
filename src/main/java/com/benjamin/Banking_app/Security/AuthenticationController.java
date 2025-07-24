@@ -19,7 +19,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.register(request));
     }
     @PutMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable Long id){
         userRepository.deleteById(id);
     }
 
