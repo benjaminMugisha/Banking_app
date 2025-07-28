@@ -1,5 +1,7 @@
+
+
 resource "aws_db_subnet_group" "this" {
-  name       = "db-subnet-group"
+  name       = "db-subnet-group2"
   subnet_ids = var.private_subnet_ids
 
   tags = {
@@ -25,7 +27,7 @@ resource "aws_db_instance" "this" {
   skip_final_snapshot = true
   publicly_accessible = false
   multi_az            = var.multi_az
-  deletion_protection = true
+  deletion_protection = false
 }
 
 resource "aws_security_group" "rds_sg" {

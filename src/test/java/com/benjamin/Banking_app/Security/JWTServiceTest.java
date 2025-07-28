@@ -4,9 +4,9 @@ import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 import java.util.List;
@@ -14,11 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestPropertySource(properties = {
-       "PhC93p4UQO4d1Yj9RLx6qOIwbbLAjUfebwuTjyeYfhc="
-})
+@ActiveProfiles("test")
 class JWTServiceTest {
-
     @Autowired
     private JWTService jwtService;
 
@@ -59,5 +56,3 @@ class JWTServiceTest {
         assertTrue(expiration.after(new Date()));
     }
 }
-
-

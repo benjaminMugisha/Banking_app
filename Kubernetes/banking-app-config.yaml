@@ -3,4 +3,7 @@ kind: ConfigMap
 metadata:
   name: config
 data:
-  SPRING_DATASOURCE_URL: jdbc:postgresql://banking-db.cj2gsumcsp2l.eu-west-1.rds.amazonaws.com:5432/banking
+  SPRING_DATASOURCE_URL: jdbc:postgresql://${RDS_ENDPOINT}:5432/dev_db
+#  TODO: also automate the last to db_name instead of naming it outright.
+
+#  SPRING_DATASOURCE_URL: jdbc:postgresql://banking-db.cjcqg40qm9u2.eu-west-1.rds.amazonaws.com:5432/prod_db

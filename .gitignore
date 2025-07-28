@@ -4,6 +4,16 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 notes.txt
+Terraform/.tfstate
+logs
+deploy.txt
+Terraform/environments/prod/.terraform/
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+crash.log
+
 
 ### STS ###
 .apt_generated

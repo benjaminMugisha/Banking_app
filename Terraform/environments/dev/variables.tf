@@ -12,25 +12,17 @@ variable "subnet_config" {
     type              = string
   }))
 }
-variable "db_username" {
-  type        = string
-  default     = "postgres"
-  description = "Database username"
-}
+variable "db_username" {}
 variable "db_name" {
-  default = "banking"
+  default = "dev_db"
 }
-variable "db_password" {
-  type = string
-  default = "benjamindb12345"
-  description = "Database password"
-}
+variable "db_password" {}
 variable "cluster_name" {
-  default = "my-eks-cluster"
+  default = "dev-cluster"
 }
 variable "dynamo_db_name" {
   default = "state-lock"
 }
 variable "bucket_name" {
-  default = "s3statebackendbenjamin12233"
+  default = "s3statebackendbenjamindev"
 }

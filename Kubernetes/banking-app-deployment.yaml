@@ -15,6 +15,7 @@ spec:
       containers:
         - name: banking-app
           image: mugisha99benjamin/banking_app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

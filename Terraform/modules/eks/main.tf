@@ -63,6 +63,7 @@ resource "aws_eks_node_group" "this" {
   node_group_name = "eks-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = var.private_subnet_ids
+  instance_types  = ["t3.micro"]
 
   scaling_config {
     desired_size = var.desired_size
@@ -79,6 +80,7 @@ resource "aws_eks_node_group" "this" {
 data "aws_eks_cluster" "this" {
   name = aws_eks_cluster.this.name
 }
+
 data "aws_eks_cluster_auth" "this" {
   name = aws_eks_cluster.this.name
 }

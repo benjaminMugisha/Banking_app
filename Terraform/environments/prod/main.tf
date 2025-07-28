@@ -50,9 +50,9 @@ module "nat_gateway" {
 module "rds" {
   source              = "../../modules/rds"
   identifier          = "banking-db"
-  db_name             = "prod-db"
-  username            = "prod-user"
-  password            = "prod.password"
+  db_name             = var.db_name
+  username            = var.db_username
+  password            = var.db_password
   private_subnet_ids  = module.subnets.private_subnet_ids
   eks_node_sg_id      = module.eks.eks_node_sg_id
   vpc_id              = module.vpc.vpc_id
@@ -65,7 +65,7 @@ module "rds" {
 
 module "eks" {
   source              = "../../modules/eks"
-  cluster_name        = "prod-cluster"
+  cluster_name        = var.cluster_name
   private_subnet_ids  = module.subnets.private_subnet_ids
   vpc_id              = module.vpc.vpc_id
   desired_size        = 3
@@ -74,7 +74,7 @@ module "eks" {
 }
 
 resource "aws_s3_bucket" "tf_state" {
-  bucket              = "s3statebackendbenjamin12233"
+  bucket              = "s3statebackendbenjamin1233"
   force_destroy       = true
 }
 
