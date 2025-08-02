@@ -1,3 +1,4 @@
+
 module "vpc" {
   source             = "../../modules/vpc"
 
@@ -6,9 +7,10 @@ module "vpc" {
   enable_dns_hostnames= true
 
   tags               = {
-    Name             = "dev-vpc"
+    Name             = var.vpc_name
   }
   vpc_name           = "dev-vpc"
+  env                = var.env
 }
 
 module "subnets" {
@@ -22,21 +24,24 @@ locals {
 module "internet_gateway" {
   source             = "../../modules/igw"
   vpc_id             = module.vpc.vpc_id
-  name               = "${local.prefix}-dev-igw"
+  name               = "${local.prefix}-igw"
+  env                 = var.env
 }
 
 module "route_table" {
   source             = "../../modules/route_table"
   vpc_id             = module.vpc.vpc_id
-  name               = "${local.prefix}-dev-rt"
+  name               = "${local.prefix}-${var.env}-rt"
+  env                 = var.env
   gateway_id         = module.internet_gateway.internet_gateway_id
   public_subnet_ids  = module.subnets.public_subnet_ids
 }
 
 module "route53" {
   source              = "../../modules/route53"
-  zone_name           = "internal.example.com"
+  zone_name           = "banking.internal.dev.com"
   vpc_id              = module.vpc.vpc_id
+  env                 = var.env
 }
 
 module "nat_gateway" {
@@ -45,12 +50,14 @@ module "nat_gateway" {
   public_subnet_id    = module.subnets.public_subnet_ids[0]
   private_subnet_ids  = module.subnets.private_subnet_ids
   name                = "dev-nat-gateway"
+  env                 = var.env
 }
 
 module "rds" {
   source              = "../../modules/rds"
   identifier          = "banking-db"
-  db_name             = var.db_name
+  env                 = var.env
+  db_name             = "${var.env}_${var.db_name}"
   username            = var.db_username
   password            = var.db_password
   private_subnet_ids  = module.subnets.private_subnet_ids
@@ -64,47 +71,51 @@ module "rds" {
 
 module "eks" {
   source              = "../../modules/eks"
-  cluster_name        = var.cluster_name
+  cluster_name        = "banking-${var.env}-cluster"
   private_subnet_ids  = module.subnets.private_subnet_ids
   vpc_id              = module.vpc.vpc_id
+  role_name           = "${var.env}-${var.node_role_name}"
+  env                 = var.env
   desired_size        = 1
-  max_size            = 1
-  min_size            = 2
+  max_size            = 2
+  min_size            = 1
+  cluster_role_name   = "${var.env}-cluster"
+  instance_type       = var.instance_type
 }
 
 resource "aws_s3_bucket" "tf_state" {
-  bucket              = "s3statebackendbenjamin12233"
+  bucket              = var.bucket_name
   force_destroy       = true
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {
   bucket              = aws_s3_bucket.tf_state.id
   versioning_configuration {
-    status = "Enabled"
+    status            = "Enabled"
   }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_sse" {
-  bucket               = aws_s3_bucket.tf_state.id
+  bucket              = aws_s3_bucket.tf_state.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm    = "AES256"
+      sse_algorithm   = "AES256"
     }
   }
 }
 
 resource "aws_dynamodb_table" "state_lock" {
-  name                 = var.dynamo_db_name
-  billing_mode         = "PAY_PER_REQUEST"
-  hash_key             = "LockID"
+  name                = var.dynamo_db_name
+  billing_mode        = "PAY_PER_REQUEST"
+  hash_key            = "LockID"
 
   attribute {
     name               = "LockID"
     type               = "S"
   }
 
-  lifecycle {
-    prevent_destroy    = true
-  }
+#  lifecycle {
+#    prevent_destroy    = false
+#  }
 }

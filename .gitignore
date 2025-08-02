@@ -7,12 +7,13 @@ notes.txt
 Terraform/.tfstate
 logs
 deploy.txt
-Terraform/environments/prod/.terraform/
-.terraform/
+Terraform/env/prod/.terraform/
+Terraform/env/dev/.terraform
+*.terraform/
 *.tfstate
 *.tfstate.backup
-*.tfvars
 crash.log
+banking-app-config.sh
 
 
 ### STS ###

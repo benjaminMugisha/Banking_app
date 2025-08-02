@@ -4,11 +4,11 @@
 ## TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
 #############################################################
 
-
+#
 #terraform {
 #  backend "s3" {
-#    bucket         = "s3statebackendbenjamin12233"
-#    dynamodb_table = "state-lock" #for state locling
+#    bucket         = "s3statebackendbenjamin123dev"
+#    dynamodb_table = "state-lock"
 #    key            = "global/s3/terraform.tfstate"
 #    region         = "eu-west-1"
 #    encrypt        = true

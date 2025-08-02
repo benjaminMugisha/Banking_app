@@ -7,7 +7,8 @@ resource "aws_route53_zone" "private" {
   comment       = "Private hosted zone"
   force_destroy = true
 
-  tags = {
-    Name = var.zone_name
+  tags              = {
+    Name            = "${var.zone_name}-sg"
+    Environment     = var.env
   }
 }

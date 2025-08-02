@@ -5,10 +5,9 @@ module "vpc" {
   enable_dns_support  = true
   enable_dns_hostnames= true
 
-  tags = {
-    Name              = "prod-vpc"
-  }
+  tags                = var.tags
   vpc_name            = "prod-vpc"
+  env                 = var.env
 }
 
 module "subnets" {
@@ -22,21 +21,24 @@ locals {
 module "internet_gateway" {
   source              = "../../modules/igw"
   vpc_id              = module.vpc.vpc_id
-  name                = "${local.prefix}-prod-igw"
+  name                = "${local.prefix}-igw"
+  env                 = var.env
 }
 
 module "route_table" {
   source              = "../../modules/route_table"
   vpc_id              = module.vpc.vpc_id
-  name                = "${local.prefix}-prod-rt"
+  name                = "${local.prefix}-rt"
+  env                 = var.env
   gateway_id          = module.internet_gateway.internet_gateway_id
   public_subnet_ids   = module.subnets.public_subnet_ids
 }
 
 module "route53" {
   source              = "../../modules/route53"
-  zone_name           = "internal.example.com"
+  zone_name           = "banking.internal.prod.com"
   vpc_id              = module.vpc.vpc_id
+  env                 = var.env
 }
 
 module "nat_gateway" {
@@ -45,12 +47,14 @@ module "nat_gateway" {
   public_subnet_id    = module.subnets.public_subnet_ids[0]
   private_subnet_ids  = module.subnets.private_subnet_ids
   name                = "prod-natgw"
+  env                 = var.env
 }
 
 module "rds" {
   source              = "../../modules/rds"
-  identifier          = "banking-db"
-  db_name             = var.db_name
+  identifier          = "${var.env}-banking-db"
+  env                 = var.env
+  db_name             = "${var.env}_${var.db_name}"
   username            = var.db_username
   password            = var.db_password
   private_subnet_ids  = module.subnets.private_subnet_ids
@@ -59,23 +63,26 @@ module "rds" {
   instance_class      = "db.t3.medium"
   allocated_storage   = 20
   multi_az            = true
-  deletion_protection = true
   storage_type        = "gp3"
 }
 
 module "eks" {
   source              = "../../modules/eks"
-  cluster_name        = var.cluster_name
+  cluster_name        = "${var.env}-cluster"
   private_subnet_ids  = module.subnets.private_subnet_ids
   vpc_id              = module.vpc.vpc_id
+  role_name           = var.node_role_name
   desired_size        = 3
   max_size            = 6
   min_size            = 3
+  env                 = var.env
+  cluster_role_name   = var.cluster_role_name
+  instance_type       = var.instance_type
 }
 
 resource "aws_s3_bucket" "tf_state" {
-  bucket              = "s3statebackendbenjamin1233"
-  force_destroy       = true
+  bucket              = var.bucket_name
+#  prevent_destroy     = false
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {
@@ -96,7 +103,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_sse" {
 }
 
 resource "aws_dynamodb_table" "state_lock" {
-  name                = var.dynamo_db_name
+  name                = var.table
   billing_mode        = "PAY_PER_REQUEST"
   hash_key            = "LockID"
 
@@ -105,7 +112,7 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-  lifecycle {
-    prevent_destroy   = true
-  }
+#  lifecycle {
+#    prevent_destroy   = true
+#  }
 }

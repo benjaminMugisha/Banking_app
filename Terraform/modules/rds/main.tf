@@ -1,27 +1,26 @@
-
-
 resource "aws_db_subnet_group" "this" {
-  name       = "db-subnet-group2"
-  subnet_ids = var.private_subnet_ids
+  name              = "rds-subnet-${var.env}"
+  subnet_ids        = var.private_subnet_ids
 
-  tags = {
-    Name = "the DB Subnet Group"
+  tags              = {
+    Name            = "rds-subnet-group-${var.env}-${var.db_name}"
+    Environment     = var.env
   }
 }
 
 resource "aws_db_instance" "this" {
-  identifier         = var.identifier
-  engine             = "postgres"
-  engine_version     = "17.4"
-  instance_class     = var.instance_class
-  allocated_storage  = var.allocated_storage
-  storage_type       = var.storage_type
+  identifier          = var.identifier
+  engine              = "postgres"
+  engine_version      = "17.4"
+  instance_class      = var.instance_class
+  allocated_storage   = var.allocated_storage
+  storage_type        = var.storage_type
 
-  username           = var.username
-  password           = var.password
-  db_name            = var.db_name
+  username            = var.username
+  password            = var.password
+  db_name             = var.db_name
 
-  db_subnet_group_name = aws_db_subnet_group.this.name
+  db_subnet_group_name= aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 
   skip_final_snapshot = true
@@ -31,7 +30,12 @@ resource "aws_db_instance" "this" {
 }
 
 resource "aws_security_group" "rds_sg" {
-  name                = "rds-sg"
+  tags                = {
+    Name              = "${var.db_name}-sg"
+    Environment       = var.env
+  }
+
+  name                = "${var.db_name}-sg"
   description         = "Allow PostgreSQL access from EKS node SG"
   vpc_id              = var.vpc_id
 
@@ -40,7 +44,7 @@ resource "aws_security_group" "rds_sg" {
     from_port         = 5432
     to_port           = 5432
     protocol          = "tcp"
-    security_groups = [var.eks_node_sg_id]
+    security_groups   = [var.eks_node_sg_id]
   }
 
   egress {
@@ -48,9 +52,5 @@ resource "aws_security_group" "rds_sg" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "rds-sg"
   }
 }

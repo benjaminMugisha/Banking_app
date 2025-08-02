@@ -7,3 +7,4 @@ variable "name" {
   description = "Name of the internet gateway"
   type        = string
 }
+variable "env" {}

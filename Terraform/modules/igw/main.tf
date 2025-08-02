@@ -1,7 +1,7 @@
 resource "aws_internet_gateway" "this" {
-  vpc_id = var.vpc_id
+  vpc_id   = var.vpc_id
 
-  tags = {
-    Name = var.name
+  tags     = {
+    Name   = "${var.env}-${var.name}"
   }
 }

@@ -1,11 +1,126 @@
-name: Manual CI/CD Run
+name: testing pipeline
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  say-hello:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Print greeting
-        run: echo "Hello from ben"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build and Test with Maven
+        run: ./mvnw clean verify
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Docker image
+        run: docker buildx build --platform linux/amd64,linux/arm64 -t mugisha99benjamin/banking_app --push .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.5.6
+          terraform_wrapper: false
+
+      - name: Terraform Init and Apply
+        run: |
+          cd Terraform/env/prod
+          if ! aws s3 ls s3://s3statebackendbenjamin123dev 2>/dev/null; then
+            echo "S3 bucket doesn't exist. creating with local backend first..."
+          
+            if [ -f backend.tf ]; then
+              mv backend.tf backend.tf.bak
+            fi
+            
+            terraform init
+            terraform apply -auto-approve
+            
+            if [ -f backend.tf.bak ]; then
+              mv backend.tf.bak backend.tf
+            fi
+            
+            echo "Migrating to remote backend..."
+            terraform init -migrate-state -force-copy
+          else
+            echo "S3 bucket exists. Using remote backend..."
+            terraform init
+            terraform apply -auto-approve
+          fi
+
+      - name: setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Update kubeconfig
+
+        run: |
+          cd Terraform/env/prod
+          cluster_name=$(terraform output -raw cluster_name)
+          echo "cluster ------------------------ $cluster_name) "
+          aws eks update-kubeconfig --region eu-west-1 --name ${cluster_name}
+
+      - name: Extract Terraform Outputs
+        id: tf_outputs
+        run: |
+          cd Terraform/env/prod
+          rds_endpoint=$(terraform output -raw rds_endpoint | cut -d ':' -f1)
+          db_name=$(terraform output -raw db_name)
+          echo "Extracted outputs: $rds_endpoint "
+          echo "Extracted --------------------- name: $db_name)"
+
+          echo "rds_endpoint=$rds_endpoint" >> $GITHUB_OUTPUT
+          echo "db_name=$db_name" >> $GITHUB_OUTPUT
+
+          echo "from GITHUB OUTPUT: $rds_endpoint"
+          echo "============== db name: ====== $db_name"
+
+      - name: Inject variables into config file
+        run: |
+          export RDS_ENDPOINT=${{ steps.tf_outputs.outputs.rds_endpoint }}
+          export DB_NAME=${{ steps.tf_outputs.outputs.db_name }}
+
+          envsubst < Kubernetes/banking-app-config.yaml | tee rendered-config.yaml
+          kubectl apply -f rendered-config.yaml
+
+      - name: Render and apply db-secret
+        run: |
+          export SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          export SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          envsubst < Kubernetes/db-secret.yaml | kubectl apply -f -
+
+      - name: Deploy to kubernetes
+        run: |
+          cd Kubernetes/
+          kubectl apply -f banking-app-service.yaml
+          kubectl apply -f banking-app-deployment.yaml

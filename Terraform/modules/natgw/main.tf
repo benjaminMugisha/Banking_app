@@ -1,20 +1,21 @@
 resource "aws_eip" "this" {
-  domain = "vpc"
-  tags = {
-    Name = var.name
+  domain          = "vpc"
+  tags            = {
+    Name          = var.name
   }
 }
 
 resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.this.id
-  subnet_id     = var.public_subnet_id
-  tags = {
-    Name = "nat-gateway"
+  allocation_id    = aws_eip.this.id
+  subnet_id        = var.public_subnet_id
+  tags             = {
+    Name           = "${var.env}-natgw"
+    Environment    = var.env
   }
 }
 
 resource "aws_route_table" "private" {
-  vpc_id = var.vpc_id
+  vpc_id           = var.vpc_id
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -22,12 +23,13 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "private-route-table"
+    Name            = "${var.env}-private-rt"
+    Environment     = var.env
   }
 }
 
 resource "aws_route_table_association" "private" {
-  count          = length(var.private_subnet_ids)
-  subnet_id      = var.private_subnet_ids[count.index]
-  route_table_id = aws_route_table.private.id
+  count             = length(var.private_subnet_ids)
+  subnet_id         = var.private_subnet_ids[count.index]
+  route_table_id    = aws_route_table.private.id
 }

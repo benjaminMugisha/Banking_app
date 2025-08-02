@@ -20,5 +20,7 @@ public class DirectDebit {
     private Long fromAccountId;
     private Long toAccountId;
     private Double amount;
+
+    @Builder.Default
     private boolean active = true ;
 }

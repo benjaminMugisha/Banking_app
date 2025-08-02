@@ -14,3 +14,4 @@ variable "gateway_id" {
 }
 
 variable "public_subnet_ids" {}
+variable "env" {}
