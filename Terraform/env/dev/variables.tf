@@ -16,15 +16,18 @@ variable "subnet_config" {
   }))
 }
 variable "db_username" {
-  default             = "Benjamin"
-}
-variable "db_name" {
-  default             = "proddb"
+  description = "Database username"
+  type        = string
+  sensitive   = true
 }
 variable "db_password" {
-  type                = string
-  sensitive           = true
-  default             = "Lefhdcvdvgf12345"
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
+variable "db_name" {
+  description = "Database name"
+  type        = string
 }
 variable "dynamo_db_name" {
   default             = "dev-state-lock"
