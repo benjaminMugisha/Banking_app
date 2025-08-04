@@ -63,7 +63,7 @@ jobs:
       - name: Terraform Init and Apply
         run: |
           cd Terraform/env/prod
-          if ! aws s3 ls s3://s3statebackendbenjamin123dev 2>/dev/null; then
+          if ! aws s3 ls s3://s3statebackendbenjamin1222333 2>/dev/null; then
             echo "S3 bucket doesn't exist. creating with local backend first..."
           
             if [ -f backend.tf ]; then
