@@ -82,7 +82,7 @@ module "eks" {
 
 resource "aws_s3_bucket" "tf_state" {
   bucket              = var.bucket_name
-#  prevent_destroy     = false
+  prevent_destroy     = true
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {
@@ -112,9 +112,9 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-#  lifecycle {
-#    prevent_destroy   = true
-#  }
+  lifecycle {
+    prevent_destroy   = true
+  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "rds_credentials"

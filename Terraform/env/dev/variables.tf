@@ -29,11 +29,14 @@ variable "db_name" {
   description = "Database name"
   type        = string
 }
+variable "cluster_name" {
+  default    = "dev-cluster"
+}
+#variable "bucket_name" {
+#  default             = "s3statebackendbenjamin123dev"
+#}
 variable "dynamo_db_name" {
   default             = "dev-state-lock"
-}
-variable "bucket_name" {
-  default             = "s3statebackendbenjamin123dev"
 }
 variable "env" {
   default             = "dev"
@@ -47,6 +50,12 @@ variable "cluster_role_name" {
 variable "instance_type" {
   default             = ["t3.micro"]
 }
-variable "zone_name" {
-  default = ""
+variable "tags" {
+  description = "Environment-level tags"
+  type        = map(string)
+  default = {
+    Owner       = "Benjamin"
+    Environment = "prod"
+    Project     = "Banking_app"
+  }
 }

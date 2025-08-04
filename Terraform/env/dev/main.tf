@@ -1,4 +1,3 @@
-
 module "vpc" {
   source             = "../../modules/vpc"
 
@@ -9,7 +8,7 @@ module "vpc" {
   tags               = {
     Name             = var.vpc_name
   }
-  vpc_name           = "dev-vpc"
+  vpc_name           = var.vpc_name
   env                = var.env
 }
 
@@ -49,13 +48,13 @@ module "nat_gateway" {
   vpc_id              = module.vpc.vpc_id
   public_subnet_id    = module.subnets.public_subnet_ids[0]
   private_subnet_ids  = module.subnets.private_subnet_ids
-  name                = "dev-nat-gateway"
+  name                = "dev-natgw"
   env                 = var.env
 }
 
 module "rds" {
   source              = "../../modules/rds"
-  identifier          = "banking-db"
+  identifier          = "${var.env}-banking-db"
   env                 = var.env
   db_name             = "${var.env}_${var.db_name}"
   username            = var.db_username
@@ -65,13 +64,13 @@ module "rds" {
   vpc_id              = module.vpc.vpc_id
   instance_class      = "db.t3.micro"
   allocated_storage   = 5
-  storage_type        = "gp2"
   multi_az            = false
+  storage_type        = "gp2"
 }
 
 module "eks" {
   source              = "../../modules/eks"
-  cluster_name        = "banking-${var.env}-cluster"
+  cluster_name        = var.cluster_name
   private_subnet_ids  = module.subnets.private_subnet_ids
   vpc_id              = module.vpc.vpc_id
   role_name           = "${var.env}-${var.node_role_name}"
@@ -79,7 +78,7 @@ module "eks" {
   desired_size        = 1
   max_size            = 2
   min_size            = 1
-  cluster_role_name   = "${var.env}-cluster"
+  cluster_role_name   = var.cluster_role_name
   instance_type       = var.instance_type
 }
 
@@ -114,10 +113,9 @@ resource "aws_dynamodb_table" "state_lock" {
     name               = "LockID"
     type               = "S"
   }
-
-#  lifecycle {
-#    prevent_destroy    = false
-#  }
+  lifecycle {
+    prevent_destroy    = false
+  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "rds_credentials"
