@@ -68,7 +68,7 @@ jobs:
 
       - name: Terraform Init and Apply
         run: | 
-          cd Terraform/env/$ {{ env.ENV }}
+          cd Terraform/env/${{ env.ENV }}
           
            S3_BUCKET=${{ env.ENV == 'prod' && secrets.S3_BUCKET || secrets.DEV_S3_BUCKET }}
           
@@ -99,7 +99,7 @@ jobs:
       - name: Update kubeconfig
 
         run: |
-          cd Terraform/env/$ {{ env.ENV }}
+          cd Terraform/env/${{ env.ENV }}
           cluster_name=$(terraform output -raw cluster_name)
           aws eks update-kubeconfig --region eu-west-1 --name ${cluster_name}
 
