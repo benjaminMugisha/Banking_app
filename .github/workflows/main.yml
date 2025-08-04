@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build:
@@ -46,6 +47,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
+      - name: Create terraform.tfvars
+        run: |
+          echo 'db_username = "${{ secrets.DB_USERNAME }}"' >> terraform.tfvars
+          echo 'db_password = "${{ secrets.DB_PASSWORD }}"' >> terraform.tfvars
+          echo 'db_name     = "${{ secrets.DB_NAME }}"' >> terraform.tfvars
+          echo 'subnet_config  = [${{ secrets.SUBNET_CONFIG }}]' >> terraform.tfvars
+
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -87,7 +95,7 @@ jobs:
         run: |
           cd Terraform/env/prod
           cluster_name=$(terraform output -raw cluster_name)
-          echo "cluster ------------------------ $cluster_name) "
+          echo "cluster ------------------------ $cluster_name "
           aws eks update-kubeconfig --region eu-west-1 --name ${cluster_name}
 
       - name: Extract Terraform Outputs

@@ -12,9 +12,8 @@ Terraform/env/dev/.terraform
 *.terraform/
 *.tfstate
 *.tfstate.backup
-crash.log
 banking-app-config.sh
-
+*.tfvars
 
 ### STS ###
 .apt_generated

@@ -12,16 +12,22 @@ variable "subnet_config" {
     type      = string
   }))
 }
+
 variable "db_username" {
-  default = "Benjamin"
+  description = "Database username"
+  type        = string
+  sensitive   = true
 }
-variable "db_name" {
-  default = "proddb"
-}
+
 variable "db_password" {
-  type       = string
-  sensitive  = true
-  default = "Lefhdcvdvgf12345"
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
 }
 
 variable "cluster_name" {

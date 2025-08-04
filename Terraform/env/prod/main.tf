@@ -116,3 +116,17 @@ resource "aws_dynamodb_table" "state_lock" {
 #    prevent_destroy   = true
 #  }
 }
+resource "aws_secretsmanager_secret" "rds_credentials" {
+  name        = "rds_credentials"
+  description = "RDS database credentials for our banking app"
+}
+
+resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.rds_credentials.id
+  secret_string = jsonencode({
+    username = var.db_username
+    password = var.db_password
+    db_name  = var.db_name
+  })
+}
+
