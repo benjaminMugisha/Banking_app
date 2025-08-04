@@ -117,7 +117,7 @@ resource "aws_dynamodb_table" "state_lock" {
 #  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
-  name        = "rds_credentials_2"
+  name        = "rds_credentials"
   description = "RDS database credentials for our banking app"
 }
 
