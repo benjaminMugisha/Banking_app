@@ -128,4 +128,3 @@ resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
     db_name  = var.db_name
   })
 }
-

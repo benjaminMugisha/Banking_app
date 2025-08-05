@@ -13,7 +13,6 @@ Terraform/env/dev/.terraform
 *.tfstate
 *.tfstate.backup
 banking-app-config.sh
-*.tfvars
 
 ### STS ###
 .apt_generated

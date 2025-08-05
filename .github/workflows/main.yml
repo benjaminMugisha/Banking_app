@@ -61,20 +61,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
-      - name: Create terraform.tfvars
-        run: |
-          if [ "$ENV" = "prod" ]; then
-            echo "db_username = \"${{ secrets.DB_USERNAME }}\"" >> terraform.tfvars
-            echo "db_password = \"${{ secrets.DB_PASSWORD }}\"" >> terraform.tfvars
-            echo "db_name     = \"${{ secrets.DB_NAME }}\"" >> terraform.tfvars
-            echo "subnet_config = ${{ secrets.SUBNET_CONFIG }}" >> terraform.tfvars
-          else
-            echo "db_username = \"${{ secrets.DEV_DB_USERNAME }}\"" >> terraform.tfvars
-            echo "db_password = \"${{ secrets.DEV_DB_PASSWORD }}\"" >> terraform.tfvars
-            echo "db_name     = \"${{ secrets.DEV_DB_NAME }}\"" >> terraform.tfvars
-            echo "subnet_config = ${{ secrets.DEV_SUBNET_CONFIG }}" >> terraform.tfvars
-          fi
-
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -82,21 +68,22 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform Init and Apply
-        env:
-          DEV_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
-          PROD_S3_BUCKET: ${{ secrets.S3_BUCKET }}
         run: |
           cd Terraform/env/${{ env.ENV }}
-          echo "Env is: ${{ env.ENV }}"
+          echo "🟡 Env is: ${{ env.ENV }}"
           
           if [ "${{ env.ENV }}" = "prod" ]; then
-            S3_BUCKET="$PROD_S3_BUCKET"
-            echo "🛑🛑🛑🛑🛑🛑 working with ${{ env.ENV }} environment"
+            S3_BUCKET="${{ secrets.S3_BUCKET }}"
+            DB_USERNAME="${{ secrets.DB_USERNAME }}"
+            DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            DB_NAME="${{ secrets.DB_NAME }}"
+          
           else
             S3_BUCKET="${{ secrets.DEV_S3_BUCKET }}"
+            DB_USERNAME="${{ secrets.DEV_DB_USERNAME }}"
+            DB_PASSWORD="${{ secrets.DEV_DB_PASSWORD }}"
+            DB_NAME="${{ secrets.DEV_DB_NAME }}"
           fi
-          
-          echo "🛑🛑🛑🛑🛑🛑 using $S3_BUCKET"
           
           if ! aws s3 ls s3://$S3_BUCKET 2>/dev/null; then
             echo "❌❌❌S3 bucket doesn't exist. creating with local backend first..."
@@ -106,13 +93,15 @@ jobs:
             fi
           
             terraform init
-            terraform apply -auto-approve
+            terraform apply -auto-approve \
+              -var="db_username=$DB_USERNAME" \
+              -var="db_password=$DB_PASSWORD" \
+              -var="db_name=$DB_NAME"
           
             if [ -f backend.tf.bak ]; then 
               mv backend.tf.bak backend.tf
             fi
-          
-            echo "Migrating to remote backend..."
+            echo "✅ Migrating to remote backend..."
             terraform init -migrate-state -force-copy
           
           else
