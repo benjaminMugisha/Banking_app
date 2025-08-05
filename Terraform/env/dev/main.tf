@@ -78,7 +78,7 @@ module "eks" {
   desired_size        = 1
   max_size            = 2
   min_size            = 1
-  cluster_role_name   = var.cluster_role_name
+  cluster_role_name   = "${var.env}-${var.cluster_role_name}"
   instance_type       = var.instance_type
 }
 
@@ -117,13 +117,13 @@ resource "aws_dynamodb_table" "state_lock" {
     prevent_destroy    = false
   }
 }
-resource "aws_secretsmanager_secret" "rds_credentials" {
-  name        = "rds_credentials"
+resource "aws_secretsmanager_secret" "dev_rds_credentials" {
+  name        = "dev_rds_credentials"
   description = "RDS database credentials for our banking app"
 }
 
 resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
-  secret_id     = aws_secretsmanager_secret.rds_credentials.id
+  secret_id     = aws_secretsmanager_secret.dev_rds_credentials.id
   secret_string = jsonencode({
     username = var.db_username
     password = var.db_password

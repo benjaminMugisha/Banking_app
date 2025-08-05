@@ -32,9 +32,9 @@ variable "db_name" {
 variable "cluster_name" {
   default    = "dev-cluster"
 }
-#variable "bucket_name" {
-#  default             = "s3statebackendbenjamin123dev"
-#}
+variable "bucket_name" {
+  default             = "s3statebackendbenjamin123dev"
+}
 variable "dynamo_db_name" {
   default             = "dev-state-lock"
 }

@@ -82,7 +82,6 @@ module "eks" {
 
 resource "aws_s3_bucket" "tf_state" {
   bucket              = var.bucket_name
-  prevent_destroy     = true
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {

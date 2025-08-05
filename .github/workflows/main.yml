@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -36,15 +37,22 @@ jobs:
         run: docker buildx build --platform linux/amd64,linux/arm64 -t mugisha99benjamin/banking_app --push .
 
   deploy:
+    name: Deploy to AWS EKS
     needs: build
     runs-on: ubuntu-latest
-
-    env:
-      ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set ENV variable
+        id: set_env
+        run: |
+          if [ "${GITHUB_REF##*/}" = "main" ]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+          else
+            echo "ENV=dev" >> $GITHUB_ENV
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -55,10 +63,17 @@ jobs:
 
       - name: Create terraform.tfvars
         run: |
-          echo "db_username = \"${{ env.ENV == 'prod' && secrets.DB_USERNAME || secrets.DEV_DB_USERNAME }}\"" >> terraform.tfvars
-          echo "db_password = \"${{ env.ENV == 'prod' && secrets.DB_PASSWORD || secrets.DEV_DB_PASSWORD }}\"" >> terraform.tfvars
-          echo "db_name     = \"${{ env.ENV == 'prod' && secrets.DB_NAME || secrets.DEV_DB_NAME }}\"" >> terraform.tfvars
-          echo "subnet_config  = [${{ env.ENV == 'prod' && secrets.SUBNET_CONFIG || secrets.DEV_SUBNET_CONFIG }}]" >> terraform.tfvars
+          if [ "$ENV" = "prod" ]; then
+            echo "db_username = \"${{ secrets.DB_USERNAME }}\"" >> terraform.tfvars
+            echo "db_password = \"${{ secrets.DB_PASSWORD }}\"" >> terraform.tfvars
+            echo "db_name     = \"${{ secrets.DB_NAME }}\"" >> terraform.tfvars
+            echo "subnet_config = ${{ secrets.SUBNET_CONFIG }}" >> terraform.tfvars
+          else
+            echo "db_username = \"${{ secrets.DEV_DB_USERNAME }}\"" >> terraform.tfvars
+            echo "db_password = \"${{ secrets.DEV_DB_PASSWORD }}\"" >> terraform.tfvars
+            echo "db_name     = \"${{ secrets.DEV_DB_NAME }}\"" >> terraform.tfvars
+            echo "subnet_config = ${{ secrets.DEV_SUBNET_CONFIG }}" >> terraform.tfvars
+          fi
 
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -67,21 +82,36 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform Init and Apply
-        run: | 
+        env:
+          DEV_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+          PROD_S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
           cd Terraform/env/${{ env.ENV }}
+          echo "Env is: ${{ env.ENV }}"
           
-           S3_BUCKET=${{ env.ENV == 'prod' && secrets.S3_BUCKET || secrets.DEV_S3_BUCKET }}
+          if [ "${{ env.ENV }}" = "prod" ]; then
+            S3_BUCKET="$PROD_S3_BUCKET"
+            echo "🛑🛑🛑🛑🛑🛑 working with ${{ env.ENV }} environment"
+          else
+            S3_BUCKET="${{ secrets.DEV_S3_BUCKET }}"
+          fi
+          
+          echo "🛑🛑🛑🛑🛑🛑 using $S3_BUCKET"
           
           if ! aws s3 ls s3://$S3_BUCKET 2>/dev/null; then
-            echo "S3 bucket doesn't exist. creating with local backend first..."
+            echo "❌❌❌S3 bucket doesn't exist. creating with local backend first..."
           
-            if [ -f backend.tf ]; then mv backend.tf backend.tf.bak fi
+            if [ -f backend.tf ]; then 
+              mv backend.tf backend.tf.bak 
+            fi
           
             terraform init
             terraform apply -auto-approve
           
-            if [ -f backend.tf.bak ]; then mv backend.tf.bak backend.tf fi
-            
+            if [ -f backend.tf.bak ]; then 
+              mv backend.tf.bak backend.tf
+            fi
+          
             echo "Migrating to remote backend..."
             terraform init -migrate-state -force-copy
           
@@ -106,7 +136,7 @@ jobs:
       - name: Extract Terraform Outputs
         id: tf_outputs
         run: |
-          cd Terraform/env/$ {{ env.ENV }}
+          cd Terraform/env/${{ env.ENV }}
           rds_endpoint=$(terraform output -raw rds_endpoint | cut -d ':' -f1)
           db_name=$(terraform output -raw db_name)
           echo "rds_endpoint=$rds_endpoint" >> $GITHUB_OUTPUT
@@ -122,8 +152,14 @@ jobs:
 
       - name: Render and apply db-secret
         run: |
-          export SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
-          export SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          if [ "$ENV" = "prod" ]; then
+            export SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
+            export SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
+          else
+            export SPRING_DATASOURCE_USERNAME=${{ secrets.DEV_DB_USERNAME }}
+            export SPRING_DATASOURCE_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
+          fi
+
           envsubst < Kubernetes/db-secret.yaml | kubectl apply -f -
 
       - name: Deploy to kubernetes
