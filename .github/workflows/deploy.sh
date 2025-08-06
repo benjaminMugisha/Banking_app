@@ -18,6 +18,11 @@ else
   DB_NAME="${DEV_DB_NAME}"
 fi
 
+TF_VARS="-var=db_username=$DB_USERNAME \
+         -var=db_password=$DB_PASSWORD \
+         -var=db_name=$DB_NAME \
+         -var=bucket_name=$S3_BUCKET"
+
 cd Terraform/env/$ENV
 
 if ! aws s3 ls s3://$S3_BUCKET 2>/dev/null; then
@@ -26,10 +31,7 @@ if ! aws s3 ls s3://$S3_BUCKET 2>/dev/null; then
   [ -f backend.tf ] && mv backend.tf backend.tf.bak
 
   terraform init
-  terraform apply -auto-approve \
-    -var="db_username=$DB_USERNAME" \
-    -var="db_password=$DB_PASSWORD" \
-    -var="db_name=$DB_NAME"
+  terraform apply -auto-approve $TF_VARS
 
   [ -f backend.tf.bak ] && mv backend.tf.bak backend.tf
 
@@ -39,5 +41,5 @@ if ! aws s3 ls s3://$S3_BUCKET 2>/dev/null; then
 else
   echo "✅✅✅ S3 bucket exists. Using remote backend..."
   terraform init
-  terraform apply -auto-approve
+  terraform apply -auto-approve $TF_VARS
 fi
