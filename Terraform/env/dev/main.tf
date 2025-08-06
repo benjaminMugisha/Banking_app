@@ -5,9 +5,7 @@ module "vpc" {
   enable_dns_support = true
   enable_dns_hostnames= true
 
-  tags               = {
-    Name             = var.vpc_name
-  }
+  tags               = var.tags
   vpc_name           = var.vpc_name
   env                = var.env
 }
@@ -30,19 +28,17 @@ module "internet_gateway" {
 module "route_table" {
   source             = "../../modules/route_table"
   vpc_id             = module.vpc.vpc_id
-  name               = "${local.prefix}-${var.env}-rt"
+  name               = "${local.prefix}-rt"
   env                 = var.env
   gateway_id         = module.internet_gateway.internet_gateway_id
   public_subnet_ids  = module.subnets.public_subnet_ids
 }
-
 module "route53" {
   source              = "../../modules/route53"
   zone_name           = "banking.internal.dev.com"
   vpc_id              = module.vpc.vpc_id
   env                 = var.env
 }
-
 module "nat_gateway" {
   source              = "../../modules/natgw"
   vpc_id              = module.vpc.vpc_id
@@ -78,7 +74,7 @@ module "eks" {
   desired_size        = 1
   max_size            = 2
   min_size            = 1
-  cluster_role_name   = "${var.env}-${var.cluster_role_name}"
+  cluster_role_name   = var.cluster_role_name
   instance_type       = var.instance_type
 }
 
@@ -119,7 +115,7 @@ resource "aws_dynamodb_table" "state_lock" {
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "dev_rds_credentials"
-  description = "RDS database credentials for our banking app"
+  description = "RDS database credentials for our banking app in dev-environment"
 }
 
 resource "aws_secretsmanager_secret_version" "rds_credentials_version" {

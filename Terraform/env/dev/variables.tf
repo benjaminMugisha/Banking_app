@@ -8,7 +8,7 @@ variable "vpc_name" {
 }
 variable "subnet_config" {
   description         = "List of subnet configurations (both public and private)"
-  type = list(object({
+  type                = list(object({
     name              = string
     cidr_block        = string
     availability_zone = string
@@ -55,7 +55,7 @@ variable "tags" {
   type        = map(string)
   default = {
     Owner       = "Benjamin"
-    Environment = "prod"
+    Environment = "dev"
     Project     = "Banking_app"
   }
 }

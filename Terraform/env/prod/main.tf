@@ -6,7 +6,7 @@ module "vpc" {
   enable_dns_hostnames= true
 
   tags                = var.tags
-  vpc_name            = "prod-vpc"
+  vpc_name            = var.vpc_name
   env                 = var.env
 }
 
@@ -16,7 +16,7 @@ module "subnets" {
   subnet_config       = var.subnet_config
 }
 locals {
-  prefix = module.vpc.vpc_name
+  prefix              = module.vpc.vpc_name
 }
 module "internet_gateway" {
   source              = "../../modules/igw"
@@ -24,7 +24,6 @@ module "internet_gateway" {
   name                = "${local.prefix}-igw"
   env                 = var.env
 }
-
 module "route_table" {
   source              = "../../modules/route_table"
   vpc_id              = module.vpc.vpc_id
@@ -33,14 +32,12 @@ module "route_table" {
   gateway_id          = module.internet_gateway.internet_gateway_id
   public_subnet_ids   = module.subnets.public_subnet_ids
 }
-
 module "route53" {
   source              = "../../modules/route53"
   zone_name           = "banking.internal.prod.com"
   vpc_id              = module.vpc.vpc_id
   env                 = var.env
 }
-
 module "nat_gateway" {
   source              = "../../modules/natgw"
   vpc_id              = module.vpc.vpc_id
