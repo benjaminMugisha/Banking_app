@@ -51,7 +51,7 @@ module "rds" {
   source              = "../../modules/rds"
   identifier          = "${var.env}-banking-db"
   env                 = var.env
-  db_name             = "${var.env}_${var.db_name}"
+  db_name             = var.db_name
   username            = var.db_username
   password            = var.db_password
   private_subnet_ids  = module.subnets.private_subnet_ids
@@ -108,9 +108,9 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-  lifecycle {
-    prevent_destroy   = true
-  }
+#  lifecycle {
+#    prevent_destroy   = true
+#  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "rds_credentials"

@@ -3,7 +3,7 @@
 ### UNCOMMENT THIS CODE THEN RERUN TERRAFORM INIT
 ### TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
 ##############################################################
-#
+
 terraform {
   backend "s3" {
     bucket         = "s3statebackendbenjamin1222333"
