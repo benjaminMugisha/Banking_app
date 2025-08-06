@@ -1,7 +1,7 @@
 Banking Application 💳
 
-A backend banking application with a RESTful API built using **Spring Boot**, containerized with **Docker**, deployed on **Kubernetes**, and provisioned with **Terraform** on AWS. 
-Supports account creation, deposits, withdrawals, transfers, loans, direct debits and jwt user authentication. 
+A backend banking application with a RESTful API built using **Spring Boot**, containerized with **Docker**, deployed on **Kubernetes**, and provisioned by **Terraform** on AWS. 
+Supports account and user creation, deposits, withdrawals, transfers, loans, direct debits and jwt user authentication. 
 
 ## Tech Stack
 
@@ -11,7 +11,7 @@ Supports account creation, deposits, withdrawals, transfers, loans, direct debit
 - **Infrastructure as Code:** Terraform
 - **Containerization:** Docker
 - **Orchestration:** Kubernetes (deployed on AWS EKS)
-- **Hosting:** AWS (RDS, EKS, S3, etc.)
+- **Hosting:** AWS.
 - **Testing:** JUnit 5(unit testing), Spring Boot Test(integration testing) and Mockito. 
 
 ## Features
@@ -83,32 +83,49 @@ Press Ctrl + C in your terminal, or run: ` docker compose down `
 
 ### Infrastructure on AWS(Terraform)
 
-Commands:
-  ` cd Terraform
-   terraform init
-   terraform apply -auto-approve `
+This Project uses Terraform to provision cloud infrastructure and Github Actions to automate deployment.
+Every push to main or dev triggered a CI/CD pipeline that:
+1. Builds and tests the Java Spring Boot app using Maven
+2. Builds and pushes a Docker image to Docker Hub
+3. Provisions AWS infrastructure using Terraform. 
+   If the S3 state bucket does not exist, it uses local backend first, then migrates to remote.
+4. Deploys the app to EKS:
+   Applies Kubernetes Config and injects dynamic values like RDS endpoint and credentials. 
+NOTE: The pipeline supports both dev and prod environments based on the branch.
 
-Terraform provisions:
-- VPC + Subnets 
+Provisioned resources:
+- VPC + Subnets
 - RDS (PostgreSQL)
-- EKS Cluster 
-- IAM Roles and Networking 
-- Route 53 hosted zone 
+- EKS Cluster
+- IAM Roles and Networking
+- Route 53 hosted zone
 - Internet Gateway
 - Route Table
 - NAT Gateway
 
-to move state from local to s3 uncomment backend.tf then `terraform init` then `yes` when prompted. 
+to manually test deployment:
+1. `cd ./Terraform/env/dev`
+2. comment out backend.tf 
+3. `terraform init && Terraform apply -auto-approve -var="db_username=your-db-username" -var="db_password=your-db-password" -var="db_name=your_db_name" `
+   NOTE: please use proper variables and for db_name you can only use alphanumeric characters.
 
+5. `aws eks --region eu-west-1 update-kubeconfig --name dev-cluster`
+   NOTE: if you used prod env, then `aws eks --region eu-west-1 update-kubeconfig --name prod-cluster`
+6. export the output variables:
 
-### Deploying on Kubernetes(EKS)
-
-once EKS is ready, deploy your app:
-
-1. `aws eks --region eu-west-1 update-kubeconfig --name my-eks-cluster`
-2. `cd ..` 
-3. `kubectl apply -f kubernetes/` 
-4. `kubectl get svc` to view endpoint to use for testing in curl or postman
+<pre> ``` bash
+export RDS_ENDPOINT=$(terraform output -raw rds_endpoint)
+export DB_NAME=$(terraform output -raw db_name)
+export CLUSTER_NAME=$(terraform output -raw cluster_name) ``` </pre>
+   
+7. ` cd ../../../Kubernetes ` 
+8. ` envsubt < banking-app-config.yaml > config.yaml `
+9. ` kubectl apply -f config.yaml `
+10. '
+8.`kubectl apply -f kubernetes/`
+export RDS_ENDPOINT=${{ steps.tf_outputs.outputs.rds_endpoint }}
+   export DB_NAME=${{ steps.tf_outputs.outputs.db_name }}
+`kubectl get svc` to view endpoint to use for testing in curl or postman
 
 ### Additional Concepts Implemented
 

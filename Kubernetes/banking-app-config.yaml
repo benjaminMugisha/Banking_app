@@ -4,4 +4,3 @@ metadata:
   name: config
 data:
   SPRING_DATASOURCE_URL: jdbc:postgresql://$RDS_ENDPOINT:5432/$DB_NAME
-

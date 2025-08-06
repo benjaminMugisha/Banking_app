@@ -8,7 +8,7 @@ variable "vpc_name" {
 }
 variable "subnet_config" {
   description         = "List of subnet configurations (both public and private)"
-  type                = list(object({
+  type = list(object({
     name              = string
     cidr_block        = string
     availability_zone = string
@@ -33,7 +33,6 @@ variable "cluster_name" {
   default    = "dev-cluster"
 }
 variable "bucket_name" {
-  default             = "s3statebackendbenjamin123dev"
 }
 variable "dynamo_db_name" {
   default             = "dev-state-lock"
@@ -55,7 +54,7 @@ variable "tags" {
   type        = map(string)
   default = {
     Owner       = "Benjamin"
-    Environment = "dev"
+    Environment = "prod"
     Project     = "Banking_app"
   }
 }

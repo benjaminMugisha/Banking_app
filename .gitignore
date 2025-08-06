@@ -13,6 +13,8 @@ Terraform/env/dev/.terraform
 *.tfstate
 *.tfstate.backup
 banking-app-config.sh
+*.hcl
+Terraform/env/prod/.terraform.lock.hcl
 
 ### STS ###
 .apt_generated

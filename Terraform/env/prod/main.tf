@@ -6,7 +6,7 @@ module "vpc" {
   enable_dns_hostnames= true
 
   tags                = var.tags
-  vpc_name            = var.vpc_name
+  vpc_name            = "prod-vpc"
   env                 = var.env
 }
 
@@ -16,7 +16,7 @@ module "subnets" {
   subnet_config       = var.subnet_config
 }
 locals {
-  prefix              = module.vpc.vpc_name
+  prefix = module.vpc.vpc_name
 }
 module "internet_gateway" {
   source              = "../../modules/igw"
@@ -24,6 +24,7 @@ module "internet_gateway" {
   name                = "${local.prefix}-igw"
   env                 = var.env
 }
+
 module "route_table" {
   source              = "../../modules/route_table"
   vpc_id              = module.vpc.vpc_id
@@ -32,12 +33,14 @@ module "route_table" {
   gateway_id          = module.internet_gateway.internet_gateway_id
   public_subnet_ids   = module.subnets.public_subnet_ids
 }
+
 module "route53" {
   source              = "../../modules/route53"
   zone_name           = "banking.internal.prod.com"
   vpc_id              = module.vpc.vpc_id
   env                 = var.env
 }
+
 module "nat_gateway" {
   source              = "../../modules/natgw"
   vpc_id              = module.vpc.vpc_id
@@ -51,7 +54,7 @@ module "rds" {
   source              = "../../modules/rds"
   identifier          = "${var.env}-banking-db"
   env                 = var.env
-  db_name             = "${var.env}_${var.db_name}"
+  db_name             = var.db_name
   username            = var.db_username
   password            = var.db_password
   private_subnet_ids  = module.subnets.private_subnet_ids
@@ -108,9 +111,9 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-  lifecycle {
-    prevent_destroy   = true
-  }
+#  lifecycle {
+#    prevent_destroy   = true
+#  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "rds_credentials"
@@ -125,3 +128,4 @@ resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
     db_name  = var.db_name
   })
 }
+
