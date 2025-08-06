@@ -1,4 +1,3 @@
-
 module "vpc" {
   source             = "../../modules/vpc"
 
@@ -6,10 +5,8 @@ module "vpc" {
   enable_dns_support = true
   enable_dns_hostnames= true
 
-  tags               = {
-    Name             = var.vpc_name
-  }
-  vpc_name           = "dev-vpc"
+  tags               = var.tags
+  vpc_name           = var.vpc_name
   env                = var.env
 }
 
@@ -31,31 +28,29 @@ module "internet_gateway" {
 module "route_table" {
   source             = "../../modules/route_table"
   vpc_id             = module.vpc.vpc_id
-  name               = "${local.prefix}-${var.env}-rt"
+  name               = "${local.prefix}-rt"
   env                 = var.env
   gateway_id         = module.internet_gateway.internet_gateway_id
   public_subnet_ids  = module.subnets.public_subnet_ids
 }
-
 module "route53" {
   source              = "../../modules/route53"
   zone_name           = "banking.internal.dev.com"
   vpc_id              = module.vpc.vpc_id
   env                 = var.env
 }
-
 module "nat_gateway" {
   source              = "../../modules/natgw"
   vpc_id              = module.vpc.vpc_id
   public_subnet_id    = module.subnets.public_subnet_ids[0]
   private_subnet_ids  = module.subnets.private_subnet_ids
-  name                = "dev-nat-gateway"
+  name                = "dev-natgw"
   env                 = var.env
 }
 
 module "rds" {
   source              = "../../modules/rds"
-  identifier          = "banking-db"
+  identifier          = "${var.env}-banking-db"
   env                 = var.env
   db_name             = "${var.env}_${var.db_name}"
   username            = var.db_username
@@ -65,13 +60,13 @@ module "rds" {
   vpc_id              = module.vpc.vpc_id
   instance_class      = "db.t3.micro"
   allocated_storage   = 5
-  storage_type        = "gp2"
   multi_az            = false
+  storage_type        = "gp2"
 }
 
 module "eks" {
   source              = "../../modules/eks"
-  cluster_name        = "banking-${var.env}-cluster"
+  cluster_name        = var.cluster_name
   private_subnet_ids  = module.subnets.private_subnet_ids
   vpc_id              = module.vpc.vpc_id
   role_name           = "${var.env}-${var.node_role_name}"
@@ -79,7 +74,7 @@ module "eks" {
   desired_size        = 1
   max_size            = 2
   min_size            = 1
-  cluster_role_name   = "${var.env}-cluster"
+  cluster_role_name   = var.cluster_role_name
   instance_type       = var.instance_type
 }
 
@@ -114,8 +109,20 @@ resource "aws_dynamodb_table" "state_lock" {
     name               = "LockID"
     type               = "S"
   }
+  lifecycle {
+    prevent_destroy    = false
+  }
+}
+resource "aws_secretsmanager_secret" "rds_credentials" {
+  name        = "dev_rds_credentials"
+  description = "RDS database credentials for our banking app in dev-environment"
+}
 
-#  lifecycle {
-#    prevent_destroy    = false
-#  }
+resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.rds_credentials.id
+  secret_string = jsonencode({
+    username = var.db_username
+    password = var.db_password
+    db_name  = var.db_name
+  })
 }

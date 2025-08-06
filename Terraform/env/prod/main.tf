@@ -6,7 +6,7 @@ module "vpc" {
   enable_dns_hostnames= true
 
   tags                = var.tags
-  vpc_name            = "prod-vpc"
+  vpc_name            = var.vpc_name
   env                 = var.env
 }
 
@@ -16,7 +16,7 @@ module "subnets" {
   subnet_config       = var.subnet_config
 }
 locals {
-  prefix = module.vpc.vpc_name
+  prefix              = module.vpc.vpc_name
 }
 module "internet_gateway" {
   source              = "../../modules/igw"
@@ -24,7 +24,6 @@ module "internet_gateway" {
   name                = "${local.prefix}-igw"
   env                 = var.env
 }
-
 module "route_table" {
   source              = "../../modules/route_table"
   vpc_id              = module.vpc.vpc_id
@@ -33,14 +32,12 @@ module "route_table" {
   gateway_id          = module.internet_gateway.internet_gateway_id
   public_subnet_ids   = module.subnets.public_subnet_ids
 }
-
 module "route53" {
   source              = "../../modules/route53"
   zone_name           = "banking.internal.prod.com"
   vpc_id              = module.vpc.vpc_id
   env                 = var.env
 }
-
 module "nat_gateway" {
   source              = "../../modules/natgw"
   vpc_id              = module.vpc.vpc_id
@@ -82,7 +79,6 @@ module "eks" {
 
 resource "aws_s3_bucket" "tf_state" {
   bucket              = var.bucket_name
-#  prevent_destroy     = false
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {
@@ -112,7 +108,20 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-#  lifecycle {
-#    prevent_destroy   = true
-#  }
+  lifecycle {
+    prevent_destroy   = true
+  }
+}
+resource "aws_secretsmanager_secret" "rds_credentials" {
+  name        = "rds_credentials"
+  description = "RDS database credentials for our banking app"
+}
+
+resource "aws_secretsmanager_secret_version" "rds_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.rds_credentials.id
+  secret_string = jsonencode({
+    username = var.db_username
+    password = var.db_password
+    db_name  = var.db_name
+  })
 }
