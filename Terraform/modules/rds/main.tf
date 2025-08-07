@@ -3,7 +3,7 @@ resource "aws_db_subnet_group" "this" {
   subnet_ids        = var.private_subnet_ids
 
   tags              = {
-    Name            = "rds-subnet-group-${var.env}-${var.db_name}"
+    Name            = "rds-subnet-group-${var.env}"
     Environment     = var.env
   }
 }
@@ -20,8 +20,8 @@ resource "aws_db_instance" "this" {
   password            = var.password
   db_name             = var.db_name
 
-  db_subnet_group_name= aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  db_subnet_group_name  = aws_db_subnet_group.this.name
+  vpc_security_group_ids= [aws_security_group.rds_sg.id]
 
   skip_final_snapshot = true
   publicly_accessible = false

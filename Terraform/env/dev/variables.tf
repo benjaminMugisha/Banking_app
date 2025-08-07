@@ -16,24 +16,24 @@ variable "subnet_config" {
   }))
 }
 variable "db_username" {
-  description = "Database username"
-  type        = string
-  sensitive   = true
+  description         = "Database username"
+  type                = string
+  sensitive           = true
 }
 variable "db_password" {
-  description = "Database password"
-  type        = string
-  sensitive   = true
+  description         = "Database password"
+  type                = string
+  sensitive           = true
 }
 variable "db_name" {
-  description = "Database name"
-  type        = string
+  description         = "Database name"
+  type                = string
 }
 variable "cluster_name" {
-  default    = "dev-cluster"
+  default             = "dev-cluster"
 }
 variable "bucket_name" {
-  default             = "s3statebackendbenjamin123dev"
+  description         = "name of our s3 bucket"
 }
 variable "dynamo_db_name" {
   default             = "dev-state-lock"
@@ -51,11 +51,11 @@ variable "instance_type" {
   default             = ["t3.micro"]
 }
 variable "tags" {
-  description = "Environment-level tags"
-  type        = map(string)
-  default = {
-    Owner       = "Benjamin"
-    Environment = "dev"
-    Project     = "Banking_app"
+  description         = "Environment-level tags"
+  type                = map(string)
+  default             = {
+    Owner             = "Benjamin"
+    Environment       = "dev"
+    Project           = "Banking_app"
   }
 }

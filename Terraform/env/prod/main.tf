@@ -49,7 +49,7 @@ module "nat_gateway" {
 
 module "rds" {
   source              = "../../modules/rds"
-  identifier          = "${var.env}-banking-db"
+  identifier          = "banking-db"
   env                 = var.env
   db_name             = var.db_name
   username            = var.db_username
@@ -108,9 +108,9 @@ resource "aws_dynamodb_table" "state_lock" {
     type              = "S"
   }
 
-#  lifecycle {
-#    prevent_destroy   = true
-#  }
+  lifecycle {
+    prevent_destroy   = true
+  }
 }
 resource "aws_secretsmanager_secret" "rds_credentials" {
   name        = "rds_credentials"

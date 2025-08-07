@@ -1,24 +1,24 @@
 variable "region" {
-  description         = "AWS region"
-  type                = string
-  default             = "eu-west-1"
+  description          = "AWS region"
+  type                 = string
+  default              = "eu-west-1"
 }
 variable "vpc_name" {
-  default             = "prod-vpc"
+  default              = "prod-vpc"
 }
 variable "subnet_config" {
-  description         = "List of subnet configurations (both public and private)"
-  type                = list(object({
-    name              = string
-    cidr_block        = string
-    availability_zone = string
-    type              = string
+  description          = "List of subnet configurations (both public and private)"
+  type                 = list(object({
+    name               = string
+    cidr_block         = string
+    availability_zone  = string
+    type               = string
   }))
 }
 variable "db_username" {
-  description         = "Database username"
-  type                = string
-  sensitive           = true
+  description          = "Database username"
+  type                 = string
+  sensitive            = true
 }
 variable "db_password" {
   description          = "Database password"
@@ -33,7 +33,7 @@ variable "cluster_name" {
   default              = "prod-cluster"
 }
 variable "bucket_name" {
-  default              = "s3statebackendbenjamin1222333"
+  description          = "name of our S3 bucket"
 }
 variable "env" {
   default              = "prod"

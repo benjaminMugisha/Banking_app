@@ -1,76 +1,102 @@
 Banking Application 💳
 
-A backend banking application with a RESTful API built using **Spring Boot**, containerized with **Docker**, deployed on **Kubernetes**, and provisioned with **Terraform** on AWS. 
-Supports account creation, deposits, withdrawals, transfers, loans, direct debits and jwt user authentication. 
+A banking application with a RESTful API built using Spring Boot,
+containerized using Docker, deployed on Kubernetes (AWS EKS), and provisioned via Terraform on AWS EKS.
+
+Supports full banking operations such as account creation, deposits, withdrawals, transfers, loans,
+direct debits, transaction tracking and JWT based authentication.
 
 ## Tech Stack
 
-- **Backend:** Java + Spring Boot
-- **Database:** PostgreSQL
-- **API Security:** Spring Security + JWT
-- **Infrastructure as Code:** Terraform
-- **Containerization:** Docker
-- **Orchestration:** Kubernetes (deployed on AWS EKS)
-- **Hosting:** AWS (RDS, EKS, S3, etc.)
-- **Testing:** JUnit 5(unit testing), Spring Boot Test(integration testing) and Mockito. 
+- Backend: Java + Spring Boot
+- Database: PostgreSQL
+- API Security: Spring Security + JWT
+- Infrastructure as Code: Terraform
+- Containerization: Docker + Docker Compose
+- Orchestration: Kubernetes (on AWS EKS)
+- Cloud Hosting: AWS (EKS, RDS, EKS, S3, DynamoDB, etc.)
+- Testing: JUnit 5, Spring Boot Test and Mockito.
+- CICD: GitHub Actions.
 
 ## Features
 
 - User registration and authentication (JWT)
-- Account management: create, view and delete accounts. 
-- Transactions: deposit, withdraw, transfer, 
+- Account management: create, view and delete accounts.
+- Transactions: deposit, withdraw, transfer,
 - Direct debits: create and cancel.
-- Loans: apply, delete, view, repay monthly or full amount, affordability check.
+- Loans: apply, delete, view, repay monthly or full amount, affordability checks.
 - Role-based access control(admin,user)
 - Docker + Docker Compose for local development
-- Fully automated infrastructure with Terraform
-- Kubernetes deployment with production-ready manifests
+- Fully automated infrastructure via Terraform
+- Kubernetes deployment with autoscaling
+- Version control: Git&GitHub
+- CICD pipeline using Github Actions to automatically test, Docker build and deploy.
+- Global Exception handling with custom error responses.
+- Pagination and logging.
+- Docker Compose setup for local development
 
 
 ## Getting Started
 
 ### Prerequisites
-- Docker
-- Docker Compose 
-- Java 17+ and Maven (if running locally without Docker)
-- AWS CLI & Terraform (for cloud provisioning) 
+- Docker & Docker Compose
+- Java 17+ and Maven
+- AWS CLI & Terraform (for cloud provisioning)
 - Kubernetes CLI (kubectl)
 
 ### Building and Running the Application locally
 
 1. Clone the repository:
-   ` git clone git@github.com:benjaminMugisha/Banking_app.git `
+   ` git clone git@github.com:benjaminMugisha/Banking_app.git && cd Banking_app `
 
-2. ` cd Banking-app `
-
-3. create a .env file:
-   ` echo "POSTGRES_USER=postgres 
+2. create a .env file:
+   ` echo "POSTGRES_USER=postgres
    POSTGRES_PASSWORD=00000
    POSTGRES_DB=banking" > .env `
 
-4.  ` docker-compose up --build ` build and start the application using Docker Compose:
+3. build and start the application using Docker Compose:
+   ` docker-compose up --build `
 
-5. Access the application at ` http://localhost:8080/swagger-ui/index.html ` to view endpoints.
+4. to view endpoints visit Swagger UI:
+   ` http://localhost:8080/swagger-ui/index.html `
 
-###  **curl examples**
+###  ** Sample CURL examples**
 
 **Register a User and generate a token**
 ```bash
 curl -X POST http://localhost:8080/api/v1/auth/register \
 -H "Content-Type: application/json" \
--d '{"firstName":"John","lastName":"Doe","email":"john@example.com","password":"password123"}'
+-d '{"firstName":"John","lastName":"Doe","accountUsername":"johndoe12345",
+"balance":"500","email":"john@example.com","password":"password123","role":"ADMIN"}'
 ```
+will return a jwt token, plus your account details.
 
-**create an account**
+**Register another user.***
 ```bash
-curl -X POST http://localhost:8080/api/v1/account/create \
+curl -X POST http://localhost:8080/api/v1/auth/register \
 -H "Content-Type: application/json" \
--d '{"accountUsername":"john", "balance": 100}'
+-d '{"firstName":"Peter","lastName":"Pan","accountUsername":"peterpan123456",
+"balance":"50","email":"peterpan@gmail.com","password":"password123","role":"USER"}'
 ```
 
-**get all accounts**
+**Get all accounts(Admin only).**
 ```bash
-curl -X GET http://localhost:8080/api/v1/account/all -H "Authorization: Bearer <JWT_TOKEN>" 
+curl -X GET http://localhost:8080/api/v1/account/all \
+ -H "Authorization: Bearer <JWT TOKEN>"
+```
+
+**Test transfer**
+```bash
+curl -X PATCH http://localhost:8080/api/v1/account/user/transfer \
+ -H "Authorization: Bearer <JWT TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{"fromAccountId":2, "toAccountId":1, "amount":1.5}'  
+```
+
+**View transaction history**
+```bash
+curl -X GET http://localhost:8080/api/v1/transactions/2 \
+ -H "Authorization: Bearer <JWT TOKEN>"
 ```
 
 ### Running tests:
@@ -81,48 +107,15 @@ curl -X GET http://localhost:8080/api/v1/account/all -H "Authorization: Bearer <
 Press Ctrl + C in your terminal, or run: ` docker compose down `
 
 
-### Infrastructure on AWS(Terraform)
 
-Commands:
-  ` cd Terraform
-   terraform init
-   terraform apply -auto-approve `
-
-Terraform provisions:
-- VPC + Subnets 
-- RDS (PostgreSQL)
-- EKS Cluster 
-- IAM Roles and Networking 
-- Route 53 hosted zone 
-- Internet Gateway
-- Route Table
-- NAT Gateway
-
-to move state from local to s3 uncomment backend.tf then `terraform init` then `yes` when prompted. 
+### Docker Image, Infrastructure on AWS(Terraform) and Deploying to Kubernetes(EKS):
+This project uses GitHub Actions to automatically build the Docker image and push it to Dockerhub,
+deploy the app to AWS EKS and Kubernetes.
+No manual deployment steps are required, just push to Github and the CICD pipeline will handle everything.  
+see .github/workflows for code and scripts.
 
 
-### Deploying on Kubernetes(EKS)
-
-once EKS is ready, deploy your app:
-
-1. `aws eks --region eu-west-1 update-kubeconfig --name my-eks-cluster`
-2. `cd ..` 
-3. `kubectl apply -f kubernetes/` 
-4. `kubectl get svc` to view endpoint to use for testing in curl or postman
-
-### Additional Concepts Implemented
-
-- Global Exception Handling using @ControllerAdvice
-- API Error Standardization with custom error objects
-- validating request fields
-- pagination
-- logging
-
-Note: For readability, not all methods include pagination, detailed logging, or granular permissions — but those are demonstrated in key features and would be scaled across in production.
-
-
-### coming next:
-- CI/CD
+### COMING NEXT:
 - React UI
 
 📄 License
@@ -130,6 +123,6 @@ Note: For readability, not all methods include pagination, detailed logging, or 
 MIT License.
 Copyright (c) 2025 Benjamin Mugisha
 
-🔗 LinkedIn: https://www.linkedin.com/in/benjamin-mugisha-9b2397299/
-🐳 Docker Hub: mugisha99benjamin 
-📦 GitHub: github.com/benjaminMugisha
+🔗 [LinkedIn](https://www.linkedin.com/in/benjamin-mugisha-9b2397299/)
+🐳 [Docker Hub](https://hub.docker.com/r/mugisha99benjamin/banking_app)
+📦 [GitHub](https://github.com/benjaminMugisha/Banking_app)
