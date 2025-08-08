@@ -75,12 +75,12 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("account used not found"));
         double total = account.getBalance() + amount;
         account.setBalance(total);
-        Account savedAccount = accountRepository.save(account); //persist it so it updates the balance
+        Account savedAccount = accountRepository.save(account);
 
         transactionService.recordTransaction(account, "DEPOSIT", amount, "Deposit of " + amount, null, null);
         logger.info("Deposit successful. AccountId: {}, Amount: {}, New Balance: {}", accountId, amount, account.getBalance());
 
-        return AccountMapper.MapToAccountDto(savedAccount);//using savedAccount since it's the upto date version
+        return AccountMapper.MapToAccountDto(savedAccount);
          }
     @Transactional
     public void transfer(TransferRequest transferRequest) {
@@ -133,7 +133,6 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.MapToAccountDto(savedAccount);
     }
 
-    //create and save the direct debit
     @Override
     public DirectDebit createDirectDebit(Long fromId, Long toId, Double amount) {
         DirectDebit dd =  DirectDebit.builder()

@@ -87,7 +87,7 @@ curl -X GET http://localhost:8080/api/v1/account/all \
 
 **Test transfer**
 ```bash
-curl -X PATCH http://localhost:8080/api/v1/account/user/transfer \
+curl -X PATCH http://localhost:8080/api/v1/account/transfer \
  -H "Authorization: Bearer <JWT TOKEN>" \
  -H "Content-Type: application/json" \
  -d '{"fromAccountId":2, "toAccountId":1, "amount":1.5}'  

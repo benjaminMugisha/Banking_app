@@ -182,7 +182,7 @@ public class AccountControllerTest {
 
         doNothing().when(accountService).transfer(any(TransferRequest.class));
 
-        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "user/transfer")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferRequest)));
 
@@ -201,7 +201,7 @@ public class AccountControllerTest {
         when(accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount()))
                 .thenReturn(dd);
 
-        ResultActions response = mockMvc.perform(post(ACCOUNT_API + "dd/create")
+        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "dd/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dd)));
 

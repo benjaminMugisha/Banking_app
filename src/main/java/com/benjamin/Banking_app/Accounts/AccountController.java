@@ -48,7 +48,7 @@ public class AccountController {
     }
 
     @PatchMapping("/{id}/withdraw")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AccountDto> withdraw(@PathVariable Long id,
                                                @RequestBody Map<String, Double> request) {
         double amount = request.get("amount");
@@ -56,8 +56,8 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    @PatchMapping("user/transfer")
-    @PreAuthorize("hasRole('USER')")
+    @PatchMapping("/transfer")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<String> transfer(@RequestBody TransferRequest transferRequest) {
         accountService.transfer(transferRequest);
         return ResponseEntity.ok("Transfer successful");
@@ -70,7 +70,7 @@ public class AccountController {
         return ResponseEntity.ok("account successfuly deleted");
     }
 
-    @PostMapping("/dd/create")
+    @PutMapping("/dd/create")
     public ResponseEntity<DirectDebit> CreateDirectDebit(@RequestBody DirectDebit dd){
         DirectDebit saved = accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
         return ResponseEntity.ok(saved);

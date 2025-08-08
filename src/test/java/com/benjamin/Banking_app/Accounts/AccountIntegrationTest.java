@@ -179,7 +179,7 @@ public class AccountIntegrationTest {
         TransferRequest transferRequest = new TransferRequest(
                 account.getId(), account2.getId(), transferAmount);
 
-        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "user/transfer")
+        ResultActions response = mockMvc.perform(patch(ACCOUNT_API + "/transfer")
                 .with(user(user1.getEmail()).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferRequest)));
@@ -215,7 +215,7 @@ public class AccountIntegrationTest {
                 .fromAccountId(account.getId()).toAccountId(account2.getId()).amount(50.0)
                 .build();
 
-        ResultActions response = mockMvc.perform(post(ACCOUNT_API + "dd/create")
+        ResultActions response = mockMvc.perform(put(ACCOUNT_API + "dd/create")
                 .with(user(user1.getEmail()).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(directDebit)));
