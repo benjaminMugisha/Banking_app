@@ -3,56 +3,39 @@ package com.benjamin.Banking_app.Transactions;
 import com.benjamin.Banking_app.Accounts.Account;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionMapperTest {
 
     @Test
-    void mapToTransaction_ShouldMapFieldsCorrectly_ReturnTransaction() {
-        TransactionDto transactionDto = new TransactionDto(1L, new Account(), "DEPOSIT", 500.0,
-                LocalDateTime.now(), "Salary payment", new Account());
-
-        Transaction transaction = TransactionMapper.MapToTransaction(transactionDto);
-
-        assertThat(transaction).isNotNull();
-        assertEquals(transactionDto.getTransactionId(), transaction.getTransactionId());
-        assertEquals(transactionDto.getAccount(), transaction.getAccount());
-        assertEquals(transactionDto.getType(), transaction.getType());
-        assertEquals(transactionDto.getAmount(), transaction.getAmount());
-        assertEquals(transactionDto.getTimestamp(), transaction.getTime());
-        assertEquals(transactionDto.getDescription(), transaction.getDescription());
-        assertEquals(transactionDto.getToAccount(), transaction.getToAccount());
+    void mapToTransactionDto_shouldReturnNull_whenTransactionIsNull() {
+        TransactionDto dto = TransactionMapper.mapToTransactionDto(null);
+        assertThat(dto).isNull();
     }
 
     @Test
-    void mapToTransactionDto_ShouldMapFieldsCorrectly_ReturnTransactionDto() {
-        Transaction transaction = new Transaction(2L, new Account(), "WITHDRAWAL", 200.0,
-                LocalDateTime.now(), "Cash withdrawal", new Account());
+    void mapToTransactionDto_shouldMapAllFieldsCorrectly() {
+        Account account = Account.builder()
+                .id(1L)
+                .accountUsername("john").balance(BigDecimal.valueOf(1000))
+                .build();
 
-        TransactionDto transactionDto = TransactionMapper.MapToTransactionDto(transaction);
+        Transaction transaction = Transaction.builder()
+                .transactionId(99L).account(account)
+                .type(TransactionType.DEPOSIT).amount(BigDecimal.valueOf(500))
+                .time(LocalDateTime.of(2025, 1, 1, 12, 0))
+                .build();
 
-        assertThat(transactionDto).isNotNull();
-        assertEquals(transaction.getTransactionId(), transactionDto.getTransactionId());
-        assertEquals(transaction.getAccount(), transactionDto.getAccount());
-        assertEquals(transaction.getType(), transactionDto.getType());
-        assertEquals(transaction.getAmount(), transactionDto.getAmount());
-        assertEquals(transaction.getTime(), transactionDto.getTimestamp());
-        assertEquals(transaction.getDescription(), transactionDto.getDescription());
-        assertEquals(transaction.getToAccount(), transactionDto.getToAccount());
-    }
+        TransactionDto dto = TransactionMapper.mapToTransactionDto(transaction);
 
-    @Test
-    void mapToTransaction_ShouldHandleNullTransactionDto_ReturnNull() {
-        Transaction transaction = TransactionMapper.MapToTransaction(null);
-        assertThat(transaction).isNull();
-    }
-
-    @Test
-    void mapToTransactionDto_ShouldHandleNullTransaction_ReturnNull() {
-        TransactionDto transactionDto = TransactionMapper.MapToTransactionDto(null);
-        assertThat(transactionDto).isNull();
+        assertThat(dto.getTransactionId()).isEqualTo(99L);
+        assertThat(dto.getAccountUsername()).isEqualTo("john");
+        assertThat(dto.getType()).isEqualTo(TransactionType.DEPOSIT);
+        assertThat(dto.getAmount()).isEqualByComparingTo("500");
+        assertThat(dto.getTimestamp()).isEqualTo(
+                LocalDateTime.of(2025, 1, 1, 12, 0));
     }
 }

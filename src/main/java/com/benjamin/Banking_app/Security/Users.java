@@ -1,7 +1,6 @@
 package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Accounts.Account;
-import com.benjamin.Banking_app.Roles.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,16 +16,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "users")
 public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstname;
-    private String lastname;
+    @Column(nullable = false, length = 20)
+    private String firstName;
+    @Column(nullable = false, length = 20)
+    private String lastName;
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column( nullable = false)
     private String password;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -62,7 +68,7 @@ public class Users implements UserDetails {
     }
 
     @Override
-    public String getPassword(){ //always have this password getter yourself
+    public String getPassword(){
         return password;
     }
 }

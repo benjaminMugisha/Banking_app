@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,7 +20,6 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @JsonIgnore // preventing the entire account from being serialized
     private Long transactionId;
 
     @ManyToOne
@@ -27,12 +27,11 @@ public class Transaction {
     @JsonIgnore
     private Account account;
 
-    private String type;
-    private Double amount;
-    private LocalDateTime time;
-    private String description;
 
-    // Optional fields for transfers
+    private TransactionType type;
+    private BigDecimal amount;
+    private LocalDateTime time;
+
     @ManyToOne
     @JoinColumn(name = "to_account_id", nullable = true)
     private Account toAccount;

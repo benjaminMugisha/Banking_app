@@ -1,6 +1,5 @@
 package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.Accounts.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
+    private String refreshToken;
     private String token;
-    private Account account;
+    private String accountUsername;
 }

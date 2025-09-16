@@ -1,4 +1,4 @@
-package com.benjamin.Banking_app.Roles;
+package com.benjamin.Banking_app.Security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

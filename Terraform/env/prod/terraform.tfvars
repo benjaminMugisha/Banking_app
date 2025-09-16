@@ -6,3 +6,4 @@ subnet_config = [
   { name = "public-3",  cidr_block = "10.0.5.0/24", availability_zone = "eu-west-1c", type = "public" },
   { name = "private-3", cidr_block = "10.0.6.0/24", availability_zone = "eu-west-1c", type = "public" }
 ]
+

@@ -1,26 +1,16 @@
 package com.benjamin.Banking_app.Transactions;
 
 public class TransactionMapper {
-    public static Transaction MapToTransaction(TransactionDto transactionDto){
-        if(transactionDto == null){
-            return null;
-        }
 
-        return new Transaction(transactionDto.getTransactionId(),transactionDto.getAccount(),
-                transactionDto.getType(), transactionDto.getAmount(),
-                transactionDto.getTimestamp(), transactionDto.getDescription(),
-                transactionDto.getToAccount()
-                 );
-    }
-    public static TransactionDto MapToTransactionDto(Transaction transaction){
-        if(transaction == null){
-            return null;
-        }
+    public static TransactionDto mapToTransactionDto(Transaction transaction) {
 
-        return new TransactionDto(transaction.getTransactionId(),transaction.getAccount(),
-                transaction.getType(), transaction.getAmount(),
-                transaction.getTime(), transaction.getDescription(),
-                transaction.getToAccount()
-        );
+        return transaction == null ? null :
+                TransactionDto.builder()
+                        .transactionId(transaction.getTransactionId())
+                        .accountUsername(transaction.getAccount().getAccountUsername())
+                        .type(transaction.getType())
+                        .amount(transaction.getAmount())
+                        .timestamp(transaction.getTime())
+                        .build();
     }
 }

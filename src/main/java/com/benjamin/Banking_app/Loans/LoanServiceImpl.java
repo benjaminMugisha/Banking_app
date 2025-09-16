@@ -3,25 +3,26 @@ package com.benjamin.Banking_app.Loans;
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
-import com.benjamin.Banking_app.Exception.InsufficientFundsException;
-import com.benjamin.Banking_app.Exception.LoanAlreadyPaidException;
-import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
+import com.benjamin.Banking_app.UserUtils;
+import com.benjamin.Banking_app.Transactions.TransactionService;
+import com.benjamin.Banking_app.Transactions.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,185 +30,189 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
     private final AccountRepository accountRepository;
-    private final TransactionServiceImpl transactionService;
+    private final TransactionService transactionService;
+    private final UserUtils userUtils;
+
     private final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
+
+    @Transactional
+    public LoanResponse applyForLoan(LoanRequest request) {
+        logger.info("Loan application initiated for principal: {}", request.getPrincipal());
+
+        Account account = userUtils.getCurrentUserAccount();
+
+        BigDecimal monthlyPayment = calculateMonthlyInstallment(request.getPrincipal(), request.getMonthsToRepay());
+        BigDecimal yearlyPayment = monthlyPayment.multiply(BigDecimal.valueOf(12));
+        BigDecimal fullLoanBalance = monthlyPayment.multiply(BigDecimal.valueOf(request.getMonthsToRepay()));
+
+        LoanEligibilityResult eligibility = checkEligibility(request.getIncome(), yearlyPayment, account.getId());
+        if (!eligibility.isAffordable()) {
+            logger.warn("Loan denied of account: {} because their DTI is: {}%",
+                    account.getAccountUsername(), eligibility.dti());
+            return new LoanResponse("Loan denied. your Debt-to-income ratio is too high:" +
+                    "  (" + eligibility.dti() + "%). maximum is 40% of your yearly income )");
+        }
+
+        Loan loan = Loan.builder()
+                .account(account).principal(request.principal)
+                .amountToPayEachMonth(monthlyPayment)
+                .remainingBalance(fullLoanBalance).startDate(LocalDate.now())
+                .build();
+        loan.setNextPaymentDate(LocalDate.now().plusDays(30));
+
+        loanRepository.save(loan);
+        recordLoanTransaction(account,
+                loan.getRemainingBalance(), TransactionType.LOAN_APPLICATION);
+
+        return new LoanResponse(
+                "Loan accepted: ", LoanMapper.mapToDto(loan)
+        );
+    }
+
+    private LoanEligibilityResult checkEligibility(
+            BigDecimal yearlyIncome, BigDecimal estimatedYearlyPayment, long accountId) {
+        List<Loan> activeLoans = loanRepository
+                .findByAccountIdAndRemainingBalanceGreaterThan(accountId, 0.0);
+
+        BigDecimal yearlyPaymentOfExistingLoans = activeLoans.stream()
+                .map(loan ->
+                        loan.getAmountToPayEachMonth().multiply(BigDecimal.valueOf(12)))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalYearlyPayment = yearlyPaymentOfExistingLoans.add(estimatedYearlyPayment);
+        BigDecimal dti = totalYearlyPayment.divide(yearlyIncome, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(2, RoundingMode.HALF_UP);
+
+        return new LoanEligibilityResult(dti.compareTo(BigDecimal.valueOf(40)) <= 0, dti);
+    }
+
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void processDueLoanRepayments() {
+        LocalDate today = LocalDate.now();
+        List<Loan> dueLoans =
+                loanRepository.findByRemainingBalanceGreaterThanAndNextPaymentDate(0.0, today);
+
+        for (Loan loan : dueLoans) {
+            try {
+                Account account = loan.getAccount();
+
+                if (account.getBalance().compareTo(loan.getAmountToPayEachMonth()) < 0) {
+                        logger.warn("Insufficient funds for loan repayment. Loan ID: {}, Account: {}",
+                                loan.getLoanId(), account.getAccountUsername());
+                        continue;
+                }
+                account.setBalance(account.getBalance().subtract(loan.getAmountToPayEachMonth()));
+                loan.setRemainingBalance(loan.getRemainingBalance().subtract(loan.getAmountToPayEachMonth()));
+                if(loan.getRemainingBalance().compareTo(BigDecimal.ZERO) <= 0){
+                    loan.setRemainingBalance(BigDecimal.ZERO);
+                    loan.setActive(false);
+                } else {
+                    loan.setNextPaymentDate(today.plusDays(30));
+                }
+
+                accountRepository.save(account);
+                loanRepository.save(loan);
+
+                recordLoanTransaction(account, loan.getAmountToPayEachMonth(), TransactionType.LOAN_REPAYMENT);
+            } catch (Exception e) {
+                logger.error("Failed to process repayment for Loan ID: {}",
+                        loan.getLoanId(), e);
+            }
+        }
+    }
+
+    @Override
+    public LoanPageResponse getLoansOfAnAccount(int pageNo, int pageSize, String accountUsername) {
+        Account account;
+        if (isAdmin() && accountUsername != null ) {
+            account = accountRepository.findByAccountUsername(accountUsername)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + accountUsername));
+        } else {
+             account = userUtils.getCurrentUserAccount();
+        }
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Loan> loans = loanRepository.findByAccountIdAndActiveTrue(account.getId(), pageable);
+
+        List<LoanDto> loanDtos = loans.getContent().stream()
+                .map(LoanMapper::mapToDto)
+                .collect(Collectors.toList());
+
+        return LoanPageResponse.builder()
+                .content(loanDtos).pageNo(loans.getNumber())
+                .pageSize(loans.getSize()).totalElements(loans.getTotalElements())
+                .last(loans.isLast())
+                .build();
+    }
 
     @Override
     @Transactional
-    public LoanResponse applyForLoan(LoanRequest request) {
-        logger.info("loan application initiated");
-        long accountId = request.getAccountId();
-        double income = request.getIncome(); //yearly income
-        double principal = request.getPrincipal();
-        int monthsToRepay = request.getMonthsToRepay();
-        double monthlyPayment = calculateMonthlyInstallment(principal, monthsToRepay);
-        double yearlyPayment = monthlyPayment * 12;
-
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("account with id: " + accountId + " not found"));
-
-        // Check if the loan is affordable by checking if Debt-to-Income (DTI) ratio exceeds 40%
-        if (!isLoanAffordable(income, yearlyPayment, accountId)) {
-            return new LoanResponse("Loan denied due to high debt-to-income ratio", null);
-        }
-
-        LocalDateTime startDate = LocalDateTime.now();
-
-        // Create and save loan
-        Loan loan = new Loan();
-        loan.setAccount(account);
-        loan.setPrincipal(principal);
-        loan.setRemainingBalance(principal);
-        loan.setStartDate(startDate);
-        loan.setAmountToPayEachMonth(monthlyPayment);
-
-        loanRepository.save(loan);
-
-        //save the loan transaction
-        transactionService.recordTransaction(account,
-                "LOAN_APPLICATION",
-                loan.getRemainingBalance(),
-                "loan created. the initial amount is: " + principal, null, null);
-
-        scheduleFirstRepayment(loan);
-        return new LoanResponse("loan accepted: ", loan);
-    }
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    public void scheduleFirstRepayment(Loan loan) {
-        long initialDelay = ChronoUnit.MILLIS.between(LocalDateTime.now(), loan.getStartDate().plusDays(30));
-        long period = TimeUnit.DAYS.toMillis(30); // Run every 30 days
-
-        scheduler.scheduleAtFixedRate(() -> processMonthlyRepayment(loan.getLoanId(), loan.getAmountToPayEachMonth()),
-                initialDelay, period, TimeUnit.MILLISECONDS);
-    }
-
-    @Override
-    public LoanPageResponse getAllLoans(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Loan> loans = loanRepository.findAll(pageable);
-        List<Loan> content = loans.getContent();
-        LoanPageResponse response = new LoanPageResponse();
-        response.setContent(content);
-        response.setPageNo(loans.getNumber());
-        response.setPageSize(loans.getSize());
-        response.setTotalElements(loans.getTotalElements());
-        response.setTotalPages(loans.getTotalPages());
-        response.setLast(loans.isLast());
-
-        return response;
-    }
-
-    @Override
-    public Loan getLoanByLoanId(long loanId) {
-        logger.info("searching for loan: {}", loanId);
-        return loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
-    }
-
-    //all loans including both active and fully repaid loans.
-    @Override
-    public List<Loan> getLoansByAccountId(long accountId) {
-        return loanRepository.findByAccountId(accountId);
-    }
-
-    //repay the whole loan early. comes with a 2% penalty
-    @Override
     public LoanResponse repayLoanEarly(Long loanId) {
+        Account currentUser = userUtils.getCurrentUserAccount();
 
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
-        Account account = loan.getAccount();
-        double accountBalance = account.getBalance();
-        if (loan.getRemainingBalance() > accountBalance) {
-            return new LoanResponse("insufficient funds to clear the loan.", null);
+
+        if (!loan.getAccount().getId().equals(currentUser.getId())) {
+            return new LoanResponse("You can not repay someone else's loan.");
         }
-
-        double totalPayment = loan.getRemainingBalance() * 0.02; //2% penalty
-        if (totalPayment > accountBalance) {
-            return new LoanResponse("insufficient funds to clear the loan with the 2% penalty included.", null);
-        }
-
-        loan.setRemainingBalance(0);
-        loanRepository.save(loan);
-
-        account.setBalance(accountBalance - totalPayment); //updating our user's balance.
-
-        return new LoanResponse("Loan of fully repaid early successfully, 2% penalty applied");
-    }
-
-    @Override
-    public double calculateMonthlyInstallment(double principal, int monthsToRepay) {
-        // annualInterestRate is 5 hence 0.05
-        double monthlyInterestRate = 0.005/12;
-        double timeInYears =  (monthsToRepay/12.0);
-
-        double totalLoan = principal + (principal * monthlyInterestRate * timeInYears );
-
-        // Return the ceiling to ensure no underpayment
-        return Math.ceil(totalLoan/monthsToRepay);
-    }
-
-    @Override
-    public void deleteLoan(long loanId) {
-        loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
-
-        loanRepository.deleteById(loanId);
-    }
-
-    @Override
-    public boolean isLoanAffordable(double yearlyIncome, double estimatedYearlyPayment, long accountId) {
-        List<Loan> activeLoans = loanRepository.findByAccountIdAndRemainingBalanceGreaterThan(accountId, 0.0);
-
-        // Calculate yearly payment for all existing loans
-        double yearlyPaymentOfExistingLoans = activeLoans.stream()
-                .mapToDouble(loan -> loan.getAmountToPayEachMonth() * 12)
-                .sum();
-
-        // Total yearly loan payments (existing + new loan)
-        double totalYearlyPayment = yearlyPaymentOfExistingLoans + estimatedYearlyPayment;
-
-        // Debt-to-Income (DTI) Ratio Calculation
-        double dti = (totalYearlyPayment / yearlyIncome) * 100;
-
-        // Loan is affordable if DTI <= 40%
-        return dti <= 40;
-    }
-
-    @Override
-    public LoanResponse processMonthlyRepayment(Long loanId, double amount) {
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("Loan with id: " + loanId + " not found"));
 
         Account account = loan.getAccount();
+        BigDecimal accountBalance = account.getBalance();
+        BigDecimal loanBalance = loan.getRemainingBalance();
 
-        if (loan.getRemainingBalance() <= 0) {
-            throw new LoanAlreadyPaidException("loan fully paid", HttpStatus.NOT_FOUND);
-        }
-        double paymentAmount = (amount <= 0) ? loan.getAmountToPayEachMonth() : amount;
-
-        if (paymentAmount > loan.getRemainingBalance()){
-            paymentAmount = loan.getRemainingBalance();
+        if(loanBalance.compareTo(accountBalance) > 0) {
+            return new LoanResponse("insufficient funds to clear the loan.");
         }
 
-        if (account.getBalance() < loan.getAmountToPayEachMonth()) {
-            throw new InsufficientFundsException("Insufficient funds");
-        }
+        account.setBalance(accountBalance.subtract(loanBalance));
+        loan.setRemainingBalance(BigDecimal.valueOf(0));
+        loan.setActive(false);
 
-        loan.setRemainingBalance(loan.getRemainingBalance() - paymentAmount);
-        account.setBalance(account.getBalance() - paymentAmount);
+        recordLoanTransaction(account, loanBalance, TransactionType.LOAN_REPAYMENT);
 
         loanRepository.save(loan);
         accountRepository.save(account);
 
-        transactionService.recordTransaction(account,
-                "LOAN_REPAYMENT",
-                paymentAmount,
-                "this month's loan repaid. the amount is: " + loan.getAmountToPayEachMonth()
-                , null, null);
-        logger.info(" loan: {} repaid for this month successfully", loan.getLoanId());
+        return new LoanResponse(
+                "Loan of €" + loanBalance +
+                        " fully repaid. your remaining balance is: €" + account.getBalance());
+    }
 
-        return new LoanResponse("Loan repayment of " + paymentAmount + " processed successfully. Remaining balance is: "
-                + loan.getRemainingBalance());
+    @Override
+    public LoanDto getLoanByLoanId(long loanId) {
+        logger.info("searching for loan with id: {}", loanId);
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
+        return LoanMapper.mapToDto(loan);
+    }
+
+    //✅ private helper methods:
+    private BigDecimal calculateMonthlyInstallment(BigDecimal principal, int monthsToRepay) {
+        BigDecimal annualInterestRate = BigDecimal.valueOf(0.05); // 5% annual interest rate.
+        BigDecimal timeInYears = BigDecimal.valueOf(monthsToRepay)
+                .divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+
+        BigDecimal totalInterest = principal.multiply(annualInterestRate).multiply(timeInYears);
+        BigDecimal totalLoan = principal.add(totalInterest);
+
+        return totalLoan.divide(BigDecimal.valueOf(monthsToRepay), 2, RoundingMode.HALF_UP);
+    }
+
+    private void recordLoanTransaction(Account account, BigDecimal amount, TransactionType type) {
+        transactionService.recordTransaction(
+                account,
+                type,
+                amount,
+                null
+        );
+    }
+
+    private boolean isAdmin(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 }

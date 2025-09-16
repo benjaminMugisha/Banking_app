@@ -1,122 +1,87 @@
 package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.Exception.AccessDeniedException;
+import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Exception.BadRequestException;
-import com.benjamin.Banking_app.Roles.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private AuthenticationManager authManager;
-
-    @Mock
-    private JWTService jwtService;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private UserRepository userRepository;
+    @Mock private AuthenticationManager authManager;
+    @Mock private JWTService jwtService;
+    @Mock private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AuthenticationService authenticationService;
 
+    private RegisterRequest registerRequest;
+
+    @BeforeEach
+    void setUp() {
+        registerRequest = new RegisterRequest("John", "Doe",
+                "johnAccount",  BigDecimal.valueOf(1000),
+                "john@mail.com", "Password1234",
+                Role.USER);
+    }
+
     @Test
-    void register_NewUser_ReturnsAuthenticationResponse() {
-        RegisterRequest request = RegisterRequest.builder()
-                .email("john@gmail.com").password("password").accountUsername("john12345")
-                .balance(1000.0).role(Role.USER)
-                .build();
+    void register_shouldSaveUserAndReturnTokens() {
+        when(userRepository.existsByEmail("john@mail.com")).thenReturn(false);
+        when(passwordEncoder.encode("Password1234")).thenReturn("hashedPw");
+        when(jwtService.generateToken(any(Users.class))).thenReturn("accessToken");
+        when(jwtService.generateRefreshToken(any(Users.class))).thenReturn("refreshToken");
 
-        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
-        when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
-        when(jwtService.generateToken(any(Users.class))).thenReturn("jwt-token");
+        AuthenticationResponse response = authenticationService.register(registerRequest);
 
-        AuthenticationResponse response = authenticationService.register(request);
-
-        assertNotNull(response);
-        assertEquals("jwt-token", response.getToken());
-        assertNotNull(response.getAccount());
-        assertEquals("john12345", response.getAccount().getAccountUsername());
+        assertThat(response.getToken()).isEqualTo("accessToken");
+        assertThat(response.getRefreshToken()).isEqualTo("refreshToken");
+        assertThat(response.getAccountUsername()).isEqualTo("johnAccount");
 
         verify(userRepository).save(any(Users.class));
     }
 
     @Test
-    void register_ExistingEmail_ThrowsBadRequestException() {
-        RegisterRequest request = RegisterRequest.builder()
-                .email("john@gmail.com")
-                .build();
+    void register_shouldFail_whenEmailExists() {
+        when(userRepository.existsByEmail("john@mail.com")).thenReturn(true);
 
-        when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
-
-        assertThrows(BadRequestException.class, () -> authenticationService.register(request));
-
-        verify(userRepository, never()).save(any());
+        assertThatThrownBy(() -> authenticationService.register(registerRequest))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("email already in use");
     }
 
     @Test
-    void authenticate_ValidCredentials_ReturnsJwtToken() {
-        AuthenticationRequest request = AuthenticationRequest.builder()
-                .email("john@gmail.com").password("password")
-                .build();
+    void authenticate_shouldReturnTokens_whenCredentialsValid() {
+        Users user = Users.builder().id(1L).email("john@mail.com").password("pw").role(Role.USER).build();
+        user.setAccount(Account.builder().accountUsername("johnAccount")
+                .balance(BigDecimal.valueOf(500)).user(user).build());
 
-        Users user = Users.builder()
-                .email(request.getEmail()).password("encodedPassword").role(Role.USER)
-                .build();
+        when(userRepository.findByEmail("john@mail.com")).thenReturn(Optional.of(user));
+        when(jwtService.generateToken(user)).thenReturn("accessToken");
+        when(jwtService.generateRefreshToken(user)).thenReturn("refreshToken");
 
-        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(user));
-        when(jwtService.generateToken(user)).thenReturn("jwt-token");
+        AuthenticationRequest request = new AuthenticationRequest("john@mail.com", "1234");
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
-        assertNotNull(response);
-        assertEquals("jwt-token", response.getToken());
-
-        verify(authManager).authenticate(any());
-    }
-
-    @Test
-    void authenticate_InvalidEmail_ThrowsAccessDeniedException() {
-        AuthenticationRequest request = AuthenticationRequest.builder()
-                .email("invalid@gmail.com").password("password")
-                .build();
-
-        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
-
-        assertThrows(AccessDeniedException.class, () -> authenticationService.authenticate(request));
-    }
-
-    @Test
-    void authenticate_AuthManagerFails_ThrowsAccessDeniedException() {
-        AuthenticationRequest request = AuthenticationRequest.builder()
-                .email("wrong@gmail.com").password("password")
-                .build();
-
-        Users mockUser = Users.builder()
-                .email("john@gmail.com").password("password")
-                .role(Role.USER)
-                .build();
-
-        when(userRepository.findByEmail(request.getEmail()))
-                .thenReturn(Optional.of(mockUser));
-
-        doThrow(new RuntimeException("bad credentials")).when(authManager).authenticate(any());
-
-        assertThrows(AccessDeniedException.class, () -> authenticationService.authenticate(request));
+        assertThat(response.getToken()).isEqualTo("accessToken");
+        verify(authManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 }

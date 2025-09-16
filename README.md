@@ -67,7 +67,7 @@ direct debits, transaction tracking and JWT based authentication.
 curl -X POST http://localhost:8080/api/v1/auth/register \
 -H "Content-Type: application/json" \
 -d '{"firstName":"John","lastName":"Doe","accountUsername":"johndoe12345",
-"balance":"500","email":"john@example.com","password":"password123","role":"ADMIN"}'
+"balance":"500","email":"john@example.com","password":"Password123","role":"ADMIN"}'
 ```
 will return a jwt token, plus your account details.
 
@@ -76,7 +76,7 @@ will return a jwt token, plus your account details.
 curl -X POST http://localhost:8080/api/v1/auth/register \
 -H "Content-Type: application/json" \
 -d '{"firstName":"Peter","lastName":"Pan","accountUsername":"peterpan123456",
-"balance":"50","email":"peterpan@gmail.com","password":"password123","role":"USER"}'
+"balance":"50","email":"peterpan@gmail.com","password":"Password123","role":"USER"}'
 ```
 
 **Get all accounts(Admin only).**

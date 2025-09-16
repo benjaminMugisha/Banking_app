@@ -2,12 +2,10 @@ package com.benjamin.Banking_app.Transactions;
 
 import com.benjamin.Banking_app.Accounts.Account;
 
-public interface TransactionService {
-    TransactionResponse findByAccountId(Long accountId, int pageNo, int pageSize);
-    void recordTransaction(Account account, String type, double amount,
-                           String description, String toAccount,
-                           String fromAccount);
+import java.math.BigDecimal;
 
-//    void recordLoanTransaction(Account account, String type,
-//                               String monthlyRepayment, double remainingBalance, String s);
+public interface TransactionService {
+    TransactionResponse transactions(int pageNo, int pageSize, String accountUsername);
+    void recordTransaction(Account account, TransactionType type, BigDecimal amount,
+                            Account toAccount);
 }

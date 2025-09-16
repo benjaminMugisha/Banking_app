@@ -2,83 +2,72 @@ package com.benjamin.Banking_app.Accounts;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/account")
+@RequestMapping("api/v2/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 
     private final AccountService accountService;
-    private final DirectDebitRepo ddr;
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AccountResponse> getAllAccounts(
+    public ResponseEntity<AccountPageResponse> getAllAccounts(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {
         return ResponseEntity.ok(accountService.getAllAccounts(pageNo, pageSize));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<AccountDto> createAccount(
-            @RequestBody @Valid AccountDto accountDto) {
-        return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
-    }
-
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AccountDto> getAccountById(@PathVariable Long id) {
             AccountDto accountDto = accountService.getAccountById(id);
             return ResponseEntity.ok(accountDto);
     }
 
-    @PatchMapping("/{id}/deposit")
-    public ResponseEntity<AccountDto> deposit(@PathVariable Long id,
-                                              @RequestBody Map<String, Double> request) {
-        Double amount = request.get("amount");
-        AccountDto accountDto = accountService.deposit(id, amount);
-        return ResponseEntity.ok(accountDto);
+    @PatchMapping("deposit")
+    public ResponseEntity<AccountResponse> deposit(
+            @RequestBody Map<String, Double> request) {
+        BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
+        AccountDto accountDto = accountService.deposit(amount);
+        return ResponseEntity.ok(AccountResponse.builder()
+                        .message("Deposit of €" +  amount + " successful")
+                        .data(accountDto)
+                .build());
     }
 
-    @PatchMapping("/{id}/withdraw")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<AccountDto> withdraw(@PathVariable Long id,
-                                               @RequestBody Map<String, Double> request) {
-        double amount = request.get("amount");
-        AccountDto accountDto = accountService.withdraw(id, amount);
-        return ResponseEntity.ok(accountDto);
+    @PatchMapping("/withdraw")
+    public ResponseEntity<AccountResponse> withdraw(
+            @RequestBody Map<String, Double> request) {
+        BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
+        AccountDto accountDto = accountService.withdraw(amount);
+        return ResponseEntity.ok(AccountResponse.builder()
+                .message("Withdraw of €" +  amount + " successful")
+                .data(accountDto)
+                .build());
     }
 
     @PatchMapping("/transfer")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<String> transfer(@RequestBody TransferRequest transferRequest) {
-        accountService.transfer(transferRequest);
-        return ResponseEntity.ok("Transfer successful");
+    public ResponseEntity<AccountResponse> transfer(
+            @Valid @RequestBody TransferRequest transferRequest) {
+        AccountDto accountDto = accountService.transfer(transferRequest);
+        return ResponseEntity.ok(AccountResponse.builder()
+                .message("Transfer of €" +  transferRequest.getAmount() + " successful")
+                .data(accountDto)
+                .build());
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
+    public ResponseEntity<AccountResponse> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
-        return ResponseEntity.ok("account successfuly deleted");
-    }
-
-    @PutMapping("/dd/create")
-    public ResponseEntity<DirectDebit> CreateDirectDebit(@RequestBody DirectDebit dd){
-        DirectDebit saved = accountService.createDirectDebit(dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
-        return ResponseEntity.ok(saved);
-    }
-
-    @PutMapping("dd/cancel/{id}")
-    public  ResponseEntity<String> cancelDirectDebit(@PathVariable Long id){
-        accountService.cancelDirectDebit(id);
-        return ResponseEntity.ok("succesfully deleted");
+        return ResponseEntity.ok(AccountResponse.builder()
+                        .message("account successfuly deleted")
+                .build());
     }
 }

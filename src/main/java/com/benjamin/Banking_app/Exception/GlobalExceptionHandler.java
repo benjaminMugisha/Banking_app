@@ -2,10 +2,8 @@ package com.benjamin.Banking_app.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
@@ -15,84 +13,64 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
-    public ResponseEntity<Object> handleAccountNotFoundException(
-            EntityNotFoundException entityNotFoundException) {
+    private ResponseEntity<Object> buildResponse(
+            String message, HttpStatus status, Map<String, String> validationErrors) {
         ApiError error = new ApiError(
-                entityNotFoundException.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+                message,
+                status,
+                LocalDateTime.now(),
+                validationErrors
+        );
+        return new ResponseEntity<>(error, status);
     }
 
-    @ExceptionHandler(value = {InsufficientFundsException.class})
-    public ResponseEntity<Object> handleInsufficientFundsException(
-            InsufficientFundsException insufficientFundsException) {
-        ApiError error = new ApiError(
-                insufficientFundsException.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
-        ApiError error = new ApiError(
-                exception.getMessage(),
-                HttpStatus.UNAUTHORIZED,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-    }
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception) {
-        ApiError error = new ApiError(
-                exception.getMessage(),
-                HttpStatus.FORBIDDEN,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-    }
-    @ExceptionHandler(value = InvalidJwtSignatureException.class)
-    public ResponseEntity<Object> handleInvalidJwtSignatureException(InvalidJwtSignatureException exception) {
-        ApiError error = new ApiError(
-                exception.getMessage(),
-                HttpStatus.FORBIDDEN,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND, null);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<Object> handleInsufficientFunds(InsufficientFundsException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+
+    @ExceptionHandler(LoanAlreadyPaidException.class)
+    public ResponseEntity<Object> handleLoanAlreadyPaid(LoanAlreadyPaidException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handleBadRequest(BadRequestException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleInvalidArgument(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
-            errors.put(error.getField(), error.getDefaultMessage())
+                errors.put(error.getField(), error.getDefaultMessage())
         );
         ApiError error = new ApiError(
-                "Validation failed: " + errors.toString(),
+                "Validation failed: ",
                 HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                errors
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(value = {LoanAlreadyPaidException.class})
-    public ResponseEntity<Object> handleLoanAlreadyPaidException(LoanAlreadyPaidException ex) {
-        ApiError error = new ApiError(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDenied(org.springframework.security.access.AccessDeniedException ex) {
+        return buildResponse("Access is denied.", HttpStatus.FORBIDDEN, null);
     }
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Object> handleBadRequest(BadRequestException badRequestException) {
-        ApiError error = new ApiError(
-                badRequestException.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+
+    @ExceptionHandler(io.jsonwebtoken.ExpiredJwtException.class)
+    public ResponseEntity<Object> handleExpiredJwt(io.jsonwebtoken.ExpiredJwtException ex) {
+        return buildResponse("JWT token has expired. Please log in again.", HttpStatus.UNAUTHORIZED, null);
+    }
+
+    @ExceptionHandler({io.jsonwebtoken.MalformedJwtException.class, io.jsonwebtoken.SignatureException.class})
+    public ResponseEntity<Object> handleInvalidJwt(Exception ex) {
+        return buildResponse("Invalid JWT token.", HttpStatus.UNAUTHORIZED, null);
     }
 }

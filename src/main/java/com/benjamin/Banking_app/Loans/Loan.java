@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -17,15 +18,24 @@ import java.time.LocalDateTime;
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long LoanId;
+    private Long loanId;
+
+    @Version
+    private Long version;
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore
     private Account account;
-    private double remainingBalance;
-    @JsonFormat(pattern = "dd/MM/yyy ")
-    private LocalDateTime startDate;
-    private double principal;
-    private double amountToPayEachMonth;
+
+    private BigDecimal remainingBalance;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate startDate;
+
+    private BigDecimal principal;
+    private BigDecimal amountToPayEachMonth;
+    private LocalDate nextPaymentDate;
+
+    @Builder.Default
+    private boolean active = true;
 }

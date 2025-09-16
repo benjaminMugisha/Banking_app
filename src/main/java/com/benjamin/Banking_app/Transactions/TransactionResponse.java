@@ -1,6 +1,5 @@
 package com.benjamin.Banking_app.Transactions;
 
-import com.benjamin.Banking_app.Accounts.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

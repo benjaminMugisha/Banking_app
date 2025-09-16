@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class LoanPageResponse {
-    private List<Loan> content;
+    private List<LoanDto> content;
     private int pageNo;
     private int pageSize;
     private long totalElements;

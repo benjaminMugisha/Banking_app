@@ -3,20 +3,21 @@ package com.benjamin.Banking_app.Accounts;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
-import com.benjamin.Banking_app.Exception.BadRequestException;
-import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
+import com.benjamin.Banking_app.UserUtils;
+import com.benjamin.Banking_app.Transactions.TransactionService;
+import com.benjamin.Banking_app.Transactions.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,35 +26,18 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final TransactionServiceImpl transactionService;
-    private final DirectDebitRepo directDebitRepo;
-   private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
+    private final TransactionService transactionService;
+    private final UserUtils userUtils;
+    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
-    public AccountDto createAccount(AccountDto accountDto) {
-        logger.info(" creating an account...");
-        if (accountDto == null || accountDto.getAccountUsername() == null || accountDto.getBalance() <= 0) {
-            throw new BadRequestException("Invalid account data");
-        }
-        if (accountRepository.findByAccountUsername(accountDto.getAccountUsername()).isPresent()) {
-            logger.warn("attempt to create an account with a duplicate username");
-            throw new BadRequestException("username already exists");
-        }
-
-        Account account = AccountMapper.MapToAccount(accountDto);
-        Account savedAccount = accountRepository.save(account);
-
-        logger.info(" account: {} created successfully", account);
-        return AccountMapper.MapToAccountDto(savedAccount);
-    }
-
-    @Override
-    public AccountResponse getAllAccounts(int pageNo, int pageSize) {
+    public AccountPageResponse getAllAccounts(int pageNo, int pageSize) {
+        logger.info(" retrieving all accounts ...");
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)
                 .collect(Collectors.toList());
-        return AccountResponse.builder()
+        return AccountPageResponse.builder()
                 .content(content).pageNo(accounts.getNumber()).pageSize(accounts.getSize())
                 .totalElements(accounts.getTotalElements()).totalPages(accounts.getTotalPages())
                 .last(accounts.isLast()).build();
@@ -64,113 +48,85 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("account not found"));
         authorizeAccess(account);
-        logger.info(" searched account: {} returned successfuly " ,account );
+        logger.info(" searched account: {} returned successfuly ", account);
         return AccountMapper.MapToAccountDto(account);
     }
 
     @Override
     @Transactional
-    public AccountDto deposit(Long accountId, double amount) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("account used not found"));
-        double total = account.getBalance() + amount;
+    public AccountDto deposit(BigDecimal amount) {
+        Account account = userUtils.getCurrentUserAccount();
+        BigDecimal total = account.getBalance().add(amount);
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
 
-        transactionService.recordTransaction(account, "DEPOSIT", amount, "Deposit of " + amount, null, null);
-        logger.info("Deposit successful. AccountId: {}, Amount: {}, New Balance: {}", accountId, amount, account.getBalance());
+        transactionService.recordTransaction(account, TransactionType.DEPOSIT,
+                amount, null);
 
         return AccountMapper.MapToAccountDto(savedAccount);
-         }
+    }
+
+    @Override
     @Transactional
-    public void transfer(TransferRequest transferRequest) {
-        Account fromAccount = accountRepository.findById(transferRequest.getFromAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("account to send the funds not found"));
-        Account toAccount = accountRepository.findById(transferRequest.getToAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("account to receive the funds not found"));
-        authorizeAccountOwnerOnly(fromAccount);
-        if (fromAccount.getBalance() < transferRequest.getAmount()) {
+    public AccountDto transfer(TransferRequest transferRequest) {
+        Account fromAccount = userUtils.getCurrentUserAccount();
+        Account toAccount = accountRepository.findByAccountUsername(
+                transferRequest.getToAccountUsername())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "account to receive the funds not found"));
+
+        Account updatedAccount = processTransfer(fromAccount, toAccount, transferRequest.getAmount());
+        return AccountMapper.MapToAccountDto(updatedAccount);
+    }
+
+    private Account processTransfer(Account fromAccount, Account toAccount, BigDecimal amount) {
+        if (fromAccount.getBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException("Insufficient balance");
         }
 
-        fromAccount.setBalance(fromAccount.getBalance() - transferRequest.getAmount());
-        toAccount.setBalance(toAccount.getBalance() + transferRequest.getAmount());
+        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
+        toAccount.setBalance(toAccount.getBalance().add(amount));
 
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
 
-        transactionService.recordTransaction(fromAccount,
-                "TRANSFER_OUT",
-                transferRequest.getAmount(),
-                "Transfer to " + toAccount.getAccountUsername(),
-                toAccount.getAccountUsername(),
-                fromAccount.getAccountUsername());
+        transactionService.recordTransaction(
+                fromAccount, TransactionType.TRANSFER_OUT, amount,
+                toAccount
+        );
 
-        transactionService.recordTransaction(toAccount, "TRANSFER_IN", transferRequest.getAmount(),
-                "Received transfer from " + fromAccount.getAccountUsername(),
-                null, fromAccount.getAccountUsername());
+        transactionService.recordTransaction(
+                toAccount, TransactionType.TRANSFER_IN, amount,
+                null
+        );
 
-        logger.info("funds transferred successfully. from: {}, to: {}, Amount: {}" ,
-                fromAccount.getAccountUsername(), toAccount.getAccountUsername(), transferRequest.getAmount());
+        return fromAccount;
     }
 
     @Override
     @Transactional
-    public AccountDto withdraw(Long id, double amount) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("account not found"));
-        authorizeAccountOwnerOnly(account);
-        if (amount > account.getBalance()){
+    public AccountDto withdraw(BigDecimal amount) {
+        Account account = userUtils.getCurrentUserAccount();
+        if (amount.compareTo(account.getBalance()) > 0) {
             throw new InsufficientFundsException("insufficient funds");
         }
-        double total = account.getBalance() - amount;
+        BigDecimal total = account.getBalance().subtract(amount);
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
 
-        transactionService.recordTransaction(account, "WITHDRAW", amount, "Withdraw of " + amount,
-                null, null);
+        transactionService.recordTransaction(account, TransactionType.WITHDRAW, amount,
+                 null);
 
         return AccountMapper.MapToAccountDto(savedAccount);
     }
 
     @Override
-    public DirectDebit createDirectDebit(Long fromId, Long toId, Double amount) {
-        DirectDebit dd =  DirectDebit.builder()
-                .fromAccountId(fromId).toAccountId(toId).amount(amount).active(true)
-                .build();
-         return directDebitRepo.save(dd);
-    }
-    public void cancelDirectDebit(Long id){
-        DirectDebit dd = directDebitRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("direct debit not found"));
-            dd.setActive(false); //mark it inactive so we keep the record of it instead of deleting
-            directDebitRepo.save(dd);
-    }
-
-    @Scheduled(initialDelay = 2419200000L, fixedDelay = 2419200000L) //28 days in ms
-    public void processDirectDebits(){
-        List<DirectDebit> activeDebits = directDebitRepo.findByActiveTrue();
-        for(DirectDebit dd : activeDebits){
-            try {
-                TransferRequest transferRequest = new TransferRequest(
-                        dd.getFromAccountId(), dd.getToAccountId(), dd.getAmount());
-                transfer(transferRequest);
-            } catch (Exception e){
-                logger.error("failed to process the direct debit. from: {}, to: {}, Amount: {}" ,
-                        dd.getFromAccountId(), dd.getToAccountId(),  dd.getAmount());
-                throw new RuntimeException("failed to process the direct debit");
-            }
-        }
-    }
-
-    @Override
     public void deleteAccount(Long id) {
-        accountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("account not found"));
-
         accountRepository.deleteById(id);
         logger.info("account: {} deleted successfully", id);
     }
+
+    //ensure only currently authenticated user or admin have access.
     public void authorizeAccess(Account account) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticatedUser = authentication.getName();
@@ -182,12 +138,6 @@ public class AccountServiceImpl implements AccountService {
 
         if (!isOwner && !isAdmin) {
             throw new AccessDeniedException("not the owner of the account");
-        }
-    }
-    public void authorizeAccountOwnerOnly(Account account) {
-        String authenticatedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!account.getUser().getEmail().equals(authenticatedUser)) {
-            throw new AccessDeniedException("only the account owner can perform this action");
         }
     }
 }

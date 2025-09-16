@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -16,16 +18,19 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "account_username", unique = true)
     private String accountUsername;
-    private double balance;
+    private BigDecimal balance;
 
     @OneToOne
     @JsonIgnore
     @JoinColumn(name="user_id")
     private Users user;
 
-    public Account(long id, String accountUsername, double balance) {
+    public Account(long id, String accountUsername, BigDecimal balance) {
         this.id = id;
         this.accountUsername = accountUsername;
         this.balance = balance;
