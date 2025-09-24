@@ -36,8 +36,8 @@ public class AccountController {
         BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
         AccountDto accountDto = accountService.deposit(amount);
         return ResponseEntity.ok(AccountResponse.builder()
-                        .message("Deposit of €" +  amount + " successful")
-                        .data(accountDto)
+                        .message("Deposit of €" +  amount + " successful. your new balance is: €" + accountDto.getBalance())
+//                        .data(accountDto)
                 .build());
     }
 
@@ -47,8 +47,8 @@ public class AccountController {
         BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
         AccountDto accountDto = accountService.withdraw(amount);
         return ResponseEntity.ok(AccountResponse.builder()
-                .message("Withdraw of €" +  amount + " successful")
-                .data(accountDto)
+                .message("Withdraw of €" +  amount + " successful. your new balance is: €" + accountDto.getBalance())
+//                .data(accountDto)
                 .build());
     }
 
@@ -57,8 +57,9 @@ public class AccountController {
             @Valid @RequestBody TransferRequest transferRequest) {
         AccountDto accountDto = accountService.transfer(transferRequest);
         return ResponseEntity.ok(AccountResponse.builder()
-                .message("Transfer of €" +  transferRequest.getAmount() + " successful")
-                .data(accountDto)
+                .message("Transfer of €" +  transferRequest.getAmount() + " successful. " +
+                        "your remaining balance is €" + accountDto.getBalance())
+//                .data(accountDto)
                 .build());
     }
 

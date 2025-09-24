@@ -12,9 +12,9 @@ direct debits, transaction tracking and JWT based authentication.
 - Database: PostgreSQL
 - API Security: Spring Security + JWT
 - Infrastructure as Code: Terraform
-- Containerization: Docker + Docker Compose
+- Containerization: Docker
 - Orchestration: Kubernetes (on AWS EKS)
-- Cloud Hosting: AWS (EKS, RDS, EKS, S3, DynamoDB, etc.)
+- Cloud Hosting: AWS (EKS, RDS, S3, DynamoDB, etc.)
 - Testing: JUnit 5, Spring Boot Test and Mockito.
 - CICD: GitHub Actions.
 
@@ -61,43 +61,86 @@ direct debits, transaction tracking and JWT based authentication.
    ` http://localhost:8080/swagger-ui/index.html `
 
 ###  ** Sample CURL examples**
+Below are example requests to test the API. 
+Replace <JWT TOKEN> with the token received after registering or logging in. 
 
-**Register a User and generate a token**
+**Register a User(returns JWT + refresh token + account details)**
 ```bash
-curl -X POST http://localhost:8080/api/v1/auth/register \
+curl -X POST http://localhost:8080/api/v2/auth/register \
 -H "Content-Type: application/json" \
--d '{"firstName":"John","lastName":"Doe","accountUsername":"johndoe12345",
-"balance":"500","email":"john@example.com","password":"Password123","role":"ADMIN"}'
+-d '{"firstName":"John","lastName":"Doe",
+"accountUsername":"johndoe12345",
+"balance":500,
+"email":"john@example.com",
+"password":"Password123",
+"role":"ADMIN"}'
 ```
-will return a jwt token, plus your account details.
+example response:
+{
+"refreshToken":"eyJhbGciOiJIUzI1NiJ9...",
+"token":"eyJhbGciOiJIUzI1NiJ9...",
+"accountUsername":"johndoe12345"
+}
 
-**Register another user.***
+**Login( optional if you already registered):**
 ```bash
-curl -X POST http://localhost:8080/api/v1/auth/register \
+curl -X POST http://localhost:8080/api/v2/auth/login \
 -H "Content-Type: application/json" \
--d '{"firstName":"Peter","lastName":"Pan","accountUsername":"peterpan123456",
-"balance":"50","email":"peterpan@gmail.com","password":"Password123","role":"USER"}'
+-d '{"email":"john@example.com","password":"Password123"}'
 ```
 
 **Get all accounts(Admin only).**
 ```bash
-curl -X GET http://localhost:8080/api/v1/account/all \
+curl -X GET http://localhost:8080/api/v2/accounts/all \
  -H "Authorization: Bearer <JWT TOKEN>"
 ```
 
-**Test transfer**
+**transfer between accounts**
+You have to first Register another user:
 ```bash
-curl -X PATCH http://localhost:8080/api/v1/account/transfer \
+curl -X POST http://localhost:8080/api/v2/auth/register \
+-H "Content-Type: application/json" \
+-d '{"firstName":"Peter","lastName":"Pan","accountUsername":"peterpan123",
+"balance":50,"email":"peterpan@gmail.com","password":"Password123"}'
+```
+then transfer:
+```bash
+curl -X PATCH http://localhost:8080/api/v2/accounts/transfer \
  -H "Authorization: Bearer <JWT TOKEN>" \
  -H "Content-Type: application/json" \
- -d '{"fromAccountId":2, "toAccountId":1, "amount":1.5}'  
+ -d '{"toAccountUsername":"peterpan123", "amount":1.5}'  
 ```
 
-**View transaction history**
+**Direct Debit setup**
 ```bash
-curl -X GET http://localhost:8080/api/v1/transactions/2 \
+curl -X POST http://localhost:8080/api/v2/dd/create \
+ -H "Authorization: Bearer <JWT TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{"toAccountUsername":"peterpan123", "amount":1.5}'  
+```
+
+**deposit**
+```bash
+curl -X PATCH http://localhost:8080/api/v2/accounts/deposit \
+ -H "Authorization: Bearer <JWT TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{"amount":1.50}'  
+```
+
+**Loan application**
+```bash
+curl -X POST http://localhost:8080/api/v2/loans/apply \
+ -H "Authorization: Bearer <JWT TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{"income":10000, "principal":100, "monthsToRepay":12}'  
+```
+
+**View all your transaction history**
+```bash
+curl -X GET http://localhost:8080/api/v2/auth/me/transactions \
  -H "Authorization: Bearer <JWT TOKEN>"
 ```
+
 
 ### Running tests:
 ` ./mvnw clean test `
@@ -105,7 +148,6 @@ curl -X GET http://localhost:8080/api/v1/transactions/2 \
 ### Stopping the Application
 
 Press Ctrl + C in your terminal, or run: ` docker compose down `
-
 
 
 ### Docker Image, Infrastructure on AWS(Terraform) and Deploying to Kubernetes(EKS):
@@ -116,7 +158,7 @@ see .github/workflows for code and scripts.
 
 
 ### COMING NEXT:
-- React UI
+- currently working on frontend in React JSX.
 
 📄 License
 

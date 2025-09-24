@@ -101,7 +101,7 @@ public class AccountIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.balance").value(BigDecimal.valueOf(1200.0)));
+                .andExpect(jsonPath("$.message").value("Deposit of €200.0 successful. your new balance is: €1200.0"));
 
         Account updated = accountRepository.findById(account.getId()).orElseThrow();
         assertThat(updated.getBalance()).isEqualTo(BigDecimal.valueOf(1200.0));
@@ -117,7 +117,7 @@ public class AccountIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.balance").value(BigDecimal.valueOf(700.0)));
+                .andExpect(jsonPath("$.message").value("Withdraw of €300.0 successful. your new balance is: €700.0"));
 
         Account updated = accountRepository.findById(account.getId()).orElseThrow();
         assertThat(updated.getBalance()).isEqualTo(BigDecimal.valueOf(700.0));
@@ -134,7 +134,8 @@ public class AccountIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transferRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.balance").value(BigDecimal.valueOf(600.0)));
+                .andExpect(jsonPath("$.message").value("Transfer of €400.0 successful. " +
+                        "your remaining balance is €600.0"));
 
         Account updatedFrom = accountRepository.findById(account.getId()).orElseThrow();
         Account updatedTo = accountRepository.findById(account2.getId()).orElseThrow();
