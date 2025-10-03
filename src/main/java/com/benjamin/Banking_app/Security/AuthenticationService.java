@@ -1,6 +1,7 @@
 package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Accounts.Account;
+import com.benjamin.Banking_app.Accounts.AccountService;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ public class AuthenticationService {
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
@@ -30,6 +33,7 @@ public class AuthenticationService {
             throw new BadRequestException("email already in use.");
         }
         var role = (request.getRole() == null ) ? Role.USER : request.getRole();
+        
         var user = Users.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -41,9 +45,9 @@ public class AuthenticationService {
         var account = Account.builder()
                 .accountUsername(request.getAccountUsername())
                 .balance(request.getBalance())
+                .iban(generateUniqueIban())
                 .user(user)
                 .build();
-
 
         user.setAccount(account);
 
@@ -61,6 +65,7 @@ public class AuthenticationService {
                 .token(accessToken)
                 .refreshToken(refreshToken)
                 .accountUsername(account.getAccountUsername())
+                .iban(user.getAccount().getIban())
                 .build();
     }
 
@@ -81,7 +86,11 @@ public class AuthenticationService {
                     .token(accessToken).refreshToken(refreshToken)
                     .accountUsername(user.getAccount().getAccountUsername())
                     .build();
-        } catch (Exception e) {
+        } catch (BadCredentialsException e){
+            logger.warn("wrong credentials");
+            throw new AccessDeniedException("Bad credentials. Please try again.");
+        }
+        catch (Exception e) {
             logger.error("failed login attempt for user: {}. Error: {}", request.getEmail(), e.getMessage());
             throw e;
         }
@@ -96,9 +105,22 @@ public class AuthenticationService {
         return UserDto.builder()
                 .accountUsername(user.getAccount().getAccountUsername())
                 .accountBalance(user.getAccount().getBalance())
+                .iban(user.getAccount().getIban())
                 .email(user.getEmail())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())
                 .build();
+    }
+
+    private String generateUniqueIban() {
+        int attempts = 0;
+        while (attempts < 5) { //5 attempts to create an iban.
+            String iban = IbanGenerator.generateIban();
+            if (!userRepository.existsByAccount_Iban(iban)) {
+                return iban;
+            }
+            attempts++;
+        }
+        throw new IllegalStateException("Could not generate unique IBAN after 5 retries");
     }
 }

@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.Transactions;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,6 +25,7 @@ public class TransactionRepositoryTest {
     void findByAccountId_shouldReturnTransactionsForThatAccount() {
         Account account = Account.builder()
                 .accountUsername("john").balance(BigDecimal.valueOf(1000))
+                .iban(IbanGenerator.generateIban())
                 .build();
         accountRepository.save(account);
 

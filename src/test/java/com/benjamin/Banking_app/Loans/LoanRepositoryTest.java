@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class LoanRepositoryTest {
         account = accountRepository.save(
                 Account.builder()
                         .accountUsername("john").balance(BigDecimal.valueOf(2000))
+                        .iban(IbanGenerator.generateIban())
                         .build()
         );
 

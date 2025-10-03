@@ -1,5 +1,6 @@
 package com.benjamin.Banking_app.Accounts;
 
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,6 +20,7 @@ public class AccountRepositoryTests {
     void findByAccountUsername_ShouldReturnAccount_WhenUsernameExists() {
         Account account = Account.builder()
                 .accountUsername("John")
+                .iban(IbanGenerator.generateIban())
                 .balance(BigDecimal.valueOf(100.0))
                 .build();
         accountRepository.save(account);

@@ -13,4 +13,5 @@ public class AuthenticationResponse {
     private String refreshToken;
     private String token;
     private String accountUsername;
+    private String iban;
 }

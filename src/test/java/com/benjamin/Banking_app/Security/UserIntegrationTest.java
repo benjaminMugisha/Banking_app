@@ -73,6 +73,7 @@ class UserIntegrationTest {
         account = Account.builder()
                 .accountUsername("userAccount")
                 .balance(BigDecimal.valueOf(1000))
+                .iban(IbanGenerator.generateIban())
                 .user(user)
                 .build();
         user.setAccount(account);
@@ -86,6 +87,7 @@ class UserIntegrationTest {
         Account toAccount = Account.builder()
                 .accountUsername("toAccount")
                 .balance(BigDecimal.valueOf(500)).user(toAccountUser)
+                .iban(IbanGenerator.generateIban())
                 .build();
         toAccountUser.setAccount(toAccount);
         userRepository.save(toAccountUser);

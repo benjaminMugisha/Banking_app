@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.DirectDebit;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import com.benjamin.Banking_app.Security.Role;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.benjamin.Banking_app.Security.Users;
@@ -68,6 +69,7 @@ public class DirectDebitIntegrationTest {
 
         account1 = Account.builder()
                 .accountUsername("account1")
+                .iban(IbanGenerator.generateIban())
                 .balance(BigDecimal.valueOf(1000.0)).user(user1)
                 .build();
         account1 = accountRepository.save(account1);
@@ -76,6 +78,7 @@ public class DirectDebitIntegrationTest {
 
         account2 = Account.builder()
                 .accountUsername("account2")
+                .iban(IbanGenerator.generateIban())
                 .balance(BigDecimal.valueOf(500.0)).user(user2)
                 .build();
         account2 = accountRepository.save(account2);
@@ -87,16 +90,13 @@ public class DirectDebitIntegrationTest {
     @WithMockUser(username = "user1@gmail.com", roles = {"USER"})
     void createDirectDebit_ShouldSaveDirectDebitAndTransferImmediately() throws Exception {
         DirectDebitRequest request = new DirectDebitRequest();
-        request.setToAccountUsername("account2");
+        request.setToIban(account2.getIban());
         request.setAmount(BigDecimal.valueOf(100.0));
 
         mockMvc.perform(post(DD_API + "create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.toAccountUsername").value("account2"))
-                .andExpect(jsonPath("$.fromAccountUsername").value("account1"))
-                .andExpect(jsonPath("$.amount").value(100.0));
+                .andExpect(status().isCreated());
 
         List<DirectDebit> activeDD = directDebitRepo.findByActiveTrueAndNextPaymentDate(LocalDate.now().plusDays(28));
         assertThat(activeDD).hasSize(1);

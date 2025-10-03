@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class TransferRequest {
     @NotBlank
-    private String toAccountUsername;
+    private String toIban;
 
     @NotNull
     @DecimalMin(value = "1", message = "amount must be at least €1")

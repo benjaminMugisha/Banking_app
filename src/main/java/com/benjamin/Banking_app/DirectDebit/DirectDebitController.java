@@ -36,7 +36,7 @@ public class DirectDebitController {
     public ResponseEntity<DirectDebitDto> createDirectDebit(
             @Valid @RequestBody DirectDebitRequest request){
         return new ResponseEntity<>(
-                directDebitService.createDirectDebit(request.getToAccountUsername(), request.getAmount()),
+                directDebitService.createDirectDebit(request.getToIban(), request.getAmount()),
                 HttpStatus.CREATED);
     }
 

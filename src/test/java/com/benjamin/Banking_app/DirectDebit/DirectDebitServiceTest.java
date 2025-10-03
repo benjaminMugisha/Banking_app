@@ -73,11 +73,11 @@ public  class DirectDebitServiceTest {
 
     @Test
     void createDirectDebit_ShouldSaveDirectDebitAndTransferImmediately() {
-        when(accountRepository.findByAccountUsername("user2")).thenReturn(Optional.of(toAccount));
+        when(accountRepository.findByIban(toAccount.getIban())).thenReturn(Optional.of(toAccount));
 
         BigDecimal amount = BigDecimal.valueOf(100.0);
 
-        DirectDebitDto dto = directDebitService.createDirectDebit("user2", amount);
+        DirectDebitDto dto = directDebitService.createDirectDebit(toAccount.getIban(), amount);
 
         assertThat(dto).isNotNull();
         assertThat(dto.getFromAccountUsername()).isEqualTo("user1");

@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.DirectDebit;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,11 @@ public class DirectDebitRepoTest {
     void setUp() {
         account1 = accountRepository.save(Account.builder().
                 accountUsername("user1").balance(BigDecimal.valueOf(1000))
+                        .iban(IbanGenerator.generateIban())
                 .build());
         account2 = accountRepository.save(Account.builder()
                 .accountUsername("user2").balance(BigDecimal.valueOf(500))
+                .iban(IbanGenerator.generateIban())
                 .build());
 
         DirectDebit dd1 = DirectDebit.builder()

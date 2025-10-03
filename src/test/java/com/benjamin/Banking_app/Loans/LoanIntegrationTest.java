@@ -2,10 +2,7 @@ package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
-import com.benjamin.Banking_app.Security.JWTService;
-import com.benjamin.Banking_app.Security.Role;
-import com.benjamin.Banking_app.Security.UserRepository;
-import com.benjamin.Banking_app.Security.Users;
+import com.benjamin.Banking_app.Security.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,6 +67,7 @@ class LoanIntegrationTest {
         account = Account.builder()
                 .accountUsername("loanUserAcc")
                 .balance(BigDecimal.valueOf(5000))
+                .iban(IbanGenerator.generateIban())
                 .user(user)
                 .build();
         user.setAccount(account);

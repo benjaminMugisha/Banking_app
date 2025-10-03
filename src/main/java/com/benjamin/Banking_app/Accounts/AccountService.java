@@ -10,5 +10,4 @@ public interface AccountService {
     AccountPageResponse getAllAccounts(int pageNo, int pageSize);
     void deleteAccount(Long id);
     AccountDto transfer(TransferRequest transferRequest);
-
 }

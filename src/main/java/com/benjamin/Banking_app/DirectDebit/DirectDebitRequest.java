@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 public class DirectDebitRequest {
     @NotBlank(message = "to account username cannot be empty")
-    private String toAccountUsername;
+    private String toIban;
 
     @DecimalMin(value = "1.0", message = "amount can't be less than 1")
     private BigDecimal amount;

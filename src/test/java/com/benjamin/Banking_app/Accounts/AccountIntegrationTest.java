@@ -1,6 +1,7 @@
 package com.benjamin.Banking_app.Accounts;
 
 import com.benjamin.Banking_app.DirectDebit.DirectDebitRepo;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import com.benjamin.Banking_app.Security.Role;
 import com.benjamin.Banking_app.Security.UserRepository;
 import com.benjamin.Banking_app.Security.Users;
@@ -66,7 +67,9 @@ public class AccountIntegrationTest {
         user2 = userRepository.save(user2);
 
         account = Account.builder().accountUsername("account1").
-                balance(BigDecimal.valueOf(1000.0)).user(user1)
+                balance(BigDecimal.valueOf(1000.0))
+                .iban(IbanGenerator.generateIban())
+                .user(user1)
                 .build();
         account = accountRepository.save(account);
         user1.setAccount(account);
@@ -74,7 +77,9 @@ public class AccountIntegrationTest {
 
         account2 = Account.builder()
                 .accountUsername("account2")
-                .balance(BigDecimal.valueOf(500.0)).user(user2)
+                .balance(BigDecimal.valueOf(500.0))
+                .iban(IbanGenerator.generateIban())
+                .user(user2)
                 .build();
         account2 = accountRepository.save(account2);
         user2.setAccount(account2);
@@ -127,7 +132,7 @@ public class AccountIntegrationTest {
     @WithMockUser(username = "user1@gmail.com", roles = {"USER"})
     void transfer_ShouldUpdateBothAccounts() throws Exception {
         Map<String, Object> transferRequest = new HashMap<>();
-        transferRequest.put("toAccountUsername", "account2");
+        transferRequest.put("toIban", account2.getIban());
         transferRequest.put("amount", BigDecimal.valueOf(400.0));
 
         mockMvc.perform(patch(ACCOUNT_API + "transfer")

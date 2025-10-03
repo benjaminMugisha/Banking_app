@@ -30,6 +30,9 @@ public class Account {
     @JoinColumn(name="user_id")
     private Users user;
 
+    @Column(unique = true, nullable = false)
+    private String iban;
+
     public Account(long id, String accountUsername, BigDecimal balance) {
         this.id = id;
         this.accountUsername = accountUsername;

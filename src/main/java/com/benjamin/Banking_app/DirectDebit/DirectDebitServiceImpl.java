@@ -36,11 +36,11 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
     @Override
     @Transactional
-    public DirectDebitDto createDirectDebit(String toAccountUsername, BigDecimal amount) {
+    public DirectDebitDto createDirectDebit(String toIban, BigDecimal amount) {
         Account fromAccount = userUtils.getCurrentUserAccount();
-        Account toAccount = accountRepository.findByAccountUsername(toAccountUsername)
+        Account toAccount = accountRepository.findByIban(toIban)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "account named: " + toAccountUsername +" not found"));
+                        "account named: " + toIban +" not found"));
 
         //saving the direct debit info and update nextPaymentDate for processDueDebits().
         DirectDebit directDebit = DirectDebit.builder()
@@ -51,10 +51,10 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
 
         //perform the first payment immediately.
-        TransferRequest request = new TransferRequest(toAccountUsername, amount);
+        TransferRequest request = new TransferRequest(toIban, amount);
         accountService.transfer(request);
         logger.info("direct debit paid from: {} to: {} of €{}"
-        , fromAccount.getAccountUsername(), toAccountUsername, amount);
+        , fromAccount.getAccountUsername(), toIban, amount);
 
         return DirectDebitMapper.mapToDirectDebitDto(directDebit);
     }

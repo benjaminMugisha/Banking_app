@@ -3,6 +3,7 @@ package com.benjamin.Banking_app.Accounts;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
+import com.benjamin.Banking_app.Security.IbanGenerator;
 import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.UserUtils;
 import com.benjamin.Banking_app.Transactions.TransactionService;
@@ -149,14 +150,16 @@ class AccountServiceImplTest {
     @Test
     void transfer_WithSufficientFunds_ShouldMoveMoney() {
         Account toAccount = Account.builder()
-                .id(2L).accountUsername("Peter").balance(BigDecimal.valueOf(100)).build();
+                .id(2L).accountUsername("Peter").balance(BigDecimal.valueOf(100))
+                .iban(IbanGenerator.generateIban())
+                .build();
 
         when(userUtils.getCurrentUserAccount()).thenReturn(account);
-        when(accountRepo.findByAccountUsername("Peter")).thenReturn(Optional.of(toAccount));
+        when(accountRepo.findByIban(toAccount.getIban())).thenReturn(Optional.of(toAccount));
         when(accountRepo.save(account)).thenReturn(account);
         when(accountRepo.save(toAccount)).thenReturn(toAccount);
 
-        TransferRequest request = new TransferRequest("Peter", BigDecimal.valueOf(500));
+        TransferRequest request = new TransferRequest(toAccount.getIban(), BigDecimal.valueOf(500));
         AccountDto result = accountService.transfer(request);
 
         assertThat(result.getBalance()).isEqualTo(BigDecimal.valueOf(500));
@@ -169,7 +172,7 @@ class AccountServiceImplTest {
     @Test
     void transfer_WhenRecipientNotFound_ShouldThrowException() {
         when(userUtils.getCurrentUserAccount()).thenReturn(account);
-        when(accountRepo.findByAccountUsername("ghost")).thenReturn(Optional.empty());
+//        when(accountRepo.findByAccountUsername("ghost")).thenReturn(Optional.empty());
 
         TransferRequest request = new TransferRequest("ghost", BigDecimal.valueOf(50));
 
@@ -180,12 +183,15 @@ class AccountServiceImplTest {
 
     @Test
     void transfer_WhenInsufficientFunds_ShouldThrowException() {
-        Account toAccount = Account.builder().id(2L).accountUsername("Peter").balance(BigDecimal.ZERO).build();
+        Account toAccount = Account.builder()
+                .id(2L).accountUsername("Peter").balance(BigDecimal.ZERO)
+                .iban(IbanGenerator.generateIban())
+                .build();
 
         when(userUtils.getCurrentUserAccount()).thenReturn(account);
-        when(accountRepo.findByAccountUsername("Peter")).thenReturn(Optional.of(toAccount));
+        when(accountRepo.findByIban(toAccount.getIban())).thenReturn(Optional.of(toAccount));
 
-        TransferRequest request = new TransferRequest("Peter", BigDecimal.valueOf(99999));
+        TransferRequest request = new TransferRequest(toAccount.getIban(), BigDecimal.valueOf(99999));
 
         assertThatThrownBy(() -> accountService.transfer(request))
                 .isInstanceOf(InsufficientFundsException.class)

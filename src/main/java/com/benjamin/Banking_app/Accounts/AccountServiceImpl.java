@@ -70,8 +70,8 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public AccountDto transfer(TransferRequest transferRequest) {
         Account fromAccount = userUtils.getCurrentUserAccount();
-        Account toAccount = accountRepository.findByAccountUsername(
-                transferRequest.getToAccountUsername())
+        Account toAccount = accountRepository.findByIban(
+                transferRequest.getToIban())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "account to receive the funds not found"));
 
