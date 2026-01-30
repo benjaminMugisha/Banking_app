@@ -32,14 +32,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountPageResponse getAllAccounts(int pageNo, int pageSize) {
-        logger.info(" retrieving all accounts ...");
+        Account account = userUtils.getCurrentUserAccount();
+        logger.info(account.getAccountUsername() + " is retrieving all accounts ...");
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)
                 .collect(Collectors.toList());
+        int totalPages = accounts.getTotalPages() == 0 ? 1 : accounts.getTotalPages();
+
         return AccountPageResponse.builder()
                 .content(content).pageNo(accounts.getNumber()).pageSize(accounts.getSize())
-                .totalElements(accounts.getTotalElements()).totalPages(accounts.getTotalPages())
+                .totalElements(accounts.getTotalElements()).totalPages(totalPages)
                 .last(accounts.isLast()).build();
     }
 

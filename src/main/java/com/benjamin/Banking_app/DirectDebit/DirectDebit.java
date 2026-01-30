@@ -19,7 +19,6 @@ public class DirectDebit {
     private Long id;
 
     private BigDecimal amount;
-
     private LocalDate nextPaymentDate;
 
     @Builder.Default

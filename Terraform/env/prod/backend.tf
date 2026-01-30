@@ -4,7 +4,6 @@
 ### TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
 ##############################################################
 
-
 terraform {
   backend "s3" {
     bucket         = "s3benstatefvpsvrf"

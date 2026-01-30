@@ -11,6 +11,8 @@ public class TransactionMapper {
                         .type(transaction.getType())
                         .amount(transaction.getAmount())
                         .timestamp(transaction.getTime())
+                        .toAccountUsername(transaction.getToAccount() != null
+                        ? transaction.getToAccount().getAccountUsername() : null)
                         .build();
     }
 }

@@ -23,4 +23,3 @@ public class LoanDto {
     private LocalDate nextPaymentDate;
     private boolean active;
 }
-

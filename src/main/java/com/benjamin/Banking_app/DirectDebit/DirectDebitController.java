@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v2/dd")
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class DirectDebitController {
     //fetch direct debits belonging to current user or admin searches direct debits of a specific account.
     @GetMapping("get")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public DirectDebitResponse getActiveDirectDebits(
+    public DirectDebitPageResponse getActiveDirectDebits(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(required = false) String accountUsername) {
@@ -33,7 +36,7 @@ public class DirectDebitController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<DirectDebitDto> createDirectDebit(
+    public ResponseEntity<DirectDebitResponse> createDirectDebit(
             @Valid @RequestBody DirectDebitRequest request){
         return new ResponseEntity<>(
                 directDebitService.createDirectDebit(request.getToIban(), request.getAmount()),
@@ -42,9 +45,26 @@ public class DirectDebitController {
 
     @PatchMapping("/cancel/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<String> cancelDirectDebit(@PathVariable Long id) {
-        directDebitService.cancelDirectDebit(id);
-        return ResponseEntity.ok(
-                "Direct debit with id: " + id + " has been cancelled");
+    public ResponseEntity<DirectDebitResponse> cancelDirectDebit(@PathVariable Long id) {
+//        directDebitService.cancelDirectDebit(id);
+//        return ResponseEntity.ok(
+//                "Direct debit with id: " + id + " has been cancelled");
+        return new ResponseEntity<>(
+                directDebitService.cancelDirectDebit(id), HttpStatus.OK);
     }
+
+    @PatchMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<DirectDebitResponse> updateDirectDebit(
+            @PathVariable Long id, @RequestBody Map<String, Double> request) {
+        BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
+        return new ResponseEntity<>(
+                directDebitService.updateDirectDebit(id, amount), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/d/{id}")
+    public String d(@PathVariable Long id){
+        return directDebitService.deleteById(id);
+    }
+
 }

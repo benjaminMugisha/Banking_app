@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,12 +32,14 @@ public class TransactionRepositoryTest {
 
         Transaction tx1 = Transaction.builder()
                 .account(account).type(TransactionType.DEPOSIT)
-                .amount(BigDecimal.valueOf(200)).time(LocalDateTime.now())
+                .amount(BigDecimal.valueOf(200))
+                .time(OffsetDateTime.now())
                 .build();
 
         Transaction tx2 = Transaction.builder()
                 .account(account).type(TransactionType.WITHDRAW)
-                .amount(BigDecimal.valueOf(50)).time(LocalDateTime.now())
+                .amount(BigDecimal.valueOf(50))
+                .time(OffsetDateTime.now())
                 .build();
 
         transactionRepository.save(tx1);

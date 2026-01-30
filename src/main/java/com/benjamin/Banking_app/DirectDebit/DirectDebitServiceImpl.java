@@ -5,6 +5,7 @@ import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
 import com.benjamin.Banking_app.Accounts.TransferRequest;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
+import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -36,27 +37,70 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
     @Override
     @Transactional
-    public DirectDebitDto createDirectDebit(String toIban, BigDecimal amount) {
+    public DirectDebitResponse createDirectDebit(String toIban, BigDecimal amount) {
         Account fromAccount = userUtils.getCurrentUserAccount();
         Account toAccount = accountRepository.findByIban(toIban)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "account named: " + toIban +" not found"));
+                        "account with iban: " + toIban +" not found"));
 
-        //saving the direct debit info and update nextPaymentDate for processDueDebits().
-        DirectDebit directDebit = DirectDebit.builder()
-                .fromAccount(fromAccount).toAccount(toAccount).active(true)
-                .amount(amount).nextPaymentDate(LocalDate.now().plusDays(28))
-                .build();
-        directDebitRepo.save(directDebit);
+        if(fromAccount.getId().equals(toAccount.getId())) {
+            throw new BadRequestException("this is your iban. not allowed");
+        }
+        //find the existing dd. null if it doesn't exist.
+        DirectDebit dd = directDebitRepo.findByFromAccountAndToAccount(fromAccount, toAccount);
 
+        if(dd == null) { // if the dd doesn't exist, create and  pay it.
+            DirectDebit directDebit = DirectDebit.builder()
+                    .active(true).nextPaymentDate(LocalDate.now().plusDays(28))
+                    .fromAccount(fromAccount).toAccount(toAccount)
+                    .amount(amount)
+                    .build();
+            directDebitRepo.save(directDebit);
+            setToZero(directDebit);
+            TransferRequest transfer = new TransferRequest(toIban, amount);
+            accountService.transfer(transfer);
 
-        //perform the first payment immediately.
-        TransferRequest request = new TransferRequest(toIban, amount);
-        accountService.transfer(request);
-        logger.info("direct debit paid from: {} to: {} of €{}"
-        , fromAccount.getAccountUsername(), toIban, amount);
+            logger.info("Direct debit of €{} created and paid from user: {} to user: {} ",
+                    amount, fromAccount.getAccountUsername(), toAccount.getAccountUsername());
+            return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(directDebit)
+                    , DDStatusMessage.CREATED_AND_PAID);
+        }
+        else if (!dd.isActive()) { //if we had this dd and deactivated it, reactivate it and update the amount.
+            dd.setActive(true);
+            return updateDirectDebit(dd.getId(), amount);
+        } else { //if it does exist, update the amount only.
+           return updateDirectDebit(dd.getId(), amount);
+        }
+    }
 
-        return DirectDebitMapper.mapToDirectDebitDto(directDebit);
+    @Override
+    public DirectDebitResponse updateDirectDebit(Long directDebitId, BigDecimal amount) {
+        DirectDebit dd = directDebitRepo.findById(directDebitId)
+                .orElseThrow(() -> new EntityNotFoundException("Direct debit not found"));
+        if(amount.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("amount can't be less than zero");
+        if (dd.getAmount().compareTo(amount) == 0) {
+            return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(dd), DDStatusMessage.UNCHANGED);
+        }
+        if(amount.compareTo(BigDecimal.ZERO) == 0) {
+            dd.setActive(false);
+            dd.setAmount(BigDecimal.ZERO);
+            directDebitRepo.save(dd);
+
+            return new DirectDebitResponse(
+                    DirectDebitMapper.mapToDirectDebitDto(dd),
+                    DDStatusMessage.CANCELLED
+            );
+        }
+        logger.info("updating DD from user: {} to user: {} from the old amount of {} the new amount of {}",
+                dd.getFromAccount().getAccountUsername(),
+                dd.getToAccount().getAccountUsername(), dd.getAmount(), amount);
+        dd.setAmount(amount);
+        dd.setActive(true);
+        directDebitRepo.save(dd);
+        setToZero(dd);
+
+        return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(dd),
+                DDStatusMessage.UPDATED);
     }
 
     @Scheduled(cron = "0 0 0 * * *") //to run every day at midnight.
@@ -86,7 +130,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
     @Override
     @Transactional
-    public void cancelDirectDebit(Long directDebitId) {
+    public DirectDebitResponse cancelDirectDebit(Long directDebitId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -102,6 +146,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
         debit.setActive(false);
         directDebitRepo.save(debit);
+        return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(debit), DDStatusMessage.CANCELLED);
     }
 
     @Override
@@ -111,14 +156,11 @@ public class DirectDebitServiceImpl implements DirectDebitService {
        return DirectDebitMapper.mapToDirectDebitDto(dd);
     }
 
-    @Override
-    public List<DirectDebit> all() {
-        return directDebitRepo.findAll();
-    }
+
 
     @Override
     @Transactional(readOnly = true)
-    public DirectDebitResponse getDirectDebits(
+    public DirectDebitPageResponse getDirectDebits(
             int pageNo, int pageSize, String accountUsername) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = auth.getAuthorities().stream()
@@ -141,14 +183,30 @@ public class DirectDebitServiceImpl implements DirectDebitService {
         List<DirectDebitDto> content = debitsPage.stream()
                 .map(DirectDebitMapper::mapToDirectDebitDto)
                 .toList();
+        int totalPages = debitsPage.getTotalPages() == 0 ? 1 : debitsPage.getTotalPages();
 
-        return DirectDebitResponse.builder()
+        return DirectDebitPageResponse.builder()
                 .content(content)
-                .pageNo(debitsPage.getNumber())
-                .pageSize(debitsPage.getSize())
+                .pageNo(debitsPage.getNumber()).pageSize(debitsPage.getSize())
                 .totalElements(debitsPage.getTotalElements())
-                .totalPages(debitsPage.getTotalPages())
-                .last(debitsPage.isLast())
+                .totalPages(totalPages).last(debitsPage.isLast())
                 .build();
+    }
+
+
+    private void setToZero(DirectDebit dd){
+        if(dd.getAmount().compareTo(BigDecimal.ZERO) == 0 && dd.isActive()){
+            dd.setActive(false);
+            directDebitRepo.save(dd);
+        }
+    }
+
+    @Override
+    public String deleteById(Long id){
+        DirectDebit debit = directDebitRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Direct debit not found"));
+
+        directDebitRepo.deleteById(id);
+        return "DELETED";
     }
 }

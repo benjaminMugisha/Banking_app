@@ -174,7 +174,9 @@ public class DirectDebitIntegrationTest {
         mockMvc.perform(patch(DD_API + "cancel/" + dd.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Direct debit with id: " + dd.getId() + " has been cancelled"));
+                .andExpect(jsonPath("$.status").value("CANCELLED"))
+                .andExpect(jsonPath("$.dto.id").value("1"))
+                .andExpect(jsonPath("$.dto.active").value(false));
 
         DirectDebit updated = directDebitRepo.findById(dd.getId()).orElseThrow();
         assertThat(updated.isActive()).isFalse();

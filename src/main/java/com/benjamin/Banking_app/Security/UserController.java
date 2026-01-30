@@ -1,6 +1,6 @@
 package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.DirectDebit.DirectDebitResponse;
+import com.benjamin.Banking_app.DirectDebit.DirectDebitPageResponse;
 import com.benjamin.Banking_app.DirectDebit.DirectDebitServiceImpl;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InvalidJwtSignatureException;
@@ -46,11 +46,19 @@ public class UserController {
         return ResponseEntity.ok(service.getUserInfo());
     }
 
+    @GetMapping("/users")
+    public ResponseEntity<UserPageResponse> getUsers(
+            @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value="pageSize",defaultValue = "10", required = false) int pageSize
+    )  {
+        return ResponseEntity.ok(service.getUsers(pageNo,pageSize));
+    }
+
     @GetMapping("/me/direct-debits")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public DirectDebitResponse getActiveDirectDebits(
-            @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize,
+    public DirectDebitPageResponse getActiveDirectDebits(
+            @RequestParam(value="pageNo",defaultValue = "0") int pageNo,
+            @RequestParam(value="pageSize",defaultValue = "10") int pageSize,
             @RequestParam(required = false) String accountUsername) {
         return directDebitService.getDirectDebits(pageNo, pageSize, accountUsername);
     }

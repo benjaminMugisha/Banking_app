@@ -14,4 +14,3 @@ public class IbanGenerator {
         return COUNTRY_CODE + CHECK_DIGITS + BANK_CODE + accountNumber;
     }
 }
-

@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -34,6 +37,14 @@ public class LoanController {
     @PatchMapping("/repay-full/{loanId}")
     public ResponseEntity<LoanResponse> repayFullLoanEarly(@PathVariable Long loanId) {
         return ok(service.repayLoanEarly(loanId));
+    }
+
+    @PatchMapping("/repay/{loanId}")
+    public ResponseEntity<LoanResponse> customLoan(
+            @PathVariable Long loanId,
+            @RequestBody Map<String, Double> request) {
+        BigDecimal amount = BigDecimal.valueOf(request.get("amount"));
+        return ok(service.repayCustomAmount(loanId, amount));
     }
 
     @GetMapping("/{loanId}")

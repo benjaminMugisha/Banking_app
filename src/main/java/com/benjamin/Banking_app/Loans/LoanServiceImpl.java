@@ -2,7 +2,9 @@ package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
+import com.benjamin.Banking_app.Exception.InsufficientFundsException;
 import com.benjamin.Banking_app.UserUtils;
 import com.benjamin.Banking_app.Transactions.TransactionService;
 import com.benjamin.Banking_app.Transactions.TransactionType;
@@ -31,6 +33,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final AccountRepository accountRepository;
     private final TransactionService transactionService;
+    private final AccountServiceImpl accountService;
     private final UserUtils userUtils;
 
     private final Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
@@ -49,8 +52,10 @@ public class LoanServiceImpl implements LoanService {
         if (!eligibility.isAffordable()) {
             logger.warn("Loan denied of account: {} because their DTI is: {}%",
                     account.getAccountUsername(), eligibility.dti());
-            return new LoanResponse("Loan denied. your Debt-to-income ratio is too high:" +
-                    "  (" + eligibility.dti() + "%). maximum is 40% of your yearly income )");
+//            return new LoanResponse("Loan denied. your Debt-to-income ratio is too high:" +
+//                    "  (" + eligibility.dti() + "%). maximum is 40% of your yearly income )");
+            throw new InsufficientFundsException("Your Debt-to-income ratio of " + eligibility.dti() +
+                    "% is too high maximum dti allowed is 40%");
         }
 
         Loan loan = Loan.builder()
@@ -61,6 +66,7 @@ public class LoanServiceImpl implements LoanService {
         loan.setNextPaymentDate(LocalDate.now().plusDays(30));
 
         loanRepository.save(loan);
+        accountService.deposit(request.principal);
         recordLoanTransaction(account,
                 loan.getRemainingBalance(), TransactionType.LOAN_APPLICATION);
 
@@ -69,7 +75,7 @@ public class LoanServiceImpl implements LoanService {
         );
     }
 
-    private LoanEligibilityResult checkEligibility(
+    LoanEligibilityResult checkEligibility(
             BigDecimal yearlyIncome, BigDecimal estimatedYearlyPayment, long accountId) {
         List<Loan> activeLoans = loanRepository
                 .findByAccountIdAndRemainingBalanceGreaterThan(accountId, 0.0);
@@ -139,10 +145,13 @@ public class LoanServiceImpl implements LoanService {
         List<LoanDto> loanDtos = loans.getContent().stream()
                 .map(LoanMapper::mapToDto)
                 .collect(Collectors.toList());
+        logger.info("returning all loans of user: {}", account.getAccountUsername());
+        int totalPages = loans.getTotalPages() == 0 ? 1 : loans.getTotalPages();
 
         return LoanPageResponse.builder()
                 .content(loanDtos).pageNo(loans.getNumber())
                 .pageSize(loans.getSize()).totalElements(loans.getTotalElements())
+                .totalPages(totalPages)
                 .last(loans.isLast())
                 .build();
     }
@@ -153,17 +162,21 @@ public class LoanServiceImpl implements LoanService {
         Account currentUser = userUtils.getCurrentUserAccount();
 
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("loan not found"));
 
         if (!loan.getAccount().getId().equals(currentUser.getId())) {
             return new LoanResponse("You can not repay someone else's loan.");
         }
 
+//        if(loan.getRemainingBalance().compareTo(BigDecimal.ZERO)) {}
+        if(loan.getRemainingBalance().compareTo(BigDecimal.ZERO) == 0) {
+            return new LoanResponse("loan already fully paid.");
+        }
         Account account = loan.getAccount();
         BigDecimal accountBalance = account.getBalance();
         BigDecimal loanBalance = loan.getRemainingBalance();
 
-        if(loanBalance.compareTo(accountBalance) > 0) {
+        if (loanBalance.compareTo(accountBalance) > 0) {
             return new LoanResponse("insufficient funds to clear the loan.");
         }
 
@@ -182,10 +195,65 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Transactional
+    public LoanResponse repayCustomAmount (Long loanId, BigDecimal amount) {
+        Account currentUser = userUtils.getCurrentUserAccount();
+
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("loan not found"));
+
+        if (!loan.getAccount().getId().equals(currentUser.getId())) {
+            return new LoanResponse("You can not repay someone else's loan.");
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0)
+            return new LoanResponse("Repayment amount must be greater than 0");
+
+        if (loan.getRemainingBalance().compareTo(BigDecimal.ZERO) == 0) {
+            return new LoanResponse("loan already fully paid.");
+        }
+
+        Account account = loan.getAccount();
+        BigDecimal accountBalance = account.getBalance();
+        BigDecimal loanBalance = loan.getRemainingBalance();
+
+        if (amount.compareTo(loanBalance) > 0) {
+//            BigDecimal newAmount = loanBalance;
+            account.setBalance(accountBalance.subtract(loanBalance));
+            loan.setRemainingBalance(BigDecimal.valueOf(0));
+            loan.setActive(false);
+            return new LoanResponse("loan fully repaid with " + loanBalance +
+                    ". your new balance is " + account.getBalance());
+        }
+
+        if (amount.compareTo(accountBalance) > 0) {
+            return new LoanResponse("insufficient funds to clear the loan.");
+        }
+
+        account.setBalance(accountBalance.subtract(amount));
+        loan.setRemainingBalance(loanBalance.subtract(amount));
+
+        recordLoanTransaction(account, loanBalance, TransactionType.LOAN_REPAYMENT);
+
+        loanRepository.save(loan);
+        accountRepository.save(account);
+
+        logger.info("user: {}, amount of: {}, loan balance: {}", currentUser.getAccountUsername(),
+                amount, loan.getRemainingBalance());
+
+        return new LoanResponse(
+                "amount of €" + amount +
+                        " repaid. your remaining loan balance is: €" + loan.getRemainingBalance() +
+        " and your remaining account balance is €" + accountBalance);
+    }
+
+    @Override
     public LoanDto getLoanByLoanId(long loanId) {
-        logger.info("searching for loan with id: {}", loanId);
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
+        logger.info("returning a loan with id: {} that belongs to: {}"
+                , loanId, loan.getAccount().getAccountUsername());
+
         return LoanMapper.mapToDto(loan);
     }
 

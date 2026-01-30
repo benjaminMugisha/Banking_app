@@ -2,9 +2,11 @@ package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
-import com.benjamin.Banking_app.DirectDebit.DirectDebitResponse;
+import com.benjamin.Banking_app.Admin.AdminServiceImpl;
+import com.benjamin.Banking_app.DirectDebit.DirectDebitPageResponse;
 import com.benjamin.Banking_app.DirectDebit.DirectDebitServiceImpl;
 import com.benjamin.Banking_app.Loans.LoanPageResponse;
+import com.benjamin.Banking_app.Loans.LoanRepository;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
 import com.benjamin.Banking_app.Transactions.TransactionResponse;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
@@ -20,10 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +53,10 @@ class UserControllerTest {
     private UserRepository userRepository;
     @MockBean
     private AccountRepository accountRepository;
+    @MockBean
+    private AdminServiceImpl adminService;
+    @MockBean
+    private LoanRepository loanRepository;
 
     @Test
     void register_shouldReturnAuthResponse() throws Exception {
@@ -79,7 +83,8 @@ class UserControllerTest {
     @Test
     void login_shouldReturnAuthResponse() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest("john@mail.com", "1234");
-        AuthenticationResponse response = AuthenticationResponse.builder().token("token123").refreshToken("refresh123").accountUsername("johnAccount").build();
+        AuthenticationResponse response = AuthenticationResponse.builder()
+                .token("token123").refreshToken("refresh123").accountUsername("johnAccount").build();
 
         when(authenticationService.authenticate(any(AuthenticationRequest.class))).thenReturn(response);
 
@@ -132,7 +137,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void getDirectDebits_shouldReturnDirectDebitResponse() throws Exception {
-        DirectDebitResponse response = DirectDebitResponse.builder()
+        DirectDebitPageResponse response = DirectDebitPageResponse.builder()
                 .pageNo(0)
                 .pageSize(10)
                 .totalPages(1)

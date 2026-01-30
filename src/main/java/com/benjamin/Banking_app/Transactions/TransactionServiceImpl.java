@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         Account accountToQuery;
 
-        if(isAdmin &&accountUsername != null) {
+        if(isAdmin && accountUsername != null) {
             accountToQuery = accountRepository.findByAccountUsername(accountUsername)
                     .orElseThrow(() -> new EntityNotFoundException("Account not found: " + accountUsername));
         } else {
@@ -62,7 +62,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = Transaction.builder()
                 .account(account).type(type)
-                .amount(amount).time(LocalDateTime.now())
+                .amount(amount)
+                .time(OffsetDateTime.now())
                 .toAccount(toAccount)
                 .build();
 

@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +53,8 @@ class TransactionServiceTest {
         Transaction tx = Transaction.builder()
                 .transactionId(10L)
                 .account(account).type(TransactionType.WITHDRAW)
-                .amount(BigDecimal.valueOf(100)).time(LocalDateTime.now())
+                .amount(BigDecimal.valueOf(100))
+                .time(OffsetDateTime.now())
                 .build();
 
         SecurityContext context = mock(SecurityContext.class);

@@ -70,6 +70,7 @@ class AccountServiceImplTest {
         Page<Account> page = new PageImpl<>(List.of(account), PageRequest.of(0, 1), 1);
         when(accountRepo.findAll(any(Pageable.class))).thenReturn(page);
 
+        when(userUtils.getCurrentUserAccount()).thenReturn(account);
         AccountPageResponse response = accountService.getAllAccounts(0, 1);
 
         assertThat(response).isNotNull();
@@ -172,7 +173,6 @@ class AccountServiceImplTest {
     @Test
     void transfer_WhenRecipientNotFound_ShouldThrowException() {
         when(userUtils.getCurrentUserAccount()).thenReturn(account);
-//        when(accountRepo.findByAccountUsername("ghost")).thenReturn(Optional.empty());
 
         TransferRequest request = new TransferRequest("ghost", BigDecimal.valueOf(50));
 

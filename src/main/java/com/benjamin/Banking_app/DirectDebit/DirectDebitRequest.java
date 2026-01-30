@@ -15,6 +15,4 @@ public class DirectDebitRequest {
 
     @DecimalMin(value = "1.0", message = "amount can't be less than 1")
     private BigDecimal amount;
-
-    private boolean active;
 }

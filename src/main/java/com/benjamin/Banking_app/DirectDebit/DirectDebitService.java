@@ -1,12 +1,13 @@
 package com.benjamin.Banking_app.DirectDebit;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 interface DirectDebitService {
-    DirectDebitDto createDirectDebit(String toAccountUsername, BigDecimal amount);
-    DirectDebitResponse getDirectDebits(int pageNo, int pageSize, String accountUsername);
-    void cancelDirectDebit(Long id);
+    DirectDebitResponse createDirectDebit(String toAccountUsername, BigDecimal amount);
+    DirectDebitPageResponse getDirectDebits(int pageNo, int pageSize, String accountUsername);
+    DirectDebitResponse cancelDirectDebit(Long id);
     DirectDebitDto getById(long id);
-    List<DirectDebit> all();
+    DirectDebitResponse updateDirectDebit(Long directDebitId, BigDecimal amount);
+
+    String deleteById(Long id);
 }

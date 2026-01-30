@@ -1,16 +1,16 @@
 package com.benjamin.Banking_app.DirectDebit;
 
-import lombok.Builder;
-import lombok.Data;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@Builder
+@Getter
+@Setter
 public class DirectDebitResponse {
-    private List<DirectDebitDto> content;
-    private int pageNo;
-    private int pageSize;
-    private long totalElements;
-    private int totalPages;
-    private boolean last;
+    private DirectDebitDto dto;
+    private DDStatusMessage status;
+
+    public DirectDebitResponse(DirectDebitDto dto, DDStatusMessage status) {
+        this.dto = dto;
+        this.status = status;
+    }
 }

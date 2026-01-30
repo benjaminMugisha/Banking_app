@@ -77,7 +77,7 @@ public  class DirectDebitServiceTest {
 
         BigDecimal amount = BigDecimal.valueOf(100.0);
 
-        DirectDebitDto dto = directDebitService.createDirectDebit(toAccount.getIban(), amount);
+        DirectDebitDto dto = directDebitService.createDirectDebit(toAccount.getIban(), amount).getDto();
 
         assertThat(dto).isNotNull();
         assertThat(dto.getFromAccountUsername()).isEqualTo("user1");

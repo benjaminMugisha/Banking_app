@@ -1,19 +1,23 @@
 package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Accounts.Account;
-import com.benjamin.Banking_app.Accounts.AccountService;
-import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +26,6 @@ public class AuthenticationService {
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final AccountService accountService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
@@ -72,7 +75,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         try {
             var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AccessDeniedException("user not found. try again"));
+                .orElseThrow(() -> new EntityNotFoundException("user not found. try again"));
 
             authManager.authenticate(new UsernamePasswordAuthenticationToken(
                             request.getEmail(), request.getPassword()));
@@ -80,15 +83,15 @@ public class AuthenticationService {
             String accessToken = jwtService.generateToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
-            logger.info("User: {} logged in.", request.getEmail());
+            logger.info("User {} logged in succesfully", request.getEmail());
 
             return AuthenticationResponse.builder()
                     .token(accessToken).refreshToken(refreshToken)
                     .accountUsername(user.getAccount().getAccountUsername())
                     .build();
         } catch (BadCredentialsException e){
-            logger.warn("wrong credentials");
-            throw new AccessDeniedException("Bad credentials. Please try again.");
+            logger.warn("wrong password for email: {}", request.getEmail());
+            throw new BadRequestException("Wrong credentials. Please try again");
         }
         catch (Exception e) {
             logger.error("failed login attempt for user: {}. Error: {}", request.getEmail(), e.getMessage());
@@ -109,6 +112,7 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())
+                .role(user.getRole())
                 .build();
     }
 
@@ -122,5 +126,22 @@ public class AuthenticationService {
             attempts++;
         }
         throw new IllegalStateException("Could not generate unique IBAN after 5 retries");
+    }
+
+    public UserPageResponse getUsers(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Users> users = userRepository.findAll(pageable);
+
+        List<UserDto> content = users.stream()
+                .map(UserMapper::MapToUserDto)
+                .collect(Collectors.toList());
+        int totalPages = users.getTotalPages() == 0 ? 1 : users.getTotalPages();
+
+        return UserPageResponse.builder()
+                .content(content).pageNo(users.getNumber()).pageSize(users.getSize())
+                .totalElements(users.getTotalElements()).totalPages(totalPages)
+                .last(users.isLast())
+                .build();
+
     }
 }

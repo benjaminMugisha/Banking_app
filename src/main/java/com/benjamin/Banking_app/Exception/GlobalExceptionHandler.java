@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleBadRequest(BadRequestException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, null);
+        return buildResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDenied(org.springframework.security.access.AccessDeniedException ex) {
-        return buildResponse("Access is denied.", HttpStatus.FORBIDDEN, null);
+        return buildResponse("Access denied.", HttpStatus.FORBIDDEN, null);
     }
 
     @ExceptionHandler(io.jsonwebtoken.ExpiredJwtException.class)
