@@ -28,6 +28,12 @@ public class UserController {
     private final JWTService jwtService;
     private final UserRepository userRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create-admin")
+    public ResponseEntity<String> createAdmin(
+            @RequestBody @Valid RegisterRequest request) {
+        return ResponseEntity.ok(service.registerAdmin(request));
+    }
 
     @PostMapping("/register")
     public AuthenticationResponse register(
@@ -54,33 +60,12 @@ public class UserController {
         return ResponseEntity.ok(service.getUsers(pageNo,pageSize));
     }
 
-    @GetMapping("/me/direct-debits")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public DirectDebitPageResponse getActiveDirectDebits(
-            @RequestParam(value="pageNo",defaultValue = "0") int pageNo,
-            @RequestParam(value="pageSize",defaultValue = "10") int pageSize,
-            @RequestParam(required = false) String accountUsername) {
-        return directDebitService.getDirectDebits(pageNo, pageSize, accountUsername);
-    }
-
-    @GetMapping("/me/transactions")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<TransactionResponse> getTransactionHistory(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(required = false) String accountUsername) {
-        TransactionResponse transactions = transactionService.transactions(pageNo, pageSize, accountUsername);
-        return ResponseEntity.ok(transactions);
-    }
-
-    @GetMapping("/me/loans")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public LoanPageResponse getLoansByAccountId(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(required = false) String accountUsername
-    ) {
-        return loanService.getLoansOfAnAccount(pageNo, pageSize, accountUsername);
+    @GetMapping("/admins")
+    public UserPageResponse getAdmins(
+            @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value="pageSize",defaultValue = "10", required = false) int pageSize
+    )  {
+        return service.getAdminUsers(pageNo, pageSize);
     }
 
     @PostMapping("/refresh-token")
@@ -104,5 +89,14 @@ public class UserController {
                 .refreshToken(refreshToken)
                 .accountUsername(user.getAccount().getAccountUsername())
                 .build());
+    }
+
+    @PatchMapping("/deactivate/{id}")
+    public ResponseEntity<UserDto> deactivateUser(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deactivateUser(id));
+    }
+    @PatchMapping("/reactivate/{id}")
+    public ResponseEntity<UserDto> reactivateUser(@PathVariable Long id) {
+        return ResponseEntity.ok(service.reactivateUser(id));
     }
 }

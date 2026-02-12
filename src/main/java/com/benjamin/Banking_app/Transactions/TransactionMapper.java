@@ -10,7 +10,7 @@ public class TransactionMapper {
                         .accountUsername(transaction.getAccount().getAccountUsername())
                         .type(transaction.getType())
                         .amount(transaction.getAmount())
-                        .timestamp(transaction.getTime())
+                        .timeStamp(transaction.getTime())
                         .toAccountUsername(transaction.getToAccount() != null
                         ? transaction.getToAccount().getAccountUsername() : null)
                         .build();

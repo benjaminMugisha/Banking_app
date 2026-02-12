@@ -23,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,6 +67,7 @@ class UserIntegrationTest {
                 .email("user@gmail.com")
                 .password(passwordEncoder.encode("Password1234"))
                 .role(Role.USER)
+                .active(true)
                 .build();
 
         account = Account.builder()
@@ -106,7 +105,7 @@ class UserIntegrationTest {
                 .account(account)
                 .amount(BigDecimal.valueOf(200))
                 .type(TransactionType.DEPOSIT)
-                .time(OffsetDateTime.now())
+                .time(LocalDate.now())
                 .build();
         transactionRepository.save(transaction);
 
@@ -128,7 +127,7 @@ class UserIntegrationTest {
                 "John", "Doe", "johndoe123",
                 BigDecimal.valueOf(1000),
                 "john.doe@mail.com",
-                "Password123", Role.ADMIN
+                "Password123"
         );
 
         mockMvc.perform(post("/api/v2/auth/register")
@@ -168,42 +167,4 @@ class UserIntegrationTest {
                 .andExpect(jsonPath("$.accountBalance").value(1000));
     }
 
-
-    @Test
-    void getActiveDirectDebits_shouldReturnDebits() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/direct-debits")
-                        .header("Authorization", "Bearer " + userToken)
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].amount").value(50));
-    }
-
-    @Test
-    void getTransactionHistory_shouldReturnTransactions() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/transactions")
-                        .header("Authorization", "Bearer " + userToken)
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].amount").value(200))
-                .andExpect(jsonPath("$.content[0].type").value("DEPOSIT"));
-    }
-
-    @Test
-    void getTransactions_withoutToken_shouldReturnisForbidden() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/transactions"))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void getLoansByAccountId_shouldReturnLoans() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/loans")
-                        .header("Authorization", "Bearer " + userToken)
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].principal").value(500))
-                .andExpect(jsonPath("$.content[0].remainingBalance").value(300));
-    }
 }

@@ -198,10 +198,10 @@ class AccountServiceImplTest {
                 .hasMessage("Insufficient balance");
     }
 
-    @Test
-    void deleteAccount_ShouldCallRepositoryDelete() {
-        accountService.deleteAccount(1L);
-
-        verify(accountRepo).deleteById(1L);
-    }
+//    @Test
+//    void deleteAccount_ShouldCallRepositoryDelete() {
+//        accountService.deleteAccount(1L);
+//
+//        verify(accountRepo).deleteById(1L);
+//    }
 }

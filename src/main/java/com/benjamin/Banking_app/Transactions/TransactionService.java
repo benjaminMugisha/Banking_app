@@ -8,4 +8,6 @@ public interface TransactionService {
     TransactionResponse transactions(int pageNo, int pageSize, String accountUsername);
     void recordTransaction(Account account, TransactionType type, BigDecimal amount,
                             Account toAccount);
+    TransactionPageResponse getAllTransactions(int pageNo, int pageSize);
+
 }

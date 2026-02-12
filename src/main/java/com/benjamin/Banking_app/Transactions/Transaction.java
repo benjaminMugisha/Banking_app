@@ -9,8 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -30,7 +29,7 @@ public class Transaction {
 
     private TransactionType type;
     private BigDecimal amount;
-    private OffsetDateTime time;
+    private LocalDate time;
 
     @ManyToOne
     @JoinColumn(name = "to_account_id", nullable = true)

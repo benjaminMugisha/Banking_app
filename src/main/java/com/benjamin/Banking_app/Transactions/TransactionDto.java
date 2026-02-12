@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -20,7 +21,6 @@ public class TransactionDto {
     private String accountUsername;
     private TransactionType type;
     private BigDecimal amount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private OffsetDateTime timestamp;
+    private LocalDate timeStamp;
     private String toAccountUsername;
 }

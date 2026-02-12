@@ -8,6 +8,6 @@ public interface AccountService {
     AccountDto deposit( BigDecimal amount);
     AccountDto withdraw(BigDecimal amount);
     AccountPageResponse getAllAccounts(int pageNo, int pageSize);
-    void deleteAccount(Long id);
+//    void deleteAccount(Long id);
     AccountDto transfer(TransferRequest transferRequest);
 }

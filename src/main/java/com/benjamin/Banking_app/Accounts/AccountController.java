@@ -62,12 +62,5 @@ public class AccountController {
                 .build());
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AccountResponse> deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
-        return ResponseEntity.ok(AccountResponse.builder()
-                        .message("account successfuly deleted")
-                .build());
-    }
+
 }

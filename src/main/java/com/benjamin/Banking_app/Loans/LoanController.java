@@ -28,6 +28,14 @@ public class LoanController {
         return service.getLoansOfAnAccount(pageNo, pageSize, accountUsername);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<LoanPageResponse> getAllLoans(
+            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return ResponseEntity.ok(service.getAllLoans(pageNo, pageSize));
+    }
+
     @PostMapping("apply")
     public ResponseEntity<LoanResponse> applyForLoan(@RequestBody @Valid LoanRequest loanRequest) {
         LoanResponse response = service.applyForLoan(loanRequest);
@@ -48,7 +56,7 @@ public class LoanController {
     }
 
     @GetMapping("/{loanId}")
-    public ResponseEntity<LoanDto> getLoanByLoanId(@PathVariable long loanId){
-         return ResponseEntity.ok(service.getLoanByLoanId(loanId));
+    public ResponseEntity<LoanDto> getLoanByLoanId(@PathVariable long loanId) {
+        return ResponseEntity.ok(service.getLoanByLoanId(loanId));
     }
 }

@@ -2,6 +2,7 @@ package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Exception.BadRequestException;
+import com.benjamin.Banking_app.Exception.EmailAlreadyExists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,8 +39,7 @@ class AuthenticationServiceTest {
     void setUp() {
         registerRequest = new RegisterRequest("John", "Doe",
                 "johnAccount",  BigDecimal.valueOf(1000),
-                "john@mail.com", "Password1234",
-                Role.USER);
+                "john@mail.com", "Password1234");
     }
 
     @Test
@@ -63,8 +63,8 @@ class AuthenticationServiceTest {
         when(userRepository.existsByEmail("john@mail.com")).thenReturn(true);
 
         assertThatThrownBy(() -> authenticationService.register(registerRequest))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("email already in use");
+                .isInstanceOf(EmailAlreadyExists.class)
+                .hasMessageContaining("Email already in use.");
     }
 
     @Test

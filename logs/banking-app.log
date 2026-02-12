@@ -1,0 +1,388 @@
+"2026-02-12 23:00:27 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserIntegrationTest]: UserIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:27 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserIntegrationTest
+""2026-02-12 23:00:27 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-12 23:00:27 [INFO] c.b.B.S.UserIntegrationTest - Starting UserIntegrationTest using Java 21 with PID 24645 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:27 [INFO] c.b.B.S.UserIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:00:28 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:28 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:28 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 0 (http)
+""2026-02-12 23:00:28 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:00:28 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-12 23:00:28 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-12 23:00:28 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-12 23:00:28 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1217 ms
+""2026-02-12 23:00:28 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:29 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-12 23:00:29 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:29 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:29 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-12 23:00:29 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:00:29 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-12 23:00:29 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:00:30 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:30 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:30 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:00:31 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4b7ab262, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@f7a19c4, org.springframework.security.web.context.SecurityContextHolderFilter@28fdce67, org.springframework.security.web.header.HeaderWriterFilter@3dd2a70d, org.springframework.web.filter.CorsFilter@36f93ea3, org.springframework.security.web.authentication.logout.LogoutFilter@640890bc, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@64547a83, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@55105271, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@126a8548, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2c48eb31, org.springframework.security.web.session.SessionManagementFilter@6f8c6694, org.springframework.security.web.access.ExceptionTranslationFilter@2abe5132, org.springframework.security.web.access.intercept.AuthorizationFilter@68b59e2f]
+""2026-02-12 23:00:31 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:00:31 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:00:31 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:00:31 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:00:31 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 61670 (http) with context path ''
+""2026-02-12 23:00:31 [INFO] c.b.B.S.UserIntegrationTest - Started UserIntegrationTest in 4.024 seconds (process running for 5.39)
+""2026-02-12 23:00:32 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:00:32 [INFO] c.b.B.S.AuthenticationService - user: john.doe@mail.com successfully registered
+""2026-02-12 23:00:33 [INFO] c.b.B.S.AuthenticationService - User user@gmail.com logged in successfully
+""2026-02-12 23:00:33 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:33 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-12 23:00:33 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-12 23:00:40 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest]: DirectDebitRepoTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:40 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest
+""2026-02-12 23:00:40 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-12 23:00:40 [INFO] c.b.B.D.DirectDebitRepoTest - Starting DirectDebitRepoTest using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:40 [INFO] c.b.B.D.DirectDebitRepoTest - No active profile set, falling back to 1 default profile: "default"
+""2026-02-12 23:00:41 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:41 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 96 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:41 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
+""2026-02-12 23:00:41 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:fd7a4875-28b1-4eaa-b732-8362b1858d3e;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+""2026-02-12 23:00:41 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:41 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-12 23:00:41 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:41 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:42 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:42 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:43 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5fdff4f1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@117be84a, org.springframework.security.web.context.SecurityContextHolderFilter@63f16350, org.springframework.security.web.header.HeaderWriterFilter@7d466ef9, org.springframework.web.filter.CorsFilter@140fa482, org.springframework.security.web.authentication.logout.LogoutFilter@2df7766b, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@2eb0932c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@21262bde, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3df7e309, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@78de0f6f, org.springframework.security.web.session.SessionManagementFilter@427128a6, org.springframework.security.web.access.ExceptionTranslationFilter@539f2fec, org.springframework.security.web.access.intercept.AuthorizationFilter@5643052d]
+""2026-02-12 23:00:43 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+""2026-02-12 23:00:43 [INFO] c.b.B.D.DirectDebitRepoTest - Started DirectDebitRepoTest in 3.355 seconds (process running for 4.734)
+""2026-02-12 23:00:44 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserIntegrationTest]: UserIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:44 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserIntegrationTest
+""2026-02-12 23:00:44 [INFO] c.b.B.S.UserIntegrationTest - Starting UserIntegrationTest using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:44 [INFO] c.b.B.S.UserIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:00:44 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:44 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:44 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 0 (http)
+""2026-02-12 23:00:44 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:00:44 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-12 23:00:44 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-12 23:00:44 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-12 23:00:44 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 576 ms
+""2026-02-12 23:00:44 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:44 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:44 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:44 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-12 23:00:44 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn8: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:00:44 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-12 23:00:44 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:00:44 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:44 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:45 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:00:45 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@68754439, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@44bd11a2, org.springframework.security.web.context.SecurityContextHolderFilter@2b9ea20c, org.springframework.security.web.header.HeaderWriterFilter@2e85cce1, org.springframework.web.filter.CorsFilter@56595dcb, org.springframework.security.web.authentication.logout.LogoutFilter@25af233d, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@44b860b1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@9b5ff2e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@9d7d83d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1b717d03, org.springframework.security.web.session.SessionManagementFilter@5f45b3f8, org.springframework.security.web.access.ExceptionTranslationFilter@28815100, org.springframework.security.web.access.intercept.AuthorizationFilter@341f2f4c]
+""2026-02-12 23:00:45 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:00:45 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:00:45 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+""2026-02-12 23:00:45 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:00:45 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 61683 (http) with context path ''
+""2026-02-12 23:00:45 [INFO] c.b.B.S.UserIntegrationTest - Started UserIntegrationTest in 1.602 seconds (process running for 6.772)
+""2026-02-12 23:00:46 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:00:46 [INFO] c.b.B.S.AuthenticationService - user: john.doe@mail.com successfully registered
+""2026-02-12 23:00:47 [INFO] c.b.B.S.AuthenticationService - User user@gmail.com logged in successfully
+""2026-02-12 23:00:47 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:00:47 [WARN] c.b.B.S.AuthenticationService - attempt to register with duplicate email: john@mail.com
+""2026-02-12 23:00:47 [INFO] c.b.B.S.AuthenticationService - User john@mail.com logged in successfully
+""2026-02-12 23:00:47 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:00:47 [INFO] c.b.B.S.AuthenticationService - user: john@mail.com successfully registered
+""2026-02-12 23:00:47 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionRepositoryTest]: TransactionRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:47 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionRepositoryTest
+""2026-02-12 23:00:47 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 2000
+""2026-02-12 23:00:47 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:47 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserControllerTest
+""2026-02-12 23:00:47 [INFO] c.b.B.S.UserControllerTest - Starting UserControllerTest using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:47 [INFO] c.b.B.S.UserControllerTest - No active profile set, falling back to 1 default profile: "default"
+""2026-02-12 23:00:48 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@665c8e0f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@27c2b83a, org.springframework.security.web.context.SecurityContextHolderFilter@54ea832e, org.springframework.security.web.header.HeaderWriterFilter@b76d8a8, org.springframework.web.filter.CorsFilter@400ed209, org.springframework.security.web.authentication.logout.LogoutFilter@32f7b6a2, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@11d59d0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6f102740, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@529e1192, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@22445d8e, org.springframework.security.web.session.SessionManagementFilter@7933293f, org.springframework.security.web.access.ExceptionTranslationFilter@533d1f8c, org.springframework.security.web.access.intercept.AuthorizationFilter@69917739]
+""2026-02-12 23:00:48 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:00:48 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:00:48 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:00:48 [INFO] c.b.B.S.UserControllerTest - Started UserControllerTest in 0.799 seconds (process running for 9.558)
+""2026-02-12 23:00:48 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: user1 to user: user2 
+""2026-02-12 23:00:48 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanIntegrationTest]: LoanIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:48 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanIntegrationTest
+""2026-02-12 23:00:48 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: loanUserAcc
+""2026-02-12 23:00:49 [INFO] c.b.B.L.LoanServiceImpl - returning a loan with id: 5 that belongs to: loanUserAcc
+""2026-02-12 23:00:49 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 100
+""2026-02-12 23:00:49 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: DEPOSIT, Amount: 100
+""2026-02-12 23:00:49 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: LOAN_APPLICATION, Amount: 105.00
+""2026-02-12 23:00:49 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 11, Type: LOAN_REPAYMENT, Amount: 1200
+""2026-02-12 23:00:49 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest]: DirectDebitIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:49 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest
+""2026-02-12 23:00:49 [INFO] c.b.B.D.DirectDebitIntegrationTest - Starting DirectDebitIntegrationTest using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:49 [INFO] c.b.B.D.DirectDebitIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:00:49 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:49 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 12 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:49 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:49 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:49 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:49 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Starting...
+""2026-02-12 23:00:49 [INFO] c.z.h.p.HikariPool - HikariPool-2 - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:00:49 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Start completed.
+""2026-02-12 23:00:49 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:00:49 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:49 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:50 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:00:50 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@23e1dd4a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2d3b13b8, org.springframework.security.web.context.SecurityContextHolderFilter@49ba04ff, org.springframework.security.web.header.HeaderWriterFilter@4af25503, org.springframework.web.filter.CorsFilter@4f724360, org.springframework.security.web.authentication.logout.LogoutFilter@510a5fe1, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@58d5bdb0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@65035a5a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3d8141b4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@54a1997b, org.springframework.security.web.session.SessionManagementFilter@5a25ebfc, org.springframework.security.web.access.ExceptionTranslationFilter@368352c0, org.springframework.security.web.access.intercept.AuthorizationFilter@20976bee]
+""2026-02-12 23:00:50 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:00:50 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:00:50 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:00:50 [INFO] c.b.B.D.DirectDebitIntegrationTest - Started DirectDebitIntegrationTest in 1.024 seconds (process running for 11.519)
+""2026-02-12 23:00:50 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 9, Type: TRANSFER_OUT, Amount: 100.0
+""2026-02-12 23:00:50 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: TRANSFER_IN, Amount: 100.0
+""2026-02-12 23:00:50 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: account1 to user: account2 
+""2026-02-12 23:00:50 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.BankingAppApplicationTests]: BankingAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:50 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.BankingAppApplicationTests
+""2026-02-12 23:00:50 [INFO] c.b.B.BankingAppApplicationTests - Starting BankingAppApplicationTests using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:50 [INFO] c.b.B.BankingAppApplicationTests - The following 1 profile is active: "test"
+""2026-02-12 23:00:50 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:50 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:51 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:51 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:51 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:51 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Starting...
+""2026-02-12 23:00:51 [INFO] c.z.h.p.HikariPool - HikariPool-3 - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:00:51 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Start completed.
+""2026-02-12 23:00:51 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:00:51 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:51 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:51 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:00:51 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@44e0a1ce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3650cc1a, org.springframework.security.web.context.SecurityContextHolderFilter@8658ba9, org.springframework.security.web.header.HeaderWriterFilter@57d6d605, org.springframework.web.filter.CorsFilter@600c5acf, org.springframework.security.web.authentication.logout.LogoutFilter@5a1def68, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@7d5dc96b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a4f91ad, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7bc81a1f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@a64ca7f, org.springframework.security.web.session.SessionManagementFilter@5a5be2f6, org.springframework.security.web.access.ExceptionTranslationFilter@3d65fbab, org.springframework.security.web.access.intercept.AuthorizationFilter@71b3763f]
+""2026-02-12 23:00:51 [INFO] c.b.B.BankingAppApplicationTests - Started BankingAppApplicationTests in 0.8 seconds (process running for 12.653)
+""2026-02-12 23:00:51 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.JWTServiceTest]: JWTServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:51 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.JWTServiceTest
+""2026-02-12 23:00:51 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountIntegrationTest]: AccountIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:51 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountIntegrationTest
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: WITHDRAW, Amount: 300.0
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 3, Type: DEPOSIT, Amount: 200.0
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 5, Type: TRANSFER_OUT, Amount: 400.0
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 6, Type: TRANSFER_IN, Amount: 400.0
+""2026-02-12 23:00:51 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@3921c432 returned successfuly 
+""2026-02-12 23:00:51 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountRepositoryTests]: AccountRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:51 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountRepositoryTests
+""2026-02-12 23:00:51 [INFO] c.b.B.A.AccountServiceImpl - John is retrieving all accounts ...
+""2026-02-12 23:00:51 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@7ab63914 returned successfuly 
+""2026-02-12 23:00:51 [ERROR] c.b.B.T.TransactionServiceImpl - Failed to save transaction. AccountId: 1, Type: DEPOSIT, Amount: 300, Error: DB error
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Returned 1 transactions history for account ID: 1
+""2026-02-12 23:00:51 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: DEPOSIT, Amount: 300
+""2026-02-12 23:00:51 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanRepositoryTest]: LoanRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:00:51 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanRepositoryTest
+""2026-02-12 23:00:51 [INFO] c.b.B.L.LoanRepositoryTest - Starting LoanRepositoryTest using Java 21 with PID 24826 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:00:51 [INFO] c.b.B.L.LoanRepositoryTest - The following 1 profile is active: "test"
+""2026-02-12 23:00:52 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:00:52 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:00:52 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
+""2026-02-12 23:00:52 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:c5f94a79-24db-4398-a1e5-c58f0668ec3c;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+""2026-02-12 23:00:52 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:00:52 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:00:52 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:00:52 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:00:52 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:52 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5bc0d62d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3be91ea0, org.springframework.security.web.context.SecurityContextHolderFilter@5d06081f, org.springframework.security.web.header.HeaderWriterFilter@2acee481, org.springframework.web.filter.CorsFilter@2e48b229, org.springframework.security.web.authentication.logout.LogoutFilter@e1bfdc3, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@3d452ced, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@75ad0ea9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@281a0671, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2ba06c8, org.springframework.security.web.session.SessionManagementFilter@509cd1d, org.springframework.security.web.access.ExceptionTranslationFilter@12f74e98, org.springframework.security.web.access.intercept.AuthorizationFilter@ae4c757]
+""2026-02-12 23:00:52 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+""2026-02-12 23:00:52 [INFO] c.b.B.L.LoanRepositoryTest - Started LoanRepositoryTest in 0.454 seconds (process running for 13.505)
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown initiated...
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown completed.
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown initiated...
+""2026-02-12 23:00:52 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown completed.
+""2026-02-12 23:00:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:06:49 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest]: DirectDebitIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:06:49 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest
+""2026-02-12 23:06:49 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-12 23:06:49 [INFO] c.b.B.D.DirectDebitIntegrationTest - Starting DirectDebitIntegrationTest using Java 21 with PID 29248 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:06:49 [INFO] c.b.B.D.DirectDebitIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:06:50 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:06:50 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 57 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:06:51 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:06:51 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-12 23:06:51 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:06:51 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:06:51 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-12 23:06:51 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:06:51 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-12 23:06:51 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:06:52 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:06:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:06:53 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:06:53 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@57629340, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5292d417, org.springframework.security.web.context.SecurityContextHolderFilter@27ca8a5a, org.springframework.security.web.header.HeaderWriterFilter@4ff5711b, org.springframework.web.filter.CorsFilter@415c5469, org.springframework.security.web.authentication.logout.LogoutFilter@2f1d2384, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@12faeada, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1bfc6e50, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f74edbf, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5aef36a9, org.springframework.security.web.session.SessionManagementFilter@6e157f48, org.springframework.security.web.access.ExceptionTranslationFilter@76ac3ad0, org.springframework.security.web.access.intercept.AuthorizationFilter@28f5a003]
+""2026-02-12 23:06:54 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:06:54 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:06:54 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:06:54 [INFO] c.b.B.D.DirectDebitIntegrationTest - Started DirectDebitIntegrationTest in 4.304 seconds (process running for 5.563)
+""2026-02-12 23:06:54 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:06:54 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-12 23:06:54 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-12 23:07:01 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest]: DirectDebitRepoTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:01 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest
+""2026-02-12 23:07:02 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-12 23:07:02 [INFO] c.b.B.D.DirectDebitRepoTest - Starting DirectDebitRepoTest using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:02 [INFO] c.b.B.D.DirectDebitRepoTest - No active profile set, falling back to 1 default profile: "default"
+""2026-02-12 23:07:02 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:07:02 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 55 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:07:02 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
+""2026-02-12 23:07:02 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:72cc1f8b-4320-48af-8f6e-17dddb926b95;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+""2026-02-12 23:07:02 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:07:02 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-12 23:07:03 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:07:03 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:07:03 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:07:03 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:04 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@79aa675b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3fe59f84, org.springframework.security.web.context.SecurityContextHolderFilter@5319e4fc, org.springframework.security.web.header.HeaderWriterFilter@4d4337f9, org.springframework.web.filter.CorsFilter@38eafdab, org.springframework.security.web.authentication.logout.LogoutFilter@5432be12, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@19a4cdea, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44b82007, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ae22651, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@373c8f35, org.springframework.security.web.session.SessionManagementFilter@5bb661e0, org.springframework.security.web.access.ExceptionTranslationFilter@420068a, org.springframework.security.web.access.intercept.AuthorizationFilter@287dde94]
+""2026-02-12 23:07:04 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+""2026-02-12 23:07:04 [INFO] c.b.B.D.DirectDebitRepoTest - Started DirectDebitRepoTest in 2.876 seconds (process running for 4.421)
+""2026-02-12 23:07:05 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserIntegrationTest]: UserIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:05 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserIntegrationTest
+""2026-02-12 23:07:05 [INFO] c.b.B.S.UserIntegrationTest - Starting UserIntegrationTest using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:05 [INFO] c.b.B.S.UserIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:07:05 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:07:05 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:07:05 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 0 (http)
+""2026-02-12 23:07:05 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:07:05 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-12 23:07:05 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-12 23:07:05 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-12 23:07:05 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 597 ms
+""2026-02-12 23:07:05 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:07:05 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:07:05 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:07:05 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-12 23:07:05 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn8: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:07:05 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-12 23:07:05 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:07:06 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:07:06 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:06 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:07:06 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7cb040b7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1aa9635c, org.springframework.security.web.context.SecurityContextHolderFilter@63d85fdf, org.springframework.security.web.header.HeaderWriterFilter@72eed4db, org.springframework.web.filter.CorsFilter@418f2af3, org.springframework.security.web.authentication.logout.LogoutFilter@763b279, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@3c73d613, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@68938ccf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6cdfd50a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@71d6e503, org.springframework.security.web.session.SessionManagementFilter@52031e42, org.springframework.security.web.access.ExceptionTranslationFilter@563bbf74, org.springframework.security.web.access.intercept.AuthorizationFilter@66dad66f]
+""2026-02-12 23:07:06 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:07:06 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:07:06 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:07:06 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-auto-1"]
+""2026-02-12 23:07:06 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 61857 (http) with context path ''
+""2026-02-12 23:07:06 [INFO] c.b.B.S.UserIntegrationTest - Started UserIntegrationTest in 1.747 seconds (process running for 6.6)
+""2026-02-12 23:07:07 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:07:07 [INFO] c.b.B.S.AuthenticationService - user: john.doe@mail.com successfully registered
+""2026-02-12 23:07:08 [INFO] c.b.B.S.AuthenticationService - User user@gmail.com logged in successfully
+""2026-02-12 23:07:08 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:07:08 [WARN] c.b.B.S.AuthenticationService - attempt to register with duplicate email: john@mail.com
+""2026-02-12 23:07:08 [INFO] c.b.B.S.AuthenticationService - User john@mail.com logged in successfully
+""2026-02-12 23:07:08 [INFO] c.b.B.S.AuthenticationService - user creation underway...
+""2026-02-12 23:07:08 [INFO] c.b.B.S.AuthenticationService - user: john@mail.com successfully registered
+""2026-02-12 23:07:08 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionRepositoryTest]: TransactionRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:08 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionRepositoryTest
+""2026-02-12 23:07:08 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 2000
+""2026-02-12 23:07:08 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:08 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserControllerTest
+""2026-02-12 23:07:09 [INFO] c.b.B.S.UserControllerTest - Starting UserControllerTest using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:09 [INFO] c.b.B.S.UserControllerTest - No active profile set, falling back to 1 default profile: "default"
+""2026-02-12 23:07:09 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1235abb2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5eef570, org.springframework.security.web.context.SecurityContextHolderFilter@403e8b5, org.springframework.security.web.header.HeaderWriterFilter@6390f89c, org.springframework.web.filter.CorsFilter@641423eb, org.springframework.security.web.authentication.logout.LogoutFilter@7bbf17d, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@52bf434b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@39fd1bfd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5dcd5046, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@42334d07, org.springframework.security.web.session.SessionManagementFilter@5c43a52e, org.springframework.security.web.access.ExceptionTranslationFilter@3a40e068, org.springframework.security.web.access.intercept.AuthorizationFilter@4add8b8d]
+""2026-02-12 23:07:09 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:07:09 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:07:09 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:07:09 [INFO] c.b.B.S.UserControllerTest - Started UserControllerTest in 0.848 seconds (process running for 9.479)
+""2026-02-12 23:07:10 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: user1 to user: user2 
+""2026-02-12 23:07:10 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanIntegrationTest]: LoanIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:10 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanIntegrationTest
+""2026-02-12 23:07:10 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: loanUserAcc
+""2026-02-12 23:07:10 [INFO] c.b.B.L.LoanServiceImpl - returning a loan with id: 5 that belongs to: loanUserAcc
+""2026-02-12 23:07:10 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 100
+""2026-02-12 23:07:10 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: DEPOSIT, Amount: 100
+""2026-02-12 23:07:10 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: LOAN_APPLICATION, Amount: 105.00
+""2026-02-12 23:07:10 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 11, Type: LOAN_REPAYMENT, Amount: 1200
+""2026-02-12 23:07:10 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest]: DirectDebitIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:10 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest
+""2026-02-12 23:07:10 [INFO] c.b.B.D.DirectDebitIntegrationTest - Starting DirectDebitIntegrationTest using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:10 [INFO] c.b.B.D.DirectDebitIntegrationTest - The following 1 profile is active: "test"
+""2026-02-12 23:07:10 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:07:10 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:07:10 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:07:10 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:07:10 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:07:10 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Starting...
+""2026-02-12 23:07:10 [INFO] c.z.h.p.HikariPool - HikariPool-2 - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:07:10 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Start completed.
+""2026-02-12 23:07:10 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:07:11 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:07:11 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:11 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:07:11 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@289e4d14, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2a88249d, org.springframework.security.web.context.SecurityContextHolderFilter@6503934c, org.springframework.security.web.header.HeaderWriterFilter@20520eb6, org.springframework.web.filter.CorsFilter@484424e3, org.springframework.security.web.authentication.logout.LogoutFilter@5ebe1552, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@598c23ad, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1b0b843b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2b9c0e52, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@68a08d18, org.springframework.security.web.session.SessionManagementFilter@5f7a7699, org.springframework.security.web.access.ExceptionTranslationFilter@71f3d3a, org.springframework.security.web.access.intercept.AuthorizationFilter@624cc07]
+""2026-02-12 23:07:11 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+""2026-02-12 23:07:11 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+""2026-02-12 23:07:11 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+""2026-02-12 23:07:11 [INFO] c.b.B.D.DirectDebitIntegrationTest - Started DirectDebitIntegrationTest in 0.946 seconds (process running for 11.31)
+""2026-02-12 23:07:11 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 9, Type: TRANSFER_OUT, Amount: 100.0
+""2026-02-12 23:07:11 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: TRANSFER_IN, Amount: 100.0
+""2026-02-12 23:07:11 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: account1 to user: account2 
+""2026-02-12 23:07:12 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.BankingAppApplicationTests]: BankingAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:12 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.BankingAppApplicationTests
+""2026-02-12 23:07:12 [INFO] c.b.B.BankingAppApplicationTests - Starting BankingAppApplicationTests using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:12 [INFO] c.b.B.BankingAppApplicationTests - The following 1 profile is active: "test"
+""2026-02-12 23:07:12 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:07:12 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:07:12 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:07:12 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:07:12 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:07:12 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Starting...
+""2026-02-12 23:07:12 [INFO] c.z.h.p.HikariPool - HikariPool-3 - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+""2026-02-12 23:07:12 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Start completed.
+""2026-02-12 23:07:12 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:07:12 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:07:12 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:12 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-12 23:07:12 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@428ff618, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@739481d5, org.springframework.security.web.context.SecurityContextHolderFilter@5e5a6217, org.springframework.security.web.header.HeaderWriterFilter@27f904e6, org.springframework.web.filter.CorsFilter@a98a875, org.springframework.security.web.authentication.logout.LogoutFilter@1344ad64, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@33ba19a3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@22400cd1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4d71f24b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4c1b3e17, org.springframework.security.web.session.SessionManagementFilter@4682b468, org.springframework.security.web.access.ExceptionTranslationFilter@2b7af38e, org.springframework.security.web.access.intercept.AuthorizationFilter@74964a63]
+""2026-02-12 23:07:12 [INFO] c.b.B.BankingAppApplicationTests - Started BankingAppApplicationTests in 0.854 seconds (process running for 12.554)
+""2026-02-12 23:07:12 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.JWTServiceTest]: JWTServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:12 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.JWTServiceTest
+""2026-02-12 23:07:12 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountIntegrationTest]: AccountIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:12 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountIntegrationTest
+""2026-02-12 23:07:12 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: WITHDRAW, Amount: 300.0
+""2026-02-12 23:07:13 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 3, Type: DEPOSIT, Amount: 200.0
+""2026-02-12 23:07:13 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 5, Type: TRANSFER_OUT, Amount: 400.0
+""2026-02-12 23:07:13 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 6, Type: TRANSFER_IN, Amount: 400.0
+""2026-02-12 23:07:13 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@ed7d39 returned successfuly 
+""2026-02-12 23:07:13 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountRepositoryTests]: AccountRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:13 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountRepositoryTests
+""2026-02-12 23:07:13 [INFO] c.b.B.A.AccountServiceImpl - John is retrieving all accounts ...
+""2026-02-12 23:07:13 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@3ed5e17c returned successfuly 
+""2026-02-12 23:07:13 [ERROR] c.b.B.T.TransactionServiceImpl - Failed to save transaction. AccountId: 1, Type: DEPOSIT, Amount: 300, Error: DB error
+""2026-02-12 23:07:13 [INFO] c.b.B.T.TransactionServiceImpl - Returned 1 transactions history for account ID: 1
+""2026-02-12 23:07:13 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: DEPOSIT, Amount: 300
+""2026-02-12 23:07:13 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanRepositoryTest]: LoanRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+""2026-02-12 23:07:13 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanRepositoryTest
+""2026-02-12 23:07:13 [INFO] c.b.B.L.LoanRepositoryTest - Starting LoanRepositoryTest using Java 21 with PID 29397 (started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-12 23:07:13 [INFO] c.b.B.L.LoanRepositoryTest - The following 1 profile is active: "test"
+""2026-02-12 23:07:13 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-12 23:07:13 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 12 ms. Found 5 JPA repository interfaces.
+""2026-02-12 23:07:13 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
+""2026-02-12 23:07:13 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:dead2ea6-b1a4-4f1a-a0cf-e127c68a356b;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+""2026-02-12 23:07:13 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-12 23:07:13 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-12 23:07:13 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-12 23:07:13 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-12 23:07:13 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:13 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6c892117, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1ad4e, org.springframework.security.web.context.SecurityContextHolderFilter@4f67dcad, org.springframework.security.web.header.HeaderWriterFilter@3bb35082, org.springframework.web.filter.CorsFilter@2f0c2b93, org.springframework.security.web.authentication.logout.LogoutFilter@166c24f0, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@7ce6c004, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1314b8f8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3282cd58, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ae597b2, org.springframework.security.web.session.SessionManagementFilter@72e4f58f, org.springframework.security.web.access.ExceptionTranslationFilter@38fc8a6b, org.springframework.security.web.access.intercept.AuthorizationFilter@1b35cd25]
+""2026-02-12 23:07:13 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+""2026-02-12 23:07:13 [INFO] c.b.B.L.LoanRepositoryTest - Started LoanRepositoryTest in 0.484 seconds (process running for 13.365)
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown initiated...
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown completed.
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown initiated...
+""2026-02-12 23:07:13 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown completed.
+""2026-02-12 23:07:13 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+"

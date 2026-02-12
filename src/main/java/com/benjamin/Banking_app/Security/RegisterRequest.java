@@ -21,7 +21,7 @@ public class RegisterRequest {
     @Size(max = 20, message = "Last name cannot exceed 20 characters")
     private String lastName;
 
-    @NotBlank(message = "account username cant be empty")
+//    @NotBlank(message = "account username cant be empty")
     @Size(min=8, max = 15, message = "username must be between 8-15 characters long")
     private String accountUsername;
 
@@ -40,5 +40,4 @@ public class RegisterRequest {
     )
     @Size(min=7, max = 15)
     private String password;
-    private Role role;
 }

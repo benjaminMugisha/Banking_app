@@ -1,6 +1,7 @@
 package com.benjamin.Banking_app.Security;
 
 import com.benjamin.Banking_app.Exception.InvalidJwtSignatureException;
+import com.benjamin.Banking_app.Exception.UserDeactivatedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,11 +51,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new InvalidJwtSignatureException("Invalid JWT signature");
         }
 
+
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (!jwtService.isTokenValid(jwt, userDetails)) {
             throw new InvalidJwtSignatureException("Invalid JWT signature");
             }
+
+            //stop the filter chain immediately if user is inactive on every request
+            if (!userDetails.isEnabled()) {
+                throw new UserDeactivatedException("Your account was deactivated. please contact admin");
+            }
+
+            //set authentication
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null,
                             userDetails.getAuthorities()

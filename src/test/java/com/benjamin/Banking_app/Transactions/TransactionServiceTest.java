@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -54,7 +55,7 @@ class TransactionServiceTest {
                 .transactionId(10L)
                 .account(account).type(TransactionType.WITHDRAW)
                 .amount(BigDecimal.valueOf(100))
-                .time(OffsetDateTime.now())
+                .time(LocalDate.now().now())
                 .build();
 
         SecurityContext context = mock(SecurityContext.class);

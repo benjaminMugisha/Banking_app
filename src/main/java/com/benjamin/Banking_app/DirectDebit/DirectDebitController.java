@@ -18,7 +18,7 @@ public class DirectDebitController {
     private final DirectDebitService directDebitService;
 
     //fetch direct debits belonging to current user or admin searches direct debits of a specific account.
-    @GetMapping("get")
+    @GetMapping("/")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public DirectDebitPageResponse getActiveDirectDebits(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -67,4 +67,18 @@ public class DirectDebitController {
         return directDebitService.deleteById(id);
     }
 
+    @GetMapping("/dd")
+    public ResponseEntity<DirectDebitPageResponse> getAllDirectDebits(
+            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return ResponseEntity.ok(directDebitService.getAll(pageNo, pageSize));
+    }
+    @GetMapping("/activedd")
+    public ResponseEntity<DirectDebitPageResponse> getACtiveDirectDebits(
+            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return ResponseEntity.ok(directDebitService.getActiveDds(pageNo, pageSize));
+    }
 }

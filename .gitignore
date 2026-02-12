@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 notes.txt
 Terraform/.tfstate
-logs
+logs/banking-app*
 deploy.txt
 Terraform/env/prod/.terraform/
 Terraform/env/dev/.terraform

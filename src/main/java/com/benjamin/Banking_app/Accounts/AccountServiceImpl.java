@@ -123,11 +123,11 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.MapToAccountDto(savedAccount);
     }
 
-    @Override
-    public void deleteAccount(Long id) {
-        accountRepository.deleteById(id);
-        logger.info("account: {} deleted successfully", id);
-    }
+//    @Override
+//    public void deleteAccount(Long id) {
+//        accountRepository.deleteById(id);
+//        logger.info("account: {} deleted successfully", id);
+//    }
 
     //ensure only currently authenticated user or admin have access.
     public void authorizeAccess(Account account) {

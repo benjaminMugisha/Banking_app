@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -156,8 +157,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
        return DirectDebitMapper.mapToDirectDebitDto(dd);
     }
 
-
-
+    //Direct debits belonging to an account.
     @Override
     @Transactional(readOnly = true)
     public DirectDebitPageResponse getDirectDebits(
@@ -193,6 +193,37 @@ public class DirectDebitServiceImpl implements DirectDebitService {
                 .build();
     }
 
+    @Override
+    public DirectDebitPageResponse getAll(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<DirectDebit> dds = directDebitRepo.findAll(pageable);
+
+        List<DirectDebitDto> content = dds.stream()
+                .map(DirectDebitMapper::mapToDirectDebitDto)
+                .toList();
+        int totalPages = dds.getTotalPages() == 0 ? 1 : dds.getTotalPages();
+        return DirectDebitPageResponse.builder()
+                .content(content).pageNo(dds.getNumber()).pageSize(dds.getSize())
+                .totalElements(dds.getTotalElements()).totalPages(totalPages)
+                .last(dds.isLast())
+                .build();
+    }
+
+    public DirectDebitPageResponse getActiveDds(int pageNo, int pageSize ) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+         Page<DirectDebit> dds = directDebitRepo.findByActiveTrue(pageable);
+
+        List<DirectDebitDto> content = dds.stream()
+                .map(DirectDebitMapper::mapToDirectDebitDto)
+                .toList();
+        int totalPages = dds.getTotalPages() == 0 ? 1 : dds.getTotalPages();
+        return DirectDebitPageResponse.builder()
+                .content(content).pageNo(dds.getNumber()).pageSize(dds.getSize())
+                .totalElements(dds.getTotalElements()).totalPages(totalPages)
+                .last(dds.isLast())
+                .build();
+    }
+
 
     private void setToZero(DirectDebit dd){
         if(dd.getAmount().compareTo(BigDecimal.ZERO) == 0 && dd.isActive()){
@@ -209,4 +240,5 @@ public class DirectDebitServiceImpl implements DirectDebitService {
         directDebitRepo.deleteById(id);
         return "DELETED";
     }
+
 }

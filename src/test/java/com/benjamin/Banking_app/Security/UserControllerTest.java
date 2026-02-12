@@ -64,7 +64,7 @@ class UserControllerTest {
                 "John", "Doe",
                 "johndoe1234",
                 BigDecimal.valueOf(1000), "johndoe@gmail.com",
-                "Password12345", Role.USER);
+                "Password12345");
         AuthenticationResponse response = AuthenticationResponse.builder().
                 token("token123").refreshToken("refresh123")
                 .accountUsername("johnAccount")
@@ -131,86 +131,5 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email").value("john@mail.com"))
                 .andExpect(jsonPath("$.firstname").value("John"))
                 .andExpect(jsonPath("$.lastname").value("Doe"));
-    }
-
-
-    @Test
-    @WithMockUser
-    void getDirectDebits_shouldReturnDirectDebitResponse() throws Exception {
-        DirectDebitPageResponse response = DirectDebitPageResponse.builder()
-                .pageNo(0)
-                .pageSize(10)
-                .totalPages(1)
-                .content(List.of())
-                .build();
-
-        when(directDebitService.getDirectDebits(0, 10, null)).thenReturn(response);
-
-        mockMvc.perform(get("/api/v2/auth/me/direct-debits")
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageNo").value(0))
-                .andExpect(jsonPath("$.pageSize").value(10));
-    }
-
-    @Test
-    void getDirectDebits_shouldReturnForbiddenWithoutUser() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/direct-debits"))
-                .andExpect(status().isForbidden());
-    }
-
-
-    @Test
-    @WithMockUser
-    void getTransactions_shouldReturnTransactionResponse() throws Exception {
-        TransactionResponse response = TransactionResponse.builder()
-                .pageNo(0)
-                .pageSize(10)
-                .content(List.of())
-                .totalPages(1)
-                .build();
-
-        when(transactionService.transactions(0, 10, null)).thenReturn(response);
-
-        mockMvc.perform(get("/api/v2/auth/me/transactions")
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageNo").value(0))
-                .andExpect(jsonPath("$.pageSize").value(10));
-    }
-
-    @Test
-    void getTransactions_shouldReturnForbiddenWithoutUser() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/direct-debits"))
-                .andExpect(status().isForbidden());
-    }
-
-
-    @Test
-    @WithMockUser
-    void getLoans_shouldReturnLoanPageResponse() throws Exception {
-        LoanPageResponse response = LoanPageResponse.builder()
-                .pageNo(0)
-                .pageSize(10)
-                .content(List.of())
-                .totalPages(1)
-                .build();
-
-        when(loanService.getLoansOfAnAccount(0, 10, null)).thenReturn(response);
-
-        mockMvc.perform(get("/api/v2/auth/me/loans")
-                        .param("pageNo", "0")
-                        .param("pageSize", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageNo").value(0))
-                .andExpect(jsonPath("$.pageSize").value(10));
-    }
-
-    @Test
-    void getLoans_shouldReturnForbiddenWithoutUser() throws Exception {
-        mockMvc.perform(get("/api/v2/auth/me/direct-debits"))
-                .andExpect(status().isForbidden());
     }
 }

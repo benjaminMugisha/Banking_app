@@ -59,7 +59,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    @ExceptionHandler(AccessDeniedException.class)
+//    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDenied(org.springframework.security.access.AccessDeniedException ex) {
         return buildResponse("Access denied.", HttpStatus.FORBIDDEN, null);
     }
@@ -72,5 +73,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({io.jsonwebtoken.MalformedJwtException.class, io.jsonwebtoken.SignatureException.class})
     public ResponseEntity<Object> handleInvalidJwt(Exception ex) {
         return buildResponse("Invalid JWT token.", HttpStatus.UNAUTHORIZED, null);
+    }
+    @ExceptionHandler(EmailAlreadyExists.class)
+    public ResponseEntity<Object> handleEmailExists(Exception ex) {
+        return buildResponse("Email already in use.", HttpStatus.CONFLICT, null);
+    }
+    @ExceptionHandler(UserDeactivatedException.class)
+    public ResponseEntity<Object> handleUserDeactivated(UserDeactivatedException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null);
     }
 }

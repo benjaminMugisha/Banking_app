@@ -150,14 +150,14 @@ public class AccountIntegrationTest {
         assertThat(updatedTo.getBalance()).isEqualTo(BigDecimal.valueOf(900.0));
     }
 
-    @Test
-    @WithMockUser(username = "user1@gmail.com", roles = {"ADMIN"})
-    void deleteAccount_ShouldRemoveAccount() throws Exception {
-        mockMvc.perform(delete(ACCOUNT_API + "delete/" + account.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("account successfuly deleted"));
-
-        assertThat(accountRepository.findById(account.getId())).isEmpty();
-    }
+//    @Test
+//    @WithMockUser(username = "user1@gmail.com", roles = {"ADMIN"})
+//    void deleteAccount_ShouldRemoveAccount() throws Exception {
+//        mockMvc.perform(delete(ACCOUNT_API + "delete/" + account.getId())
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.message").value("account successfuly deleted"));
+//
+//        assertThat(accountRepository.findById(account.getId())).isEmpty();
+//    }
 }

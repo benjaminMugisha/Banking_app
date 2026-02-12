@@ -12,13 +12,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +63,7 @@ class LoanIntegrationTest {
                 .lastName("User")
                 .email("testloan@mail.com")
                 .password(passwordEncoder.encode("Password123"))
+                .active(true)
                 .role(Role.USER)
                 .build();
 
@@ -136,3 +140,29 @@ class LoanIntegrationTest {
                 .andExpect(jsonPath("$.content[0].principal").value(1000));
     }
 }
+
+//@Test
+//@WithMockUser
+//void getLoans_shouldReturnLoanPageResponse() throws Exception {
+//    LoanPageResponse response = LoanPageResponse.builder()
+//            .pageNo(0)
+//            .pageSize(10)
+//            .content(List.of())
+//            .totalPages(1)
+//            .build();
+//
+//    when(loanService.getLoansOfAnAccount(0, 10, null)).thenReturn(response);
+//
+//    mockMvc.perform(get("/api/v2/auth/me/loans")
+//                    .param("pageNo", "0")
+//                    .param("pageSize", "10"))
+//            .andExpect(status().isOk())
+//            .andExpect(jsonPath("$.pageNo").value(0))
+//            .andExpect(jsonPath("$.pageSize").value(10));
+//}
+
+//@Test
+//void getLoans_shouldReturnForbiddenWithoutUser() throws Exception {
+//    mockMvc.perform(get("/api/v2/auth/me/direct-debits"))
+//            .andExpect(status().isForbidden());
+//}

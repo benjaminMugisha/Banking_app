@@ -283,4 +283,19 @@ public class LoanServiceImpl implements LoanService {
         return auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
+
+    public LoanPageResponse getAllLoans(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Loan> loans = loanRepository.findAll(pageable);
+
+        List<LoanDto> content = loans.stream()
+                .map(LoanMapper::mapToDto)
+                .toList();
+        int totalPages = loans.getTotalPages() == 0 ? 1 : loans.getTotalPages();
+        return LoanPageResponse.builder()
+                .content(content).pageNo(loans.getNumber())
+                .pageSize(loans.getSize()).totalElements(loans.getTotalElements())
+                .totalPages(totalPages)
+                .build();
+    }
 }

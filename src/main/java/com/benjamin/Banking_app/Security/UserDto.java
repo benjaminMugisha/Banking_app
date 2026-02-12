@@ -18,4 +18,5 @@ public class UserDto {
     private String email;
     private String iban;
     private Role role;
+    private boolean active;
 }

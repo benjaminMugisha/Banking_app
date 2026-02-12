@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
 
+    @Override
     public TransactionResponse transactions(
             int pageNo, int pageSize, String accountUsername) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionResponse;
     }
 
+    @Override
     public void recordTransaction(Account account, TransactionType type,
                                   BigDecimal amount,
                                   Account toAccount) {
@@ -63,7 +66,8 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Transaction.builder()
                 .account(account).type(type)
                 .amount(amount)
-                .time(OffsetDateTime.now())
+//                .time(OffsetDateTime.now())
+                .time(LocalDate.now())
                 .toAccount(toAccount)
                 .build();
 
@@ -77,5 +81,21 @@ public class TransactionServiceImpl implements TransactionService {
                     account.getId(), type, amount, e.getMessage());
             throw e;
         }
+    }
+
+    @Override
+    public TransactionPageResponse getAllTransactions(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Transaction> tx = transactionRepository.findAll(pageable);
+
+        List<TransactionDto> content = tx.stream()
+                .map(TransactionMapper::mapToTransactionDto)
+                .toList();
+        int totalPages = tx.getTotalPages() == 0 ? 1 : tx.getTotalPages();
+        return TransactionPageResponse.builder()
+                .content(content).pageNo(tx.getNumber())
+                .pageSize(tx.getSize()).totalElements(tx.getTotalElements())
+                .totalPages(totalPages)
+                .build();
     }
 }

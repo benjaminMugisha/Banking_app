@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -130,6 +131,33 @@ public class DirectDebitIntegrationTest {
     }
 
     @Test
+    void getDirectDebits_shouldReturnForbiddenWithoutUser() throws Exception {
+        mockMvc.perform(get(""))
+                .andExpect(status().isForbidden());
+    }
+
+//    @Test
+//    @WithMockUser
+//    void getDirectDebits_shouldReturnDirectDebitResponse() throws Exception {
+//        DirectDebitPageResponse response = DirectDebitPageResponse.builder()
+//                .pageNo(0)
+//                .pageSize(10)
+//                .totalPages(1)
+//                .content(List.of())
+//                .build();
+//
+//        when(directDebitService.getDirectDebits(0, 10, null)).thenReturn(response);
+//
+//        mockMvc.perform(get("/api/v2/auth/me/direct-debits")
+//                        .param("pageNo", "0")
+//                        .param("pageSize", "10"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.pageNo").value(0))
+//                .andExpect(jsonPath("$.pageSize").value(10));
+//    }
+
+
+    @Test
     @WithMockUser(username = "user1@gmail.com", roles = {"USER"})
     void getActiveDirectDebits_ShouldReturnPagedDirectDebits() throws Exception {
         DirectDebit dd1 = DirectDebit.builder()
@@ -149,7 +177,7 @@ public class DirectDebitIntegrationTest {
         directDebitRepo.save(dd1);
         directDebitRepo.save(dd2);
 
-        mockMvc.perform(get(DD_API + "get")
+        mockMvc.perform(get(DD_API )
                         .param("pageNo", "0")
                         .param("pageSize", "10")
                         .contentType(MediaType.APPLICATION_JSON))

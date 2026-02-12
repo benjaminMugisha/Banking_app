@@ -1,6 +1,7 @@
 package com.benjamin.Banking_app.Transactions;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TransactionController {
 
-    private final TransactionService transactionService;
+    private final TransactionServiceImpl transactionService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -22,5 +23,13 @@ public class TransactionController {
             @RequestParam(required = false) String account_username) {
 
         return transactionService.transactions(pageNo, pageSize, account_username);
+    }
+
+    @GetMapping("/tx")
+    public ResponseEntity<TransactionPageResponse> getAllTransactions(
+            @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return ResponseEntity.ok(transactionService.getAllTransactions(pageNo,pageSize));
     }
 }

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoanDto {
     private Long loanId;
+    private String loanOwner;
     private BigDecimal principal;
     private BigDecimal remainingBalance;
     private BigDecimal amountToPayEachMonth;
