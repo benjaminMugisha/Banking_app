@@ -69,7 +69,7 @@ public class DirectDebitIntegrationTest {
         user2 = userRepository.save(user2);
 
         account1 = Account.builder()
-                .accountUsername("account1")
+//                .accountUsername("account1")
                 .iban(IbanGenerator.generateIban())
                 .balance(BigDecimal.valueOf(1000.0)).user(user1)
                 .build();
@@ -78,7 +78,7 @@ public class DirectDebitIntegrationTest {
         userRepository.save(user1);
 
         account2 = Account.builder()
-                .accountUsername("account2")
+//                .accountUsername("account2")
                 .iban(IbanGenerator.generateIban())
                 .balance(BigDecimal.valueOf(500.0)).user(user2)
                 .build();

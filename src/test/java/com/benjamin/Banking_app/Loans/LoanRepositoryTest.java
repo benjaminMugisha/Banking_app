@@ -34,7 +34,7 @@ public class LoanRepositoryTest {
     void setUp() {
         account = accountRepository.save(
                 Account.builder()
-                        .accountUsername("john").balance(BigDecimal.valueOf(2000))
+//                        .accountUsername("john").balance(BigDecimal.valueOf(2000))
                         .iban(IbanGenerator.generateIban())
                         .build()
         );

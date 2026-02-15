@@ -68,7 +68,7 @@ class LoanIntegrationTest {
                 .build();
 
         account = Account.builder()
-                .accountUsername("loanUserAcc")
+//                .accountUsername("loanUserAcc")
                 .balance(BigDecimal.valueOf(5000))
                 .iban(IbanGenerator.generateIban())
                 .user(user)

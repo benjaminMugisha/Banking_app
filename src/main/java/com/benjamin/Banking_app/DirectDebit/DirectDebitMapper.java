@@ -8,8 +8,8 @@ public class DirectDebitMapper {
 
         return DirectDebitDto.builder()
                 .id(directDebit.getId())
-                .fromAccountUsername(directDebit.getFromAccount().getAccountUsername())
-                .toAccountUsername(directDebit.getToAccount().getAccountUsername())
+                .fromAccountUsername(directDebit.getFromAccount().getUser().getEmail())
+                .toAccountUsername(directDebit.getToAccount().getUser().getEmail())
                 .amount(directDebit.getAmount())
                 .nextPaymentDate(directDebit.getNextPaymentDate())
                 .active(directDebit.isActive())

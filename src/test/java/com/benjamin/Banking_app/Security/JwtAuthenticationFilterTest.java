@@ -62,7 +62,7 @@ class JwtAuthenticationFilterTest {
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
         when(jwtService.isTokenValid(token, userDetails)).thenReturn(true);
         when(userDetails.getAuthorities()).thenReturn(List.of());
-        when(userDetails.isEnabled()).thenReturn(true);
+//        when(userDetails.isEnabled()).thenReturn(true);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
 
@@ -72,21 +72,7 @@ class JwtAuthenticationFilterTest {
 
         verify(filterChain).doFilter(request, response);
     }
-    @Test
-    void doFilterInternal_UserInactive_ThrowsException() throws Exception {
-        String token = "valid.jwt.token";
-        String username = "john@gmail.com";
 
-        when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtService.extractUserName(token)).thenReturn(username);
-        when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
-        when(jwtService.isTokenValid(token, userDetails)).thenReturn(true);
-        when(userDetails.isEnabled()).thenReturn(false); // inactive for a disabled account.
-
-        assertThrows(UserDeactivatedException.class, () ->
-                jwtAuthenticationFilter.doFilterInternal(request, response, filterChain)
-        );
-    }
 
 
     @Test

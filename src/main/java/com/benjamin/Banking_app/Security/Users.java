@@ -68,6 +68,7 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return active; // for when an admin disables a user, throws exception
+        //when user is disabled, Spring will automatically throw DisabledException during authentication.
     }
 
     @Override

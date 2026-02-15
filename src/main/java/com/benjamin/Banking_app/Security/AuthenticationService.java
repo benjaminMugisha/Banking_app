@@ -49,7 +49,7 @@ public class AuthenticationService {
                 .build();
 
         var account = Account.builder()
-                .accountUsername(request.getAccountUsername())
+//                .accountUsername(request.getAccountUsername())
                 .balance(request.getBalance())
                 .iban(generateUniqueIban())
                 .user(user)
@@ -70,7 +70,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(accessToken)
                 .refreshToken(refreshToken)
-                .accountUsername(account.getAccountUsername())
+                .accountUsername(user.getEmail())
                 .iban(user.getAccount().getIban())
                 .build();
     }
@@ -119,7 +119,7 @@ public class AuthenticationService {
 
             return AuthenticationResponse.builder()
                     .token(accessToken).refreshToken(refreshToken)
-                    .accountUsername(user.getAccount().getAccountUsername())
+//                    .accountUsername(user.getAccount().getAccountUsername())
                     .build();
         } catch (BadCredentialsException e){
             logger.warn("wrong password for email: {}", email);
@@ -145,7 +145,6 @@ public class AuthenticationService {
         user.setActive(false);
         userRepository.save(user);
         return UserMapper.MapToUserDto(user);
-
     }
     public UserDto reactivateUser(Long id) {
         Users user = userRepository.findById(id)
@@ -166,7 +165,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         return UserDto.builder()
-                .accountUsername(user.getAccount().getAccountUsername())
+//                .accountUsername(user.getAccount().getAccountUsername())
                 .accountBalance(user.getAccount().getBalance())
                 .iban(user.getAccount().getIban())
                 .email(user.getEmail())
@@ -207,6 +206,21 @@ public class AuthenticationService {
     public UserPageResponse getAdminUsers(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Users> users = userRepository.findByRole(Role.ADMIN, pageable);
+        List<UserDto> content = users.stream()
+                .map(UserMapper::MapToUserDto)
+                .collect(Collectors.toList());
+        int totalPages = users.getTotalPages() == 0 ? 1 : users.getTotalPages();
+
+        return UserPageResponse.builder()
+                .content(content).pageNo(users.getNumber()).pageSize(users.getSize())
+                .totalElements(users.getTotalElements()).totalPages(totalPages)
+                .last(users.isLast())
+                .build();
+    }
+
+    public UserPageResponse getInactiveUsers(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Users> users = userRepository.findByActiveFalse(pageable);
         List<UserDto> content = users.stream()
                 .map(UserMapper::MapToUserDto)
                 .collect(Collectors.toList());

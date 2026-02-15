@@ -62,7 +62,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
             accountService.transfer(transfer);
 
             logger.info("Direct debit of €{} created and paid from user: {} to user: {} ",
-                    amount, fromAccount.getAccountUsername(), toAccount.getAccountUsername());
+                    amount, fromAccount.getUser().getEmail(), toAccount.getUser().getEmail());
             return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(directDebit)
                     , DDStatusMessage.CREATED_AND_PAID);
         }
@@ -93,8 +93,8 @@ public class DirectDebitServiceImpl implements DirectDebitService {
             );
         }
         logger.info("updating DD from user: {} to user: {} from the old amount of {} the new amount of {}",
-                dd.getFromAccount().getAccountUsername(),
-                dd.getToAccount().getAccountUsername(), dd.getAmount(), amount);
+                dd.getFromAccount().getUser().getEmail(),
+                dd.getToAccount().getUser().getEmail(), dd.getAmount(), amount);
         dd.setAmount(amount);
         dd.setActive(true);
         directDebitRepo.save(dd);
@@ -114,7 +114,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
         for (DirectDebit debit : dueDebits) {
             try {
                 TransferRequest request = new TransferRequest(
-                        debit.getToAccount().getAccountUsername(),
+                        debit.getToAccount().getUser().getEmail(),
                         debit.getAmount()
                 );
 
@@ -161,16 +161,16 @@ public class DirectDebitServiceImpl implements DirectDebitService {
     @Override
     @Transactional(readOnly = true)
     public DirectDebitPageResponse getDirectDebits(
-            int pageNo, int pageSize, String accountUsername) {
+            int pageNo, int pageSize, String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         Account accountToQuery;
 
-        if(isAdmin && accountUsername != null){
+        if(isAdmin && email != null){
             //Admin fetching someone else's direct debits.
-            accountToQuery = accountRepository.findByAccountUsername(accountUsername)
-                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + accountUsername));
+            accountToQuery = accountRepository.findByUserEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + email));
         } else {
             //normal user OR admin fetching their own direct debits.
             accountToQuery = userUtils.getCurrentUserAccount();

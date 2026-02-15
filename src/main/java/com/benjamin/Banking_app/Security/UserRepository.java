@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     boolean existsByAccount_Iban(String iban);
     long count();
     Page<Users> findByRole(Role role, Pageable pageable);
+
+    Page<Users> findByActiveFalse(Pageable pageable);
 }

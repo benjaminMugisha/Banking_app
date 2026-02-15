@@ -31,15 +31,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionResponse transactions(
-            int pageNo, int pageSize, String accountUsername) {
+            int pageNo, int pageSize, String email) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         Account accountToQuery;
 
-        if(isAdmin && accountUsername != null) {
-            accountToQuery = accountRepository.findByAccountUsername(accountUsername)
-                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + accountUsername));
+        if(isAdmin && email != null) {
+            accountToQuery = accountRepository.findByUserEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + email));
         } else {
             accountToQuery = userUtils.getCurrentUserAccount();
         }

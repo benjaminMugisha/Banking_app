@@ -1,12 +1,24 @@
 package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.Account;
+import com.benjamin.Banking_app.Security.Role;
+import com.benjamin.Banking_app.Security.UserRepository;
+import com.benjamin.Banking_app.Security.Users;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoanMapperTest {
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private UserRepository userRepository;
 
     @Test
     void mapToDto_shouldReturnNull_whenLoanIsNull() {
@@ -16,9 +28,17 @@ public class LoanMapperTest {
 
     @Test
     void mapToDto_shouldMapAllFieldsCorrectly() {
+        Users user1 = Users.builder()
+                .firstName("user")
+                .lastName("1")
+                .email("testloan@gmail.com")
+                .active(true)
+                .role(Role.USER)
+                .build();
+
         Account account1 = Account.builder()
                 .id(1L)
-                .accountUsername("Peter")
+                .user(user1)
                 .balance(BigDecimal.valueOf(1000.0))
                 .build();
 
@@ -38,7 +58,7 @@ public class LoanMapperTest {
         assertThat(dto.getLoanId()).isEqualTo(1L);
         assertThat(dto.getPrincipal()).isEqualByComparingTo("5000");
         assertThat(dto.getRemainingBalance()).isEqualByComparingTo("2000");
-        assertThat(dto.getLoanOwner()).isEqualTo("Peter");
+        assertThat(dto.getLoanOwner()).isEqualTo("testloan@gmail.com");
         assertThat(dto.getAmountToPayEachMonth()).isEqualByComparingTo("500");
         assertThat(dto.getStartDate()).isEqualTo(LocalDate.of(2025, 1, 1));
         assertThat(dto.getNextPaymentDate()).isEqualTo(LocalDate.of(2025, 2, 1));

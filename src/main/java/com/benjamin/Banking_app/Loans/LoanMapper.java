@@ -8,7 +8,7 @@ public class LoanMapper {
                 LoanDto.builder()
                 .loanId(loan.getLoanId())
                 .principal(loan.getPrincipal())
-                        .loanOwner(loan.getAccount().getAccountUsername())
+                        .loanOwner(loan.getAccount().getUser().getEmail())
                 .remainingBalance(loan.getRemainingBalance())
                 .amountToPayEachMonth(loan.getAmountToPayEachMonth())
                 .startDate(loan.getStartDate())

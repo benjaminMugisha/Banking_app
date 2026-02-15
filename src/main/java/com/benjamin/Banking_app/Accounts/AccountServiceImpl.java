@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountPageResponse getAllAccounts(int pageNo, int pageSize) {
         Account account = userUtils.getCurrentUserAccount();
-        logger.info(account.getAccountUsername() + " is retrieving all accounts ...");
+        logger.info(account.getUser().getEmail() + " is retrieving all accounts ...");
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
         List<AccountDto> content = accounts.stream().map(AccountMapper::MapToAccountDto)

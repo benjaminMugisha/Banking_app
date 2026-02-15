@@ -71,7 +71,7 @@ class UserIntegrationTest {
                 .build();
 
         account = Account.builder()
-                .accountUsername("userAccount")
+//                .accountUsername("userAccount")
                 .balance(BigDecimal.valueOf(1000))
                 .iban(IbanGenerator.generateIban())
                 .user(user)
@@ -85,7 +85,7 @@ class UserIntegrationTest {
                 .password(passwordEncoder.encode("Password1234"))
                 .role(Role.USER).build();
         Account toAccount = Account.builder()
-                .accountUsername("toAccount")
+//                .accountUsername("toAccount")
                 .balance(BigDecimal.valueOf(500)).user(toAccountUser)
                 .iban(IbanGenerator.generateIban())
                 .build();
@@ -124,7 +124,7 @@ class UserIntegrationTest {
     @Test
     void register_shouldPersistUserAndReturnTokens() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "John", "Doe", "johndoe123",
+                "John", "Doe",
                 BigDecimal.valueOf(1000),
                 "john.doe@mail.com",
                 "Password123"
@@ -135,8 +135,8 @@ class UserIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.refreshToken").exists())
-                .andExpect(jsonPath("$.accountUsername").value("johndoe123"));
+                .andExpect(jsonPath("$.refreshToken").exists());
+//                .andExpect(jsonPath("$.accountUsername").value("johndoe123"));
 
         assertTrue(userRepository.existsByEmail("john.doe@mail.com"));
     }
@@ -150,8 +150,8 @@ class UserIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.refreshToken").exists())
-                .andExpect(jsonPath("$.accountUsername").value("userAccount"));
+                .andExpect(jsonPath("$.refreshToken").exists());
+//                .andExpect(jsonPath("$.accountUsername").value("userAccount"));
     }
 
     @Test
@@ -163,7 +163,7 @@ class UserIntegrationTest {
                 .andExpect(jsonPath("$.email").value("user@gmail.com"))
                 .andExpect(jsonPath("$.firstname").value("User"))
                 .andExpect(jsonPath("$.lastname").value("User"))
-                .andExpect(jsonPath("$.accountUsername").value("userAccount"))
+//                .andExpect(jsonPath("$.accountUsername").value("userAccount"))
                 .andExpect(jsonPath("$.accountBalance").value(1000));
     }
 

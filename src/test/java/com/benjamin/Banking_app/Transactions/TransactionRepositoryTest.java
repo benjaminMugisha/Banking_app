@@ -33,7 +33,8 @@ public class TransactionRepositoryTest {
     @Test
     void findByAccountId_shouldReturnTransactionsForThatAccount() {
         Account account = Account.builder()
-                .accountUsername("john").balance(BigDecimal.valueOf(1000))
+//                .accountUsername("john")
+                .balance(BigDecimal.valueOf(1000))
                 .iban(IbanGenerator.generateIban())
                 .build();
         accountRepository.save(account);
@@ -57,8 +58,8 @@ public class TransactionRepositoryTest {
                 PageRequest.of(0, 10));
 
         assertThat(page.getContent()).hasSize(2);
-        assertThat(page.getContent().get(0).getAccount()
-                .getAccountUsername()).isEqualTo("john");
+//        assertThat(page.getContent().get(0).getAccount()
+//                .getAccountUsername()).isEqualTo("john");
     }
     @Test
     void findByAccountId_shouldReturnEmptyPage_whenNoTransactions() {

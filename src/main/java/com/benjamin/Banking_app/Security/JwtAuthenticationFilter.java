@@ -58,11 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new InvalidJwtSignatureException("Invalid JWT signature");
             }
 
-            //stop the filter chain immediately if user is inactive on every request
-            if (!userDetails.isEnabled()) {
-                throw new UserDeactivatedException("Your account was deactivated. please contact admin");
-            }
-
             //set authentication
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null,

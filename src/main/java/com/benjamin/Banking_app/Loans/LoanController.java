@@ -23,9 +23,9 @@ public class LoanController {
     public LoanPageResponse getLoansByAccountId(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(required = false) String accountUsername
+            @RequestParam(required = false) String email
     ) {
-        return service.getLoansOfAnAccount(pageNo, pageSize, accountUsername);
+        return service.getLoansOfAnAccount(pageNo, pageSize, email);
     }
 
     @GetMapping("/")

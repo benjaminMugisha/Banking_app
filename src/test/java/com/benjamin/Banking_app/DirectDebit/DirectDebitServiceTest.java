@@ -4,6 +4,7 @@ import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
 import com.benjamin.Banking_app.Accounts.TransferRequest;
+import com.benjamin.Banking_app.Security.Role;
 import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,9 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,6 +49,8 @@ public  class DirectDebitServiceTest {
 
     @InjectMocks
     private DirectDebitServiceImpl directDebitService;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     private Account fromAccount;
     private Account toAccount;
@@ -53,16 +58,35 @@ public  class DirectDebitServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        Users fromUser = Users.builder()
+                .firstName("to")
+                .lastName("User")
+                .email("fromuser@gmail.com")
+//                .password(passwordEncoder.encode("Password123"))
+                .active(true)
+                .role(Role.USER)
+                .build();
+        Users toUser = Users.builder()
+                .firstName("from")
+                .lastName("User")
+                .email("touser@gmail.com")
+//                .password(passwordEncoder.encode("Password123"))
+                .active(true)
+                .role(Role.USER)
+                .build();
+
 
         fromAccount = Account.builder()
                 .id(1L)
-                .accountUsername("user1")
+                .user(fromUser)
+//                .accountUsername("user1")
                 .balance(BigDecimal.valueOf(1000.0))
                 .build();
 
         toAccount = Account.builder()
                 .id(2L)
-                .accountUsername("user2")
+                .user(toUser)
+//                .accountUsername("user2")
                 .balance(BigDecimal.valueOf(500.0))
                 .build();
 
@@ -80,8 +104,8 @@ public  class DirectDebitServiceTest {
         DirectDebitDto dto = directDebitService.createDirectDebit(toAccount.getIban(), amount).getDto();
 
         assertThat(dto).isNotNull();
-        assertThat(dto.getFromAccountUsername()).isEqualTo("user1");
-        assertThat(dto.getToAccountUsername()).isEqualTo("user2");
+        assertThat(dto.getFromAccountUsername()).isEqualTo("fromuser@gmail.com");
+        assertThat(dto.getToAccountUsername()).isEqualTo("touser@gmail.com");
         assertThat(dto.getAmount().compareTo(amount)).isZero();
         assertThat(dto.isActive()).isTrue();
 
@@ -91,7 +115,7 @@ public  class DirectDebitServiceTest {
 
     @Test
     void createDirectDebit_ShouldThrowIfToAccountNotFound() {
-        when(accountRepository.findByAccountUsername("missing")).thenReturn(Optional.empty());
+        when(accountRepository.findByUserEmail("missing")).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () ->
                 directDebitService.createDirectDebit("missing", BigDecimal.valueOf(100.0))
@@ -121,7 +145,7 @@ public  class DirectDebitServiceTest {
     @Test
     void cancelDirectDebit_ShouldThrowAccessDeniedForNonOwnerNonAdmin() {
         Users otherUser = new Users();
-        Account otherAccount = Account.builder().id(3L).accountUsername("other").build();
+        Account otherAccount = Account.builder().id(3L).build();
         when(userUtils.getCurrentUserAccount()).thenReturn(otherAccount);
 
         DirectDebit debit = DirectDebit.builder()

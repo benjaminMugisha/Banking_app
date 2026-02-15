@@ -18,9 +18,9 @@ import java.time.OffsetDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDto {
     private Long transactionId;
-    private String accountUsername;
+    private String email;
     private TransactionType type;
     private BigDecimal amount;
     private LocalDate timeStamp;
-    private String toAccountUsername;
+    private String toEmail;
 }

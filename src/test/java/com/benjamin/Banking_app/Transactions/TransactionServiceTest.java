@@ -2,6 +2,8 @@ package com.benjamin.Banking_app.Transactions;
 
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
+import com.benjamin.Banking_app.Security.Role;
+import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,16 +46,31 @@ class TransactionServiceTest {
     void setUp() {
         account = Account.builder()
                 .id(1L)
-                .accountUsername("john")
+//                .accountUsername("john")
                 .balance(BigDecimal.valueOf(1000))
                 .build();
     }
 
     @Test
     void transactions_shouldReturnTransactionsForCurrentUser() {
+
+        Users toUser = Users.builder()
+                .firstName("to")
+                .lastName("User")
+                .email("fromuser@gmail.com")
+//                .password(passwordEncoder.encode("Password123"))
+                .active(true)
+                .role(Role.USER)
+                .build();
+        Account toAccount = Account.builder()
+                .id(1L).user(toUser)
+//                .accountUsername("john")
+                .balance(BigDecimal.valueOf(1000))
+                .build();
         Transaction tx = Transaction.builder()
                 .transactionId(10L)
-                .account(account).type(TransactionType.WITHDRAW)
+                .account(account).toAccount(toAccount)
+                .type(TransactionType.WITHDRAW)
                 .amount(BigDecimal.valueOf(100))
                 .time(LocalDate.now().now())
                 .build();

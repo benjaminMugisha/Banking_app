@@ -1,6 +1,8 @@
 package com.benjamin.Banking_app.Loans;
 
 import com.benjamin.Banking_app.Accounts.*;
+import com.benjamin.Banking_app.Security.Role;
+import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.UserUtils;
 import com.benjamin.Banking_app.Transactions.TransactionService;
 import com.benjamin.Banking_app.Transactions.TransactionType;
@@ -40,9 +42,19 @@ public class LoanServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        Users user = Users.builder()
+                .firstName("Test")
+                .lastName("User")
+                .email("testloan@mail.com")
+//                .password(passwordEncoder.encode("Password123"))
+                .active(true)
+                .role(Role.USER)
+                .build();
+
         account = Account.builder()
                 .id(1L)
-                .accountUsername("john")
+                .user(user)
+//                .accountUsername("john")
                 .balance(BigDecimal.valueOf(1000))
                 .build();
     }
@@ -86,7 +98,9 @@ public class LoanServiceImplTest {
     void repayLoanEarly_shouldFail_ifNotLoanOwner() {
         Loan loan = Loan.builder()
                 .loanId(99L)
-                .account(Account.builder().id(2L).accountUsername("other").balance(BigDecimal.TEN)
+                .account(Account.builder().id(2L)
+//                        .accountUsername("other")
+                        .balance(BigDecimal.TEN)
                         .build())
                 .remainingBalance(BigDecimal.valueOf(100))
                 .build();

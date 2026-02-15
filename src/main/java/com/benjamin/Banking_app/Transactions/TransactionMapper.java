@@ -7,12 +7,12 @@ public class TransactionMapper {
         return transaction == null ? null :
                 TransactionDto.builder()
                         .transactionId(transaction.getTransactionId())
-                        .accountUsername(transaction.getAccount().getAccountUsername())
+//                        .accountUsername(transaction.getAccount().getAccountUsername())
                         .type(transaction.getType())
                         .amount(transaction.getAmount())
                         .timeStamp(transaction.getTime())
-                        .toAccountUsername(transaction.getToAccount() != null
-                        ? transaction.getToAccount().getAccountUsername() : null)
+                        .toEmail(transaction.getToAccount().getUser().getEmail() != null
+                        ? transaction.getToAccount().getUser().getEmail() : null)
                         .build();
     }
 }

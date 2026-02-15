@@ -14,10 +14,11 @@ public class UserMapper {
 //                        user.getEmail(), user.getAccount().getIban(), user.getRole());
         return UserDto.builder()
                 .id(user.getId()).firstname(user.getFirstName())
-                .lastname(user.getLastName()).email(user.getEmail())
+                .lastname(user.getLastName())
+                .email(user.getEmail())
                 .role(user.getRole())
                 .active(user.isActive())
-                .accountUsername(account != null ? account.getAccountUsername() : null)
+//                .accountUsername(account != null ? account.getAccountUsername() : null)
                 .accountBalance(account != null ? account.getBalance() : null)
                 .iban(account != null ? account.getIban() : null)
                 .build();

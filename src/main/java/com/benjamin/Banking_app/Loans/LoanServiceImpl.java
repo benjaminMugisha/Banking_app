@@ -51,7 +51,7 @@ public class LoanServiceImpl implements LoanService {
         LoanEligibilityResult eligibility = checkEligibility(request.getIncome(), yearlyPayment, account.getId());
         if (!eligibility.isAffordable()) {
             logger.warn("Loan denied of account: {} because their DTI is: {}%",
-                    account.getAccountUsername(), eligibility.dti());
+                    account.getUser().getEmail(), eligibility.dti());
 //            return new LoanResponse("Loan denied. your Debt-to-income ratio is too high:" +
 //                    "  (" + eligibility.dti() + "%). maximum is 40% of your yearly income )");
             throw new InsufficientFundsException("Your Debt-to-income ratio of " + eligibility.dti() +
@@ -107,7 +107,7 @@ public class LoanServiceImpl implements LoanService {
 
                 if (account.getBalance().compareTo(loan.getAmountToPayEachMonth()) < 0) {
                         logger.warn("Insufficient funds for loan repayment. Loan ID: {}, Account: {}",
-                                loan.getLoanId(), account.getAccountUsername());
+                                loan.getLoanId(), account.getUser().getEmail());
                         continue;
                 }
                 account.setBalance(account.getBalance().subtract(loan.getAmountToPayEachMonth()));
@@ -131,11 +131,11 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public LoanPageResponse getLoansOfAnAccount(int pageNo, int pageSize, String accountUsername) {
+    public LoanPageResponse getLoansOfAnAccount(int pageNo, int pageSize, String email) {
         Account account;
-        if (isAdmin() && accountUsername != null ) {
-            account = accountRepository.findByAccountUsername(accountUsername)
-                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + accountUsername));
+        if (isAdmin() && email != null ) {
+            account = accountRepository.findByUserEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found: " + email));
         } else {
              account = userUtils.getCurrentUserAccount();
         }
@@ -145,7 +145,7 @@ public class LoanServiceImpl implements LoanService {
         List<LoanDto> loanDtos = loans.getContent().stream()
                 .map(LoanMapper::mapToDto)
                 .collect(Collectors.toList());
-        logger.info("returning all loans of user: {}", account.getAccountUsername());
+        logger.info("returning all loans of user: {}", account.getUser().getEmail());
         int totalPages = loans.getTotalPages() == 0 ? 1 : loans.getTotalPages();
 
         return LoanPageResponse.builder()
@@ -238,7 +238,7 @@ public class LoanServiceImpl implements LoanService {
         loanRepository.save(loan);
         accountRepository.save(account);
 
-        logger.info("user: {}, amount of: {}, loan balance: {}", currentUser.getAccountUsername(),
+        logger.info("user: {}, amount of: {}, loan balance: {}", currentUser.getUser().getEmail(),
                 amount, loan.getRemainingBalance());
 
         return new LoanResponse(
@@ -252,7 +252,7 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("loan with id: " + loanId + " not found"));
         logger.info("returning a loan with id: {} that belongs to: {}"
-                , loanId, loan.getAccount().getAccountUsername());
+                , loanId, loan.getAccount().getUser().getEmail());
 
         return LoanMapper.mapToDto(loan);
     }

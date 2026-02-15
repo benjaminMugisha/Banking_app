@@ -62,7 +62,6 @@ class UserControllerTest {
     void register_shouldReturnAuthResponse() throws Exception {
         RegisterRequest request = new RegisterRequest(
                 "John", "Doe",
-                "johndoe1234",
                 BigDecimal.valueOf(1000), "johndoe@gmail.com",
                 "Password12345");
         AuthenticationResponse response = AuthenticationResponse.builder().
@@ -98,7 +97,7 @@ class UserControllerTest {
     @Test
     void refreshToken_shouldReturnNewToken() throws Exception {
         Users user = Users.builder().id(1L).email("john@mail.com").password("pw").role(Role.USER).build();
-        user.setAccount(Account.builder().accountUsername("johnAccount").balance(BigDecimal.valueOf(500)).user(user).build());
+        user.setAccount(Account.builder().balance(BigDecimal.valueOf(500)).user(user).build());
 
         when(jwtService.extractUserName("refresh123")).thenReturn("john@mail.com");
         when(userRepository.findByEmail("john@mail.com")).thenReturn(java.util.Optional.of(user));
@@ -119,7 +118,7 @@ class UserControllerTest {
                 .email("john@mail.com")
                 .firstname("John")
                 .lastname("Doe")
-                .accountUsername("johnAccount")
+//                .accountUsername("johnAccount")
                 .accountBalance(BigDecimal.valueOf(1000))
                 .build();
 

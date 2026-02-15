@@ -38,8 +38,7 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setUp() {
         registerRequest = new RegisterRequest("John", "Doe",
-                "johnAccount",  BigDecimal.valueOf(1000),
-                "john@mail.com", "Password1234");
+                BigDecimal.valueOf(1000), "john@mail.com", "Password1234");
     }
 
     @Test
@@ -53,7 +52,7 @@ class AuthenticationServiceTest {
 
         assertThat(response.getToken()).isEqualTo("accessToken");
         assertThat(response.getRefreshToken()).isEqualTo("refreshToken");
-        assertThat(response.getAccountUsername()).isEqualTo("johnAccount");
+        assertThat(response.getAccountUsername()).isEqualTo("john@mail.com");
 
         verify(userRepository).save(any(Users.class));
     }
@@ -70,7 +69,7 @@ class AuthenticationServiceTest {
     @Test
     void authenticate_shouldReturnTokens_whenCredentialsValid() {
         Users user = Users.builder().id(1L).email("john@mail.com").password("pw").role(Role.USER).build();
-        user.setAccount(Account.builder().accountUsername("johnAccount")
+        user.setAccount(Account.builder()
                 .balance(BigDecimal.valueOf(500)).user(user).build());
 
         when(userRepository.findByEmail("john@mail.com")).thenReturn(Optional.of(user));

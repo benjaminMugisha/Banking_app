@@ -66,8 +66,9 @@ public class AccountIntegrationTest {
                 .role(Role.USER).build();
         user2 = userRepository.save(user2);
 
-        account = Account.builder().accountUsername("account1").
-                balance(BigDecimal.valueOf(1000.0))
+        account = Account.builder()
+//                .accountUsername("account1").
+                .balance(BigDecimal.valueOf(1000.0))
                 .iban(IbanGenerator.generateIban())
                 .user(user1)
                 .build();
@@ -76,7 +77,7 @@ public class AccountIntegrationTest {
         userRepository.save(user1);
 
         account2 = Account.builder()
-                .accountUsername("account2")
+//                .accountUsername("account2")
                 .balance(BigDecimal.valueOf(500.0))
                 .iban(IbanGenerator.generateIban())
                 .user(user2)
@@ -92,7 +93,7 @@ public class AccountIntegrationTest {
         mockMvc.perform(get(ACCOUNT_API + account.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accountUsername").value("account1"))
+//                .andExpect(jsonPath("$.accountUsername").value("account1"))
                 .andExpect(jsonPath("$.balance").value(1000.0));
     }
 

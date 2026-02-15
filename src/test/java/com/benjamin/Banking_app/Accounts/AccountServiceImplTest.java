@@ -51,7 +51,7 @@ class AccountServiceImplTest {
 
         account = Account.builder()
                 .id(1L)
-                .accountUsername("John")
+//                .accountUsername("John")
                 .balance(BigDecimal.valueOf(1000))
                 .user(user)
                 .build();
@@ -86,7 +86,7 @@ class AccountServiceImplTest {
         AccountDto result = accountService.getAccountById(1L);
 
         assertThat(result.getId()).isEqualTo(accountDto.getId());
-        assertThat(result.getAccountUsername()).isEqualTo("John");
+        assertThat(result.getEmail()).isEqualTo("john@example.com");
 
     }
 
@@ -151,7 +151,9 @@ class AccountServiceImplTest {
     @Test
     void transfer_WithSufficientFunds_ShouldMoveMoney() {
         Account toAccount = Account.builder()
-                .id(2L).accountUsername("Peter").balance(BigDecimal.valueOf(100))
+                .id(2L)
+//                .accountUsername("Peter")
+                .balance(BigDecimal.valueOf(100))
                 .iban(IbanGenerator.generateIban())
                 .build();
 
@@ -184,7 +186,9 @@ class AccountServiceImplTest {
     @Test
     void transfer_WhenInsufficientFunds_ShouldThrowException() {
         Account toAccount = Account.builder()
-                .id(2L).accountUsername("Peter").balance(BigDecimal.ZERO)
+                .id(2L)
+//                .accountUsername("Peter")
+                .balance(BigDecimal.ZERO)
                 .iban(IbanGenerator.generateIban())
                 .build();
 

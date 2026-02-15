@@ -20,9 +20,9 @@ public class TransactionController {
     public TransactionResponse getTransactions(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) String account_username) {
+            @RequestParam(required = false) String email) {
 
-        return transactionService.transactions(pageNo, pageSize, account_username);
+        return transactionService.transactions(pageNo, pageSize, email);
     }
 
     @GetMapping("/tx")

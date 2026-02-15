@@ -1,12 +1,9 @@
 package com.benjamin.Banking_app.Security;
 
-import com.benjamin.Banking_app.DirectDebit.DirectDebitPageResponse;
 import com.benjamin.Banking_app.DirectDebit.DirectDebitServiceImpl;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InvalidJwtSignatureException;
-import com.benjamin.Banking_app.Loans.LoanPageResponse;
 import com.benjamin.Banking_app.Loans.LoanServiceImpl;
-import com.benjamin.Banking_app.Transactions.TransactionResponse;
 import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +57,14 @@ public class UserController {
         return ResponseEntity.ok(service.getUsers(pageNo,pageSize));
     }
 
+    @GetMapping("/inactive")
+    public ResponseEntity<UserPageResponse> getInactiveUsers(
+            @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value="pageSize",defaultValue = "10", required = false) int pageSize
+    )  {
+        return ResponseEntity.ok(service.getInactiveUsers(pageNo,pageSize));
+    }
+
     @GetMapping("/admins")
     public UserPageResponse getAdmins(
             @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
@@ -87,7 +92,7 @@ public class UserController {
         return ResponseEntity.ok(AuthenticationResponse.builder()
                 .token(newAccessToken)
                 .refreshToken(refreshToken)
-                .accountUsername(user.getAccount().getAccountUsername())
+//                .accountUsername(user.getAccount().getAccountUsername())
                 .build());
     }
 
