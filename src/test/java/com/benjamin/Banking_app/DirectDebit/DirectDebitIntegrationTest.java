@@ -177,7 +177,7 @@ public class DirectDebitIntegrationTest {
         directDebitRepo.save(dd1);
         directDebitRepo.save(dd2);
 
-        mockMvc.perform(get(DD_API )
+        mockMvc.perform(get(DD_API + "/all")
                         .param("pageNo", "0")
                         .param("pageSize", "10")
                         .contentType(MediaType.APPLICATION_JSON))

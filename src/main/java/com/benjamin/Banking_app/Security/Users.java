@@ -38,6 +38,7 @@ public class Users implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Account account;
 
+    @Builder.Default //because Builder is false by default
     private boolean active = true;
 
     @Override

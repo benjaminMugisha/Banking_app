@@ -3,6 +3,7 @@ package com.benjamin.Banking_app.Transactions;
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Security.Role;
+import com.benjamin.Banking_app.Security.UserRepository;
 import com.benjamin.Banking_app.Security.Users;
 import com.benjamin.Banking_app.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -27,12 +30,11 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
+    @Mock
+    private AccountRepository accountRepository;
 
     @Mock
     private TransactionRepository transactionRepository;
-
-    @Mock
-    private AccountRepository accountRepository;
 
     @Mock
     private UserUtils userUtils;
@@ -44,11 +46,18 @@ class TransactionServiceTest {
 
     @BeforeEach
     void setUp() {
+
+        Users user = Users.builder()
+                .firstName("to").lastName("User")
+                .email("fromuser@gmail.com")
+//                .password(passwordEncoder.encode("Password123"))
+                .active(true).role(Role.USER)
+                .build();
         account = Account.builder()
                 .id(1L)
-//                .accountUsername("john")
-                .balance(BigDecimal.valueOf(1000))
+                .balance(BigDecimal.valueOf(1000)).user(user)
                 .build();
+        accountRepository.save(account);
     }
 
     @Test
@@ -64,7 +73,6 @@ class TransactionServiceTest {
                 .build();
         Account toAccount = Account.builder()
                 .id(1L).user(toUser)
-//                .accountUsername("john")
                 .balance(BigDecimal.valueOf(1000))
                 .build();
         Transaction tx = Transaction.builder()
@@ -72,7 +80,7 @@ class TransactionServiceTest {
                 .account(account).toAccount(toAccount)
                 .type(TransactionType.WITHDRAW)
                 .amount(BigDecimal.valueOf(100))
-                .time(LocalDate.now().now())
+                .time(LocalDateTime.now())
                 .build();
 
         SecurityContext context = mock(SecurityContext.class);

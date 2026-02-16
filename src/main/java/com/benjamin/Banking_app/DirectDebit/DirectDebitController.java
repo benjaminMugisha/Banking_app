@@ -18,13 +18,13 @@ public class DirectDebitController {
     private final DirectDebitService directDebitService;
 
     //fetch direct debits belonging to current user or admin searches direct debits of a specific account.
-    @GetMapping("/")
+    @GetMapping("/all")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public DirectDebitPageResponse getActiveDirectDebits(
+    public DirectDebitPageResponse getDirectDebits(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) String accountUsername) {
-        return directDebitService.getDirectDebits(pageNo, pageSize, accountUsername);
+            @RequestParam(required = false) String email) {
+        return directDebitService.getDirectDebits(pageNo, pageSize, email);
     }
 
     @GetMapping("/get/{id}")
@@ -46,9 +46,6 @@ public class DirectDebitController {
     @PatchMapping("/cancel/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<DirectDebitResponse> cancelDirectDebit(@PathVariable Long id) {
-//        directDebitService.cancelDirectDebit(id);
-//        return ResponseEntity.ok(
-//                "Direct debit with id: " + id + " has been cancelled");
         return new ResponseEntity<>(
                 directDebitService.cancelDirectDebit(id), HttpStatus.OK);
     }
@@ -62,7 +59,7 @@ public class DirectDebitController {
                 directDebitService.updateDirectDebit(id, amount), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/d/{id}")
+    @DeleteMapping("/{id}")
     public String d(@PathVariable Long id){
         return directDebitService.deleteById(id);
     }

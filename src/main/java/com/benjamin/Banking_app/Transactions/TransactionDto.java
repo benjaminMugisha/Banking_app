@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -21,6 +22,6 @@ public class TransactionDto {
     private String email;
     private TransactionType type;
     private BigDecimal amount;
-    private LocalDate timeStamp;
+    private LocalDateTime timeStamp;
     private String toEmail;
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .account(account).type(type)
                 .amount(amount)
 //                .time(OffsetDateTime.now())
-                .time(LocalDate.now())
+                .time(LocalDateTime.now())
                 .toAccount(toAccount)
                 .build();
 

@@ -4,15 +4,18 @@ public class TransactionMapper {
 
     public static TransactionDto mapToTransactionDto(Transaction transaction) {
 
-        return transaction == null ? null :
-                TransactionDto.builder()
+        if(transaction == null) return null;
+        String toEmail = null;
+        if(transaction.getToAccount() != null &&
+        transaction.getToAccount().getUser() != null) {
+            toEmail = transaction.getToAccount().getUser().getEmail();
+        }
+
+        return TransactionDto.builder()
                         .transactionId(transaction.getTransactionId())
-//                        .accountUsername(transaction.getAccount().getAccountUsername())
-                        .type(transaction.getType())
-                        .amount(transaction.getAmount())
-                        .timeStamp(transaction.getTime())
-                        .toEmail(transaction.getToAccount().getUser().getEmail() != null
-                        ? transaction.getToAccount().getUser().getEmail() : null)
-                        .build();
+                .type(transaction.getType())
+                .email(transaction.getAccount().getUser().getEmail())
+                .amount(transaction.getAmount()).timeStamp(transaction.getTime()).toEmail(toEmail)
+                .build();
     }
 }

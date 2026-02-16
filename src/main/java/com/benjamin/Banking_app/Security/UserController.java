@@ -44,11 +44,13 @@ public class UserController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser() {
         return ResponseEntity.ok(service.getUserInfo());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<UserPageResponse> getUsers(
             @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
@@ -57,6 +59,7 @@ public class UserController {
         return ResponseEntity.ok(service.getUsers(pageNo,pageSize));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/inactive")
     public ResponseEntity<UserPageResponse> getInactiveUsers(
             @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
@@ -65,6 +68,7 @@ public class UserController {
         return ResponseEntity.ok(service.getInactiveUsers(pageNo,pageSize));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admins")
     public UserPageResponse getAdmins(
             @RequestParam(value="pageNo",defaultValue = "0", required = false) int pageNo,
@@ -73,6 +77,7 @@ public class UserController {
         return service.getAdminUsers(pageNo, pageSize);
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> refreshToken(
             @RequestBody Map<String, String> request) {
@@ -96,10 +101,13 @@ public class UserController {
                 .build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/deactivate/{id}")
     public ResponseEntity<UserDto> deactivateUser(@PathVariable Long id) {
         return ResponseEntity.ok(service.deactivateUser(id));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/reactivate/{id}")
     public ResponseEntity<UserDto> reactivateUser(@PathVariable Long id) {
         return ResponseEntity.ok(service.reactivateUser(id));

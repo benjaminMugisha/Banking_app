@@ -87,7 +87,7 @@ public class AuthenticationService {
         var user = Users.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .email(email)
+                .email(email).active(true)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ADMIN)
                 .build();

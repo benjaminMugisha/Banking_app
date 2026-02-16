@@ -113,9 +113,10 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "john@gmail.com", roles = {"USER"})
     void getMe_shouldReturnUserDto() throws Exception {
         UserDto userDto = UserDto.builder()
-                .email("john@mail.com")
+                .email("john@gmail.com")
                 .firstname("John")
                 .lastname("Doe")
 //                .accountUsername("johnAccount")
@@ -127,7 +128,7 @@ class UserControllerTest {
         mockMvc.perform(get("/api/v2/auth/me")
                         .header("Authorization", "Bearer faketoken"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("john@mail.com"))
+                .andExpect(jsonPath("$.email").value("john@gmail.com"))
                 .andExpect(jsonPath("$.firstname").value("John"))
                 .andExpect(jsonPath("$.lastname").value("Doe"));
     }

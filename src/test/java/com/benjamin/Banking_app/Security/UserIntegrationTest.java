@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -105,7 +106,7 @@ class UserIntegrationTest {
                 .account(account)
                 .amount(BigDecimal.valueOf(200))
                 .type(TransactionType.DEPOSIT)
-                .time(LocalDate.now())
+                .time(LocalDateTime.now())
                 .build();
         transactionRepository.save(transaction);
 

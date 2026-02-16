@@ -42,13 +42,13 @@ public class TransactionRepositoryTest {
         Transaction tx1 = Transaction.builder()
                 .account(account).type(TransactionType.DEPOSIT)
                 .amount(BigDecimal.valueOf(200))
-                .time(LocalDate.now())
+                .time(LocalDateTime.now())
                 .build();
 
         Transaction tx2 = Transaction.builder()
                 .account(account).type(TransactionType.WITHDRAW)
                 .amount(BigDecimal.valueOf(50))
-                .time(LocalDate.now())
+                .time(LocalDateTime.now())
                 .build();
 
         transactionRepository.save(tx1);

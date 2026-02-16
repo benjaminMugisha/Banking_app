@@ -25,6 +25,7 @@ public class TransactionController {
         return transactionService.transactions(pageNo, pageSize, email);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/tx")
     public ResponseEntity<TransactionPageResponse> getAllTransactions(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
