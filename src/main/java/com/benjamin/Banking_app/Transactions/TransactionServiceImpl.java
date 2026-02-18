@@ -67,7 +67,6 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Transaction.builder()
                 .account(account).type(type)
                 .amount(amount)
-//                .time(OffsetDateTime.now())
                 .time(LocalDateTime.now())
                 .toAccount(toAccount)
                 .build();

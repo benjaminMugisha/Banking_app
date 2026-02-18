@@ -1,8 +1,16 @@
-FROM eclipse-temurin:21-jdk-jammy
+# Stage 1: Build
+FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+COPY src src
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
 
-COPY target/*.jar app.jar
-
+# Stage 2: Run
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]

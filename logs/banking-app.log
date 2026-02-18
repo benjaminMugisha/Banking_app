@@ -1,191 +1,239 @@
-"2026-02-16 22:43:46 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest]: DirectDebitRepoTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:46 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitRepoTest
-""2026-02-16 22:43:46 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2026-02-16 22:43:46 [INFO] c.b.B.D.DirectDebitRepoTest - Starting DirectDebitRepoTest using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:46 [INFO] c.b.B.D.DirectDebitRepoTest - No active profile set, falling back to 1 default profile: "default"
-""2026-02-16 22:43:47 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:43:47 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 99 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:43:47 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
-""2026-02-16 22:43:47 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:295b77f4-0d71-4679-8793-42fe582e7d82;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-""2026-02-16 22:43:47 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:43:47 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2026-02-16 22:43:47 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:43:48 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:43:49 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:43:49 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:50 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2e7dd504, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e5febe9, org.springframework.security.web.context.SecurityContextHolderFilter@25814d3c, org.springframework.security.web.header.HeaderWriterFilter@7e44f989, org.springframework.web.filter.CorsFilter@5643052d, org.springframework.security.web.authentication.logout.LogoutFilter@5f0a5848, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@2a738d47, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@427128a6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@701c413, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5e0b7f58, org.springframework.security.web.session.SessionManagementFilter@6821d4e1, org.springframework.security.web.access.ExceptionTranslationFilter@123d666b, org.springframework.security.web.access.intercept.AuthorizationFilter@4e3bc13b]
-""2026-02-16 22:43:50 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
-""2026-02-16 22:43:50 [INFO] c.b.B.D.DirectDebitRepoTest - Started DirectDebitRepoTest in 4.293 seconds (process running for 5.637)
-""2026-02-16 22:43:51 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserIntegrationTest]: UserIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:51 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserIntegrationTest
-""2026-02-16 22:43:51 [INFO] c.b.B.S.UserIntegrationTest - Starting UserIntegrationTest using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:51 [INFO] c.b.B.S.UserIntegrationTest - The following 1 profile is active: "test"
-""2026-02-16 22:43:51 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:43:51 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:43:52 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 0 (http)
-""2026-02-16 22:43:52 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-auto-1"]
-""2026-02-16 22:43:52 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2026-02-16 22:43:52 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2026-02-16 22:43:52 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2026-02-16 22:43:52 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 649 ms
-""2026-02-16 22:43:52 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:43:52 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:43:52 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:43:52 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2026-02-16 22:43:52 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection conn8: url=jdbc:h2:mem:testdb user=SA
-""2026-02-16 22:43:52 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2026-02-16 22:43:52 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-""2026-02-16 22:43:52 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:43:52 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:52 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2026-02-16 22:43:52 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@15ddf775, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@476e4bb0, org.springframework.security.web.context.SecurityContextHolderFilter@59e7a6d8, org.springframework.security.web.header.HeaderWriterFilter@56595dcb, org.springframework.web.filter.CorsFilter@337fd6a1, org.springframework.security.web.authentication.logout.LogoutFilter@1d6c69ff, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@7942987, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@757b8c47, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@69503026, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5a558335, org.springframework.security.web.session.SessionManagementFilter@1b717d03, org.springframework.security.web.access.ExceptionTranslationFilter@44bd11a2, org.springframework.security.web.access.intercept.AuthorizationFilter@6b00587b]
-""2026-02-16 22:43:53 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring TestDispatcherServlet ''
-""2026-02-16 22:43:53 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2026-02-16 22:43:53 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2026-02-16 22:43:53 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-auto-1"]
-""2026-02-16 22:43:53 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 49355 (http) with context path ''
-""2026-02-16 22:43:53 [INFO] c.b.B.S.UserIntegrationTest - Started UserIntegrationTest in 1.762 seconds (process running for 8.324)
-""2026-02-16 22:43:53 [INFO] c.b.B.S.AuthenticationService - user creation underway...
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - user: john.doe@mail.com successfully registered
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - User user@gmail.com logged in successfully
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - user creation underway...
-""2026-02-16 22:43:54 [WARN] c.b.B.S.AuthenticationService - attempt to register with duplicate email: john@mail.com
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - User john@mail.com logged in successfully
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - user creation underway...
-""2026-02-16 22:43:54 [INFO] c.b.B.S.AuthenticationService - user: john@mail.com successfully registered
-""2026-02-16 22:43:54 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Transactions.TransactionRepositoryTest]: TransactionRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:54 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Transactions.TransactionRepositoryTest
-""2026-02-16 22:43:55 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 2000
-""2026-02-16 22:43:55 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:55 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.UserControllerTest
-""2026-02-16 22:43:55 [INFO] c.b.B.S.UserControllerTest - Starting UserControllerTest using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:55 [INFO] c.b.B.S.UserControllerTest - No active profile set, falling back to 1 default profile: "default"
-""2026-02-16 22:43:55 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@222e8b99, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@191a8997, org.springframework.security.web.context.SecurityContextHolderFilter@2b0a0c83, org.springframework.security.web.header.HeaderWriterFilter@6bc67b0b, org.springframework.web.filter.CorsFilter@162be846, org.springframework.security.web.authentication.logout.LogoutFilter@1bc14017, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@3fa27158, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@587e0acf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@b82ce8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@503358e6, org.springframework.security.web.session.SessionManagementFilter@3c7b9ee3, org.springframework.security.web.access.ExceptionTranslationFilter@65e2cca9, org.springframework.security.web.access.intercept.AuthorizationFilter@337eb419]
-""2026-02-16 22:43:55 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2026-02-16 22:43:55 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2026-02-16 22:43:55 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-""2026-02-16 22:43:56 [INFO] c.b.B.S.UserControllerTest - Started UserControllerTest in 0.797 seconds (process running for 11.156)
-""2026-02-16 22:43:56 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: fromuser@gmail.com to user: touser@gmail.com 
-""2026-02-16 22:43:56 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanIntegrationTest]: LoanIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:56 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanIntegrationTest
-""2026-02-16 22:43:56 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: testloan@mail.com
-""2026-02-16 22:43:56 [INFO] c.b.B.L.LoanServiceImpl - returning a loan with id: 5 that belongs to: testloan@mail.com
-""2026-02-16 22:43:56 [INFO] c.b.B.L.LoanServiceImpl - Loan application initiated for principal: 100
-""2026-02-16 22:43:56 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: DEPOSIT, Amount: 100
-""2026-02-16 22:43:56 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: LOAN_APPLICATION, Amount: 105.00
-""2026-02-16 22:43:56 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 11, Type: LOAN_REPAYMENT, Amount: 1200
-""2026-02-16 22:43:56 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest]: DirectDebitIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:56 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.DirectDebit.DirectDebitIntegrationTest
-""2026-02-16 22:43:56 [INFO] c.b.B.D.DirectDebitIntegrationTest - Starting DirectDebitIntegrationTest using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:56 [INFO] c.b.B.D.DirectDebitIntegrationTest - The following 1 profile is active: "test"
-""2026-02-16 22:43:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:43:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:43:57 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:43:57 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:43:57 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:43:57 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Starting...
-""2026-02-16 22:43:57 [INFO] c.z.h.p.HikariPool - HikariPool-2 - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
-""2026-02-16 22:43:57 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Start completed.
-""2026-02-16 22:43:57 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-""2026-02-16 22:43:57 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:43:57 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:57 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2026-02-16 22:43:57 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@514acca7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4df62e64, org.springframework.security.web.context.SecurityContextHolderFilter@6b3d3a9a, org.springframework.security.web.header.HeaderWriterFilter@712626aa, org.springframework.web.filter.CorsFilter@509520a5, org.springframework.security.web.authentication.logout.LogoutFilter@50dffff3, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@6bd02ccb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4b95a93b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@b46d595, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2259490, org.springframework.security.web.session.SessionManagementFilter@4d228131, org.springframework.security.web.access.ExceptionTranslationFilter@50be06c0, org.springframework.security.web.access.intercept.AuthorizationFilter@7ec594eb]
-""2026-02-16 22:43:57 [INFO] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-""2026-02-16 22:43:57 [INFO] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-""2026-02-16 22:43:57 [INFO] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-""2026-02-16 22:43:57 [INFO] c.b.B.D.DirectDebitIntegrationTest - Started DirectDebitIntegrationTest in 1.011 seconds (process running for 13.08)
-""2026-02-16 22:43:58 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 9, Type: TRANSFER_OUT, Amount: 100.0
-""2026-02-16 22:43:58 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 10, Type: TRANSFER_IN, Amount: 100.0
-""2026-02-16 22:43:58 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €100.0 created and paid from user: user1@gmail.com to user: user2@gmail.com 
-""2026-02-16 22:43:58 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.BankingAppApplicationTests]: BankingAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:58 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.BankingAppApplicationTests
-""2026-02-16 22:43:58 [INFO] c.b.B.BankingAppApplicationTests - Starting BankingAppApplicationTests using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:58 [INFO] c.b.B.BankingAppApplicationTests - The following 1 profile is active: "test"
-""2026-02-16 22:43:58 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:43:58 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:43:58 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:43:58 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:43:58 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:43:58 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Starting...
-""2026-02-16 22:43:58 [INFO] c.z.h.p.HikariPool - HikariPool-3 - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
-""2026-02-16 22:43:58 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Start completed.
-""2026-02-16 22:43:58 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-""2026-02-16 22:43:58 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:43:58 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:58 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2026-02-16 22:43:58 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@13bf5c4f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@f37e5bb, org.springframework.security.web.context.SecurityContextHolderFilter@132ea193, org.springframework.security.web.header.HeaderWriterFilter@6269b9cf, org.springframework.web.filter.CorsFilter@20b2447e, org.springframework.security.web.authentication.logout.LogoutFilter@39471400, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@6b1a0a75, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2c4ce5a9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@344862e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7fdcccd5, org.springframework.security.web.session.SessionManagementFilter@65973195, org.springframework.security.web.access.ExceptionTranslationFilter@6873b44, org.springframework.security.web.access.intercept.AuthorizationFilter@12d9bd00]
-""2026-02-16 22:43:59 [INFO] c.b.B.BankingAppApplicationTests - Started BankingAppApplicationTests in 0.838 seconds (process running for 14.216)
-""2026-02-16 22:43:59 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Security.JWTServiceTest]: JWTServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:59 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Security.JWTServiceTest
-""2026-02-16 22:43:59 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountIntegrationTest]: AccountIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:59 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountIntegrationTest
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: WITHDRAW, Amount: 300.0
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 3, Type: DEPOSIT, Amount: 200.0
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 5, Type: TRANSFER_OUT, Amount: 400.0
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 6, Type: TRANSFER_IN, Amount: 400.0
-""2026-02-16 22:43:59 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@3997dd6a returned successfuly 
-""2026-02-16 22:43:59 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Accounts.AccountRepositoryTests]: AccountRepositoryTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:59 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Accounts.AccountRepositoryTests
-""2026-02-16 22:43:59 [INFO] c.b.B.A.AccountServiceImpl - john@example.com is retrieving all accounts ...
-""2026-02-16 22:43:59 [INFO] c.b.B.A.AccountServiceImpl -  searched account: com.benjamin.Banking_app.Accounts.Account@3729c576 returned successfuly 
-""2026-02-16 22:43:59 [ERROR] c.b.B.T.TransactionServiceImpl - Failed to save transaction. AccountId: 1, Type: DEPOSIT, Amount: 300, Error: DB error
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Returned 1 transactions history for account ID: 1
-""2026-02-16 22:43:59 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 1, Type: DEPOSIT, Amount: 300
-""2026-02-16 22:43:59 [INFO] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.benjamin.Banking_app.Loans.LoanRepositoryTest]: LoanRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-""2026-02-16 22:43:59 [INFO] o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.benjamin.Banking_app.App for test class com.benjamin.Banking_app.Loans.LoanRepositoryTest
-""2026-02-16 22:43:59 [INFO] c.b.B.L.LoanRepositoryTest - Starting LoanRepositoryTest using Java 21 with PID 3249 (started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:43:59 [INFO] c.b.B.L.LoanRepositoryTest - The following 1 profile is active: "test"
-""2026-02-16 22:43:59 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:43:59 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:43:59 [INFO] o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
-""2026-02-16 22:43:59 [INFO] o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:c4bdcb85-e16d-4493-9827-1c9b30ca73d9;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-""2026-02-16 22:43:59 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:43:59 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:43:59 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:43:59 [WARN] o.h.o.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-""2026-02-16 22:43:59 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:59 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2c4386a6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2b27e7c6, org.springframework.security.web.context.SecurityContextHolderFilter@7e5f596f, org.springframework.security.web.header.HeaderWriterFilter@4325a2e6, org.springframework.web.filter.CorsFilter@56c70faf, org.springframework.security.web.authentication.logout.LogoutFilter@26cba24d, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@6e4a2790, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4530e4a7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2b6c5c75, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@d03ed5d, org.springframework.security.web.session.SessionManagementFilter@731f4424, org.springframework.security.web.access.ExceptionTranslationFilter@1a74e65, org.springframework.security.web.access.intercept.AuthorizationFilter@57618fcd]
-""2026-02-16 22:43:59 [INFO] o.s.s.c.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
-""2026-02-16 22:43:59 [INFO] c.b.B.L.LoanRepositoryTest - Started LoanRepositoryTest in 0.413 seconds (process running for 15.0)
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown initiated...
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-2 - Shutdown completed.
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown initiated...
-""2026-02-16 22:43:59 [INFO] c.z.h.HikariDataSource - HikariPool-3 - Shutdown completed.
-""2026-02-16 22:43:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:44:17 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
-""2026-02-16 22:44:17 [INFO] c.b.B.App - Starting App using Java 21 with PID 3348 (/Users/ben/Desktop/b2/Banking_app/target/classes started by ben in /Users/ben/Desktop/b2/Banking_app)
-""2026-02-16 22:44:17 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
-""2026-02-16 22:44:18 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2026-02-16 22:44:18 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 61 ms. Found 5 JPA repository interfaces.
-""2026-02-16 22:44:19 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
-""2026-02-16 22:44:19 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-""2026-02-16 22:44:19 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
-""2026-02-16 22:44:19 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-""2026-02-16 22:44:19 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
-""2026-02-16 22:44:19 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1921 ms
-""2026-02-16 22:44:19 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-""2026-02-16 22:44:19 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-""2026-02-16 22:44:19 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-""2026-02-16 22:44:19 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-""2026-02-16 22:44:19 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
-""2026-02-16 22:44:19 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7254838
-""2026-02-16 22:44:19 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
-""2026-02-16 22:44:22 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-""2026-02-16 22:44:22 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:44:24 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2026-02-16 22:44:24 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@374712f8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@33aa4326, org.springframework.security.web.context.SecurityContextHolderFilter@3a3375d8, org.springframework.security.web.header.HeaderWriterFilter@1ae37be2, org.springframework.web.filter.CorsFilter@125ed27, org.springframework.security.web.authentication.logout.LogoutFilter@647d3279, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@3f465ae, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@38e100ab, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10b36d8a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2dedde74, org.springframework.security.web.session.SessionManagementFilter@63075ad1, org.springframework.security.web.access.ExceptionTranslationFilter@6a25c9ad, org.springframework.security.web.access.intercept.AuthorizationFilter@4b19ee18]
-""2026-02-16 22:44:25 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-""2026-02-16 22:44:25 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
-""2026-02-16 22:44:25 [INFO] c.b.B.App - Started App in 8.108 seconds (process running for 8.831)
-""2026-02-16 22:45:24 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-""2026-02-16 22:45:24 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
-""2026-02-16 22:45:24 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+"2026-02-19 15:04:56 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-19 15:04:56 [INFO] c.b.B.App - Starting App using Java 21 with PID 39111 (/Users/ben/Desktop/b2/Banking_app/target/classes started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-19 15:04:56 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2026-02-19 15:04:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-19 15:04:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 49 ms. Found 5 JPA repository interfaces.
+""2026-02-19 15:04:57 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2026-02-19 15:04:58 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:04:58 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-19 15:04:58 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-19 15:04:58 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-19 15:04:58 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1409 ms
+""2026-02-19 15:04:58 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-19 15:04:58 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-19 15:04:58 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-19 15:04:58 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-19 15:04:58 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-19 15:04:58 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@14485747
+""2026-02-19 15:04:58 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-19 15:04:59 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-19 15:04:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:05:00 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-19 15:05:00 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@101eb529, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6a9b8f33, org.springframework.security.web.context.SecurityContextHolderFilter@5c3ad125, org.springframework.security.web.header.HeaderWriterFilter@4d408746, org.springframework.web.filter.CorsFilter@5ac8916d, org.springframework.security.web.authentication.logout.LogoutFilter@34e1c23d, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@1e12fdcf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1deca369, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2d0ce8a1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7375ebe7, org.springframework.security.web.session.SessionManagementFilter@1c4a8c93, org.springframework.security.web.access.ExceptionTranslationFilter@773ad729, org.springframework.security.web.access.intercept.AuthorizationFilter@77c1a7ce]
+""2026-02-19 15:05:00 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:05:00 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2026-02-19 15:05:00 [INFO] c.b.B.App - Started App in 4.619 seconds (process running for 5.522)
+""2026-02-19 15:05:25 [INFO] o.a.c.h.Http11Processor - Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+"java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x000xf70x010x000x000xf30x030x0370xbfI0x0bl0x7f0x00i0x00P0xb70x0f0x970xf90x8c0x97Z0xed0xa10x930xda`z0x0e0xce0x15~]0x1e0xa40xb30x0e ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+"2026-02-19 15:07:27 [INFO] o.a.c.h.Http11Processor - Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+"java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x000xf70x010x000x000xf30x030x030x000xb6h0x100x0e0xed'0x9f;0xff0xd10x810x920xcbS0xa60xc50xe10xdb0x870xaf^0xc10xac0x830x840x9e0x970x8b4k0x08 ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+"2026-02-19 15:08:45 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2026-02-19 15:08:45 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2026-02-19 15:08:45 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 4 ms
+""2026-02-19 15:08:45 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:13:09 [ERROR] o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.benjamin.Banking_app.Accounts.Account.getBalance()" because the return value of "com.benjamin.Banking_app.Security.Users.getAccount()" is null] with root cause
+"java.lang.NullPointerException: Cannot invoke "com.benjamin.Banking_app.Accounts.Account.getBalance()" because the return value of "com.benjamin.Banking_app.Security.Users.getAccount()" is null
+	at com.benjamin.Banking_app.Security.AuthenticationService.getUserInfo(AuthenticationService.java:169)
+	at com.benjamin.Banking_app.Security.UserController.getUser(UserController.java:50)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.security.authorization.method.AuthorizationManagerBeforeMethodInterceptor.invoke(AuthorizationManagerBeforeMethodInterceptor.java:198)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.benjamin.Banking_app.Security.UserController$$SpringCGLIB$$0.getUser(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.benjamin.Banking_app.Security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:70)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:175)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:150)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+"2026-02-19 15:13:22 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:13:43 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:13:43 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-19 15:13:43 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-19 15:13:46 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-19 15:13:46 [INFO] c.b.B.App - Starting App using Java 21 with PID 42817 (/Users/ben/Desktop/b2/Banking_app/target/classes started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-19 15:13:46 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2026-02-19 15:13:47 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-19 15:13:47 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 46 ms. Found 5 JPA repository interfaces.
+""2026-02-19 15:13:47 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2026-02-19 15:13:47 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:13:47 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-19 15:13:47 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-19 15:13:47 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-19 15:13:47 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1280 ms
+""2026-02-19 15:13:47 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-19 15:13:47 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-19 15:13:48 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-19 15:13:48 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-19 15:13:48 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-19 15:13:48 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@30af23fd
+""2026-02-19 15:13:48 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-19 15:13:49 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-19 15:13:49 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:13:50 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-19 15:13:50 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6421e9e7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@552b7481, org.springframework.security.web.context.SecurityContextHolderFilter@94f79a7, org.springframework.security.web.header.HeaderWriterFilter@665574fb, org.springframework.web.filter.CorsFilter@475b796d, org.springframework.security.web.authentication.logout.LogoutFilter@602d5417, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@7568134c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4b9a1be5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@54b313d6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@24244ea, org.springframework.security.web.session.SessionManagementFilter@6d7005e2, org.springframework.security.web.access.ExceptionTranslationFilter@1ec96512, org.springframework.security.web.access.intercept.AuthorizationFilter@7ae97a58]
+""2026-02-19 15:13:50 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:13:50 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2026-02-19 15:13:50 [INFO] c.b.B.App - Started App in 4.476 seconds (process running for 5.001)
+""2026-02-19 15:13:53 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:13:53 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-19 15:13:53 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+""2026-02-19 15:13:56 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-19 15:13:56 [INFO] c.b.B.App - Starting App using Java 21 with PID 42909 (/Users/ben/Desktop/b2/Banking_app/target/classes started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-19 15:13:56 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2026-02-19 15:13:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-19 15:13:57 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 44 ms. Found 5 JPA repository interfaces.
+""2026-02-19 15:13:58 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2026-02-19 15:13:58 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:13:58 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-19 15:13:58 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-19 15:13:58 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-19 15:13:58 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1228 ms
+""2026-02-19 15:13:58 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-19 15:13:58 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-19 15:13:58 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-19 15:13:58 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-19 15:13:58 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-19 15:13:58 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3562e7c7
+""2026-02-19 15:13:58 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-19 15:13:59 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-19 15:13:59 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:14:00 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-19 15:14:00 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@668ea404, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6c89c92e, org.springframework.security.web.context.SecurityContextHolderFilter@3eb7ff78, org.springframework.security.web.header.HeaderWriterFilter@38e100ab, org.springframework.web.filter.CorsFilter@62109320, org.springframework.security.web.authentication.logout.LogoutFilter@374712f8, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@24f77077, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50ad5625, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d921267, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@34d644b5, org.springframework.security.web.session.SessionManagementFilter@1ec96512, org.springframework.security.web.access.ExceptionTranslationFilter@3a3375d8, org.springframework.security.web.access.intercept.AuthorizationFilter@602d5417]
+""2026-02-19 15:14:00 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2026-02-19 15:14:00 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2026-02-19 15:14:00 [INFO] c.b.B.App - Started App in 4.286 seconds (process running for 4.825)
+""2026-02-19 15:14:08 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2026-02-19 15:14:08 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2026-02-19 15:14:08 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 3 ms
+""2026-02-19 15:14:08 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:14:56 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:15:09 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:15:34 [WARN] c.b.B.S.AuthenticationService - wrong password for email: adminemail@mybank.com
+""2026-02-19 15:19:57 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-19 15:19:57 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2026-02-19 15:19:57 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
 "

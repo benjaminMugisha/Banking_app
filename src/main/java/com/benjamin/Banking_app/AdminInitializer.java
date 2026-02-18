@@ -6,7 +6,6 @@ import com.benjamin.Banking_app.Security.Users;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +16,6 @@ public class AdminInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-//    @Value"${app.bootstrap.admin.email}")
-//    private String adminEmail;
-//
-//    @Value("${app.bootstrap.admin.password}")
-//    private String adminPassword;
-
     @PostConstruct
     public void createInitialAdmin() {
 
@@ -32,7 +25,7 @@ public class AdminInitializer {
 
         Users admin = Users.builder()
                 .email("adminemail@mybank.com")
-                .password(passwordEncoder.encode("admin123"))
+                .password(passwordEncoder.encode("Admin12345"))
                 .firstName("System")
                 .lastName("Admin")
                 .role(Role.ADMIN)

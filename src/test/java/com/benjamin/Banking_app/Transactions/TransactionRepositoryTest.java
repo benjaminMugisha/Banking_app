@@ -33,7 +33,6 @@ public class TransactionRepositoryTest {
     @Test
     void findByAccountId_shouldReturnTransactionsForThatAccount() {
         Account account = Account.builder()
-//                .accountUsername("john")
                 .balance(BigDecimal.valueOf(1000))
                 .iban(IbanGenerator.generateIban())
                 .build();
