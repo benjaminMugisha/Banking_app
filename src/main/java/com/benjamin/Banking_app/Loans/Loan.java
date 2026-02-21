@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,7 +31,7 @@ public class Loan {
 
     private BigDecimal remainingBalance;
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     private BigDecimal principal;
     private BigDecimal amountToPayEachMonth;

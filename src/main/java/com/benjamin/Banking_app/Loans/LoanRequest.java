@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class LoanRequest {
 
     @NotNull
-    @DecimalMin(value = "100", message = "income must be above €100 to apply for a loan")
+    @DecimalMin(value = "10", message = "income must be above €10 to apply for a loan")
     BigDecimal income;
 
     @NotNull

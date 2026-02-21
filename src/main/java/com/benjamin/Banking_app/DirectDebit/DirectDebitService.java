@@ -8,9 +8,6 @@ interface DirectDebitService {
     DirectDebitResponse cancelDirectDebit(Long id);
     DirectDebitDto getById(long id);
     DirectDebitResponse updateDirectDebit(Long directDebitId, BigDecimal amount);
-
-    String deleteById(Long id);
-
     DirectDebitPageResponse getAll(int pageNo, int pageSize);
     DirectDebitPageResponse getActiveDds(int pageNo, int pageSize);
 }

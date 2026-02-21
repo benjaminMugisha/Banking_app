@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,9 +27,12 @@ public class Transaction {
     @JsonIgnore
     private Account account;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionType type;
     private BigDecimal amount;
     private LocalDateTime time;
+    private BigDecimal balance;
 
     @ManyToOne
     @JoinColumn(name = "to_account_id", nullable = true)

@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,6 @@ public class AuthenticationService {
                 .build();
 
         var account = Account.builder()
-//                .accountUsername(request.getAccountUsername())
                 .balance(request.getBalance())
                 .iban(generateUniqueIban())
                 .user(user)
@@ -92,9 +92,17 @@ public class AuthenticationService {
                 .role(Role.ADMIN)
                 .build();
 
+        var account = Account.builder()
+                .balance(request.getBalance())
+                .iban(generateUniqueIban())
+                .user(user)
+                .build();
+
+        user.setAccount(account);
+
         try {
             userRepository.save(user);
-            logger.info("admin: {} successfully registered", request.getEmail());
+            logger.info("admin: '{}' successfully registered", request.getEmail());
         } catch (Exception e) {
             logger.error("failed to register admin: {}, error: {}", request.getEmail(), e.getMessage());
             throw new BadRequestException("registration failed.");
@@ -119,7 +127,6 @@ public class AuthenticationService {
 
             return AuthenticationResponse.builder()
                     .token(accessToken).refreshToken(refreshToken)
-//                    .accountUsername(user.getAccount().getAccountUsername())
                     .build();
         } catch (BadCredentialsException e){
             logger.warn("wrong password for email: {}", email);
@@ -163,10 +170,18 @@ public class AuthenticationService {
 
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Account account = user.getAccount();
+        BigDecimal balance = null;
+        Long accountId = null;
+
+        if(account != null) {
+            balance = account.getBalance();
+            accountId = account.getId();
+        }
 
         return UserDto.builder()
-//                .accountUsername(user.getAccount().getAccountUsername())
-                .accountBalance(user.getAccount().getBalance())
+                .id(accountId)
+                .accountBalance(balance)
                 .iban(user.getAccount().getIban())
                 .email(user.getEmail())
                 .firstname(user.getFirstName())

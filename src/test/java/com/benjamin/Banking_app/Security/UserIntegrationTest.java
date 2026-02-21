@@ -115,7 +115,7 @@ class UserIntegrationTest {
                 .principal(BigDecimal.valueOf(500))
                 .remainingBalance(BigDecimal.valueOf(300))
                 .amountToPayEachMonth(BigDecimal.valueOf(100))
-                .startDate(LocalDate.now().minusMonths(1))
+                .startDate(LocalDateTime.now().minusMonths(1))
                 .nextPaymentDate(LocalDate.now().plusMonths(1))
                 .active(true)
                 .build();

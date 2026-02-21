@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request -> request
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/v2/loan/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v2/**" , "/swagger-ui/**","/v3/api-docs/**").permitAll()
+//                        .requestMatchers("/api/v2/auth/")
+                        .requestMatchers("/api/v2/auth/**" , "/swagger-ui/**","/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                          )
                 )
@@ -50,9 +50,9 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://cash-1zdo-git-main-benjamin-mugishas-projects.vercel.app",
-                "https://cash-eight-rust.vercel.app/",
-                "https://cash-1zdo.vercel.app"
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://cash-eight-ben.vercel.app",
+                "http://localhost:5173"
                 ));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));

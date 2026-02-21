@@ -46,7 +46,6 @@ public class LoanServiceImplTest {
                 .firstName("Test")
                 .lastName("User")
                 .email("testloan@mail.com")
-//                .password(passwordEncoder.encode("Password123"))
                 .active(true)
                 .role(Role.USER)
                 .build();
@@ -54,7 +53,6 @@ public class LoanServiceImplTest {
         account = Account.builder()
                 .id(1L)
                 .user(user)
-//                .accountUsername("john")
                 .balance(BigDecimal.valueOf(1000))
                 .build();
     }
@@ -76,7 +74,7 @@ public class LoanServiceImplTest {
         verify(loanRepository).save(any(Loan.class));
         verify(accountService).deposit(eq(request.getPrincipal()));
         verify(transactionService).recordTransaction(eq(account),
-                eq(TransactionType.LOAN_APPLICATION), any(), isNull());
+                eq(TransactionType.LOAN_APPLICATION), any(), isNull(), any(BigDecimal.class));
     }
 
 //    @Test
@@ -111,7 +109,7 @@ public class LoanServiceImplTest {
         LoanResponse response = loanService.repayLoanEarly(99L);
 
         assertThat(response.getMessage().contains("You can not repay someone else's loan."));
-        verify(transactionService, never()).recordTransaction(any(), any(), any(), any());
+        verify(transactionService, never()).recordTransaction(any(), any(), any(), any(), any(BigDecimal.class));
     }
 
     @Test
@@ -131,8 +129,9 @@ public class LoanServiceImplTest {
         assertThat(loan.isActive()).isFalse();
         assertThat(loan.getRemainingBalance()).isZero();
 
-        verify(transactionService).recordTransaction(eq(account),
-                eq(TransactionType.LOAN_REPAYMENT), eq(BigDecimal.valueOf(500)), isNull());
+//        verify(transactionService).recordTransaction(eq(account),
+//                eq(TransactionType.LOAN_REPAYMENT), eq(BigDecimal.valueOf(500)), isNull(), any(BigDecimal.class));
+        //        recordLoanTransaction(account, loanBalance, TransactionType.FULL_LOAN_REPAYMENT, account.getBalance());
         verify(accountRepository).save(account);
         verify(loanRepository).save(loan);
     }
@@ -151,7 +150,7 @@ public class LoanServiceImplTest {
         LoanResponse response = loanService.repayLoanEarly(2L);
 
         assertThat(response.getMessage()).contains("insufficient funds");
-        verify(transactionService, never()).recordTransaction(any(), any(), any(), any());
+        verify(transactionService, never()).recordTransaction(any(), any(), any(), any(), any());
     }
 
     @Test
@@ -173,7 +172,7 @@ public class LoanServiceImplTest {
         assertThat(loan.isActive()).isFalse();
 
         verify(transactionService).recordTransaction(eq(account), eq(TransactionType.LOAN_REPAYMENT),
-                eq(BigDecimal.valueOf(200)), isNull());
+                eq(BigDecimal.valueOf(200)), isNull(), any(BigDecimal.class));
         verify(accountRepository).save(account);
         verify(loanRepository).save(loan);
     }

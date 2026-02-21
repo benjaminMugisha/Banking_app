@@ -122,7 +122,8 @@ class AccountServiceImplTest {
 
         assertThat(result.getBalance()).isEqualTo(BigDecimal.valueOf(1200));
         verify(accountRepo).save(account);
-        verify(transactionService).recordTransaction(account, TransactionType.DEPOSIT, BigDecimal.valueOf(200), null);
+        verify(transactionService).recordTransaction(account, TransactionType.DEPOSIT,
+                BigDecimal.valueOf(200), null, result.getBalance());
     }
 
     @Test
@@ -134,7 +135,8 @@ class AccountServiceImplTest {
 
         assertThat(result.getBalance()).isEqualTo(BigDecimal.valueOf(700));
         verify(accountRepo).save(account);
-        verify(transactionService).recordTransaction(account, TransactionType.WITHDRAW, BigDecimal.valueOf(300), null);
+        verify(transactionService).recordTransaction(account, TransactionType.WITHDRAW,
+                BigDecimal.valueOf(300), null, BigDecimal.valueOf(700));
     }
 
     @Test
@@ -168,8 +170,10 @@ class AccountServiceImplTest {
         assertThat(result.getBalance()).isEqualTo(BigDecimal.valueOf(500));
         assertThat(toAccount.getBalance()).isEqualTo(BigDecimal.valueOf(600));
 
-        verify(transactionService).recordTransaction(account, TransactionType.TRANSFER_OUT, BigDecimal.valueOf(500), toAccount);
-        verify(transactionService).recordTransaction(toAccount, TransactionType.TRANSFER_IN, BigDecimal.valueOf(500), null);
+        verify(transactionService).recordTransaction(account, TransactionType.TRANSFER_OUT,
+                BigDecimal.valueOf(500), toAccount, account.getBalance());
+        verify(transactionService).recordTransaction(toAccount, TransactionType.TRANSFER_IN,
+                BigDecimal.valueOf(500), null, toAccount.getBalance());
     }
 
     @Test

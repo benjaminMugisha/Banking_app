@@ -7,6 +7,8 @@ import com.benjamin.Banking_app.Accounts.TransferRequest;
 import com.benjamin.Banking_app.Exception.AccessDeniedException;
 import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
+import com.benjamin.Banking_app.Transactions.TransactionService;
+import com.benjamin.Banking_app.Transactions.TransactionType;
 import com.benjamin.Banking_app.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
@@ -31,10 +33,10 @@ public class DirectDebitServiceImpl implements DirectDebitService {
     private final DirectDebitRepo directDebitRepo;
     private final AccountRepository accountRepository;
     private final AccountServiceImpl accountService;
+    private final TransactionService transactionService;
     private final UserUtils userUtils;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DirectDebitServiceImpl.class);
-
 
     @Override
     @Transactional
@@ -47,7 +49,7 @@ public class DirectDebitServiceImpl implements DirectDebitService {
         if(fromAccount.getId().equals(toAccount.getId())) {
             throw new BadRequestException("this is your iban. not allowed");
         }
-        //find the existing dd. null if it doesn't exist.
+        //find the existing dd. null if it doesn't exist
         DirectDebit dd = directDebitRepo.findByFromAccountAndToAccount(fromAccount, toAccount);
 
         if(dd == null) { // if the dd doesn't exist, create and  pay it.
@@ -61,6 +63,16 @@ public class DirectDebitServiceImpl implements DirectDebitService {
             TransferRequest transfer = new TransferRequest(toIban, amount);
             accountService.transfer(transfer);
 
+            //refresh fromAccount and toAccount to get the new balances for our transaction recroding
+            fromAccount = accountRepository.findById(fromAccount.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("from account not found"));
+            toAccount = accountRepository.findById(toAccount.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("to account not found"));
+
+            transactionService.recordTransaction(fromAccount, TransactionType.DIRECT_DEBIT_CREATED, amount,
+                    toAccount, fromAccount.getBalance());
+            transactionService.recordTransaction(toAccount, TransactionType.DIRECT_DEBIT_RECEIVED, amount,
+                    fromAccount, toAccount.getBalance());
             logger.info("Direct debit of €{} created and paid from user: {} to user: {} ",
                     amount, fromAccount.getUser().getEmail(), toAccount.getUser().getEmail());
             return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(directDebit)
@@ -87,6 +99,9 @@ public class DirectDebitServiceImpl implements DirectDebitService {
             dd.setAmount(BigDecimal.ZERO);
             directDebitRepo.save(dd);
 
+            transactionService.recordTransaction(dd.getFromAccount(), TransactionType.DIRECT_DEBIT_CANCELLED
+                    , BigDecimal.ZERO, dd.getToAccount(), dd.getFromAccount().getBalance());
+
             return new DirectDebitResponse(
                     DirectDebitMapper.mapToDirectDebitDto(dd),
                     DDStatusMessage.CANCELLED
@@ -100,6 +115,8 @@ public class DirectDebitServiceImpl implements DirectDebitService {
         directDebitRepo.save(dd);
         setToZero(dd);
 
+        transactionService.recordTransaction(dd.getFromAccount(), TransactionType.DIRECT_DEBIT_UPDATED, amount,
+                dd.getToAccount(), dd.getFromAccount().getBalance());
         return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(dd),
                 DDStatusMessage.UPDATED);
     }
@@ -147,6 +164,8 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
         debit.setActive(false);
         directDebitRepo.save(debit);
+        transactionService.recordTransaction(debit.getFromAccount(), TransactionType.DIRECT_DEBIT_CANCELLED,
+                BigDecimal.ZERO,debit.getToAccount(), debit.getFromAccount().getBalance());
         return new DirectDebitResponse(DirectDebitMapper.mapToDirectDebitDto(debit), DDStatusMessage.CANCELLED);
     }
 
@@ -178,7 +197,9 @@ public class DirectDebitServiceImpl implements DirectDebitService {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<DirectDebit> debitsPage =
-                directDebitRepo.findByFromAccountAndActiveTrue(accountToQuery, pageable);
+//                directDebitRepo.findByFromAccountAndActiveTrue(accountToQuery, pageable);
+                directDebitRepo.findByFromAccount(accountToQuery, pageable);
+
 
         List<DirectDebitDto> content = debitsPage.stream()
                 .map(DirectDebitMapper::mapToDirectDebitDto)
@@ -224,21 +245,10 @@ public class DirectDebitServiceImpl implements DirectDebitService {
                 .build();
     }
 
-
     private void setToZero(DirectDebit dd){
         if(dd.getAmount().compareTo(BigDecimal.ZERO) == 0 && dd.isActive()){
             dd.setActive(false);
             directDebitRepo.save(dd);
         }
     }
-
-    @Override
-    public String deleteById(Long id){
-        DirectDebit debit = directDebitRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Direct debit not found"));
-
-        directDebitRepo.deleteById(id);
-        return "DELETED";
-    }
-
 }

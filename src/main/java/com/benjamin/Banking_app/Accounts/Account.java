@@ -21,8 +21,6 @@ public class Account {
     @Version
     private Long version;
 
-//    @Column(name = "account_username", unique = true)
-//    private String email;
     private BigDecimal balance;
 
     @OneToOne
@@ -35,7 +33,6 @@ public class Account {
 
     public Account(long id, BigDecimal balance) {
         this.id = id;
-//        this.email = email;
         this.balance = balance;
     }
 }

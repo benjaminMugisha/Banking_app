@@ -19,9 +19,9 @@ import java.util.Map;
 public class UserController {
 
     private final AuthenticationService service;
-    private final DirectDebitServiceImpl directDebitService;
-    private final TransactionServiceImpl transactionService;
-    private final LoanServiceImpl loanService;
+//    private final DirectDebitServiceImpl directDebitService;
+//    private final TransactionServiceImpl transactionService;
+//    private final LoanServiceImpl loanService;
     private final JWTService jwtService;
     private final UserRepository userRepository;
 
@@ -77,7 +77,7 @@ public class UserController {
         return service.getAdminUsers(pageNo, pageSize);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> refreshToken(
             @RequestBody Map<String, String> request) {

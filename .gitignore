@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 notes.txt
+
+
 Terraform/.tfstate
 deploy.txt
 Terraform/env/prod/.terraform/
@@ -42,4 +44,4 @@ build/
 .vscode/
 
 errors.txt
-spring.txt
+./notes.txt

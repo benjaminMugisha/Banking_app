@@ -13,4 +13,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByAccountIdAndRemainingBalanceGreaterThan(long accountId, double balance);
     List<Loan> findByRemainingBalanceGreaterThanAndNextPaymentDate(double balance, LocalDate today);
     Page<Loan> findByAccountIdAndActiveTrue(Long accountId, Pageable pageable);
+    List<Loan> findByAccountIdAndActiveTrue(Long accountId);
+
+    Loan findTopByAccountIdOrderByStartDateDesc(Long id);
 }

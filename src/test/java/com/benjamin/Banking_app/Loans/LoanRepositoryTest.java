@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +45,7 @@ public class LoanRepositoryTest {
                 .principal(BigDecimal.valueOf(1000))
                 .amountToPayEachMonth(BigDecimal.valueOf(100))
                 .remainingBalance(BigDecimal.valueOf(500))
-                .startDate(LocalDate.now())
+                .startDate(LocalDateTime.now())
                 .nextPaymentDate(LocalDate.now().plusDays(30))
                 .active(true)
                 .build();

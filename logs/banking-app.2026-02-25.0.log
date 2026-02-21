@@ -1,0 +1,42 @@
+"2026-02-25 14:57:49 [INFO] o.h.v.i.u.Version - HV000001: Hibernate Validator 8.0.1.Final
+""2026-02-25 14:57:49 [INFO] c.b.B.App - Starting App using Java 21 with PID 31328 (/Users/ben/Desktop/b2/Banking_app/target/classes started by ben in /Users/ben/Desktop/b2/Banking_app)
+""2026-02-25 14:57:49 [INFO] c.b.B.App - No active profile set, falling back to 1 default profile: "default"
+""2026-02-25 14:57:51 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2026-02-25 14:57:52 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 194 ms. Found 5 JPA repository interfaces.
+""2026-02-25 14:57:53 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port 8080 (http)
+""2026-02-25 14:57:53 [INFO] o.a.c.h.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+""2026-02-25 14:57:53 [INFO] o.a.c.c.StandardService - Starting service [Tomcat]
+""2026-02-25 14:57:53 [INFO] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+""2026-02-25 14:57:53 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+""2026-02-25 14:57:53 [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3889 ms
+""2026-02-25 14:57:53 [INFO] o.h.j.i.u.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2026-02-25 14:57:53 [INFO] o.h.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+""2026-02-25 14:57:53 [INFO] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+""2026-02-25 14:57:53 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+""2026-02-25 14:57:53 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+""2026-02-25 14:57:54 [INFO] c.z.h.p.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@23bd047f
+""2026-02-25 14:57:54 [INFO] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+""2026-02-25 14:57:54 [WARN] o.h.o.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+""2026-02-25 14:57:55 [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+""2026-02-25 14:57:55 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2026-02-25 14:57:56 [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2026-02-25 14:57:56 [INFO] o.s.s.w.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@63bb719d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@38e100ab, org.springframework.security.web.context.SecurityContextHolderFilter@7040d71, org.springframework.security.web.header.HeaderWriterFilter@2c34ce24, org.springframework.web.filter.CorsFilter@10b36d8a, org.springframework.security.web.authentication.logout.LogoutFilter@3e7940b3, com.benjamin.Banking_app.Security.JwtAuthenticationFilter@256d8f17, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a8081f5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@20a434a8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@318f47f1, org.springframework.security.web.session.SessionManagementFilter@5a6f1342, org.springframework.security.web.access.ExceptionTranslationFilter@56c7e2d1, org.springframework.security.web.access.intercept.AuthorizationFilter@5fa0943d]
+""2026-02-25 14:57:57 [INFO] o.a.c.h.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+""2026-02-25 14:57:57 [INFO] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+""2026-02-25 14:57:57 [INFO] c.b.B.App - Started App in 8.827 seconds (process running for 10.206)
+""2026-02-25 14:58:07 [INFO] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2026-02-25 14:58:07 [INFO] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2026-02-25 14:58:07 [INFO] o.s.w.s.DispatcherServlet - Completed initialization in 4 ms
+""2026-02-25 14:58:31 [INFO] c.b.B.S.AuthenticationService - User adminemail@mybank.com logged in successfully
+""2026-02-25 15:01:22 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: TRANSFER_OUT, Amount: 1, balance:511.00
+""2026-02-25 15:01:22 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 313, Type: TRANSFER_IN, Amount: 1, balance:501.00
+""2026-02-25 15:01:22 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: DIRECT_DEBIT_CREATED, Amount: 1, balance:511.00
+""2026-02-25 15:01:22 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 313, Type: DIRECT_DEBIT_RECEIVED, Amount: 1, balance:501.00
+""2026-02-25 15:01:22 [INFO] c.b.B.D.DirectDebitServiceImpl - Direct debit of €1 created and paid from user: adminemail@mybank.com to user: user15user14@gmail.com 
+""2026-02-25 15:01:55 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: adminemail@mybank.com
+""2026-02-25 15:02:07 [INFO] c.b.B.L.LoanServiceImpl - adminemail@mybank.com is applying for loan
+""2026-02-25 15:02:07 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: DEPOSIT, Amount: 12, balance:523.00
+""2026-02-25 15:02:07 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: LOAN_APPLICATION, Amount: 12.60, balance:523.00
+""2026-02-25 17:05:13 [WARN] c.z.h.p.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h1m19s379ms).
+""2026-02-25 21:09:15 [WARN] c.z.h.p.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4h4m1s475ms).
+"

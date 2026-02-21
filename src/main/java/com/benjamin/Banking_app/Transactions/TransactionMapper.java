@@ -14,6 +14,7 @@ public class TransactionMapper {
         return TransactionDto.builder()
                         .transactionId(transaction.getTransactionId())
                 .type(transaction.getType())
+                .balance(transaction.getBalance())
                 .email(transaction.getAccount().getUser().getEmail())
                 .amount(transaction.getAmount()).timeStamp(transaction.getTime()).toEmail(toEmail)
                 .build();

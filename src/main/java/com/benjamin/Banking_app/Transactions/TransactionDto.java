@@ -21,4 +21,5 @@ public class TransactionDto {
     private BigDecimal amount;
     private LocalDateTime timeStamp;
     private String toEmail;
+    private BigDecimal balance;
 }

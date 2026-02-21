@@ -91,8 +91,8 @@ public class DirectDebitRepoTest {
     }
 
     @Test
-    void findByFromAccountAndActiveTrue_ShouldReturnPagedDebits() {
-        List<DirectDebit> result = directDebitRepo.findByFromAccountAndActiveTrue(account1,
+    void findByFromAccount_ShouldReturnPagedDebits() {
+        List<DirectDebit> result = directDebitRepo.findByFromAccount(account1,
                 PageRequest.of(0, 10)).getContent();
 
         assertThat(result).hasSize(1);

@@ -36,6 +36,7 @@ public class DirectDebitController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<DirectDebitResponse> createDirectDebit(
             @Valid @RequestBody DirectDebitRequest request){
         return new ResponseEntity<>(
@@ -58,12 +59,7 @@ public class DirectDebitController {
         return new ResponseEntity<>(
                 directDebitService.updateDirectDebit(id, amount), HttpStatus.ACCEPTED);
     }
-
-    @DeleteMapping("/{id}")
-    public String d(@PathVariable Long id){
-        return directDebitService.deleteById(id);
-    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/dd")
     public ResponseEntity<DirectDebitPageResponse> getAllDirectDebits(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
@@ -71,8 +67,10 @@ public class DirectDebitController {
     ) {
         return ResponseEntity.ok(directDebitService.getAll(pageNo, pageSize));
     }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/activedd")
-    public ResponseEntity<DirectDebitPageResponse> getACtiveDirectDebits(
+    public ResponseEntity<DirectDebitPageResponse> getActiveDirectDebits(
             @RequestParam(value = "pageNo",defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {

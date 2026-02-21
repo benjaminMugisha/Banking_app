@@ -36,13 +36,15 @@ public class LoanController {
         return ResponseEntity.ok(service.getAllLoans(pageNo, pageSize));
     }
 
-    @PostMapping("apply")
+    @PostMapping("/apply")
+
     public ResponseEntity<LoanResponse> applyForLoan(@RequestBody @Valid LoanRequest loanRequest) {
         LoanResponse response = service.applyForLoan(loanRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/repay-full/{loanId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<LoanResponse> repayFullLoanEarly(@PathVariable Long loanId) {
         return ok(service.repayLoanEarly(loanId));
     }
