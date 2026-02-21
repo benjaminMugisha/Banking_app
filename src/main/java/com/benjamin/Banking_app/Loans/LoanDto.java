@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class LoanDto {
     private BigDecimal principal;
     private BigDecimal remainingBalance;
     private BigDecimal amountToPayEachMonth;
-    private LocalDate startDate;
+    private LocalDateTime startDate;
     private LocalDate nextPaymentDate;
     private boolean active;
 }

@@ -6,6 +6,7 @@ import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
 import com.benjamin.Banking_app.Accounts.TransferRequest;
 import com.benjamin.Banking_app.Security.Role;
 import com.benjamin.Banking_app.Security.Users;
+import com.benjamin.Banking_app.Transactions.TransactionServiceImpl;
 import com.benjamin.Banking_app.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,26 +32,21 @@ public  class DirectDebitServiceTest {
 
     @Mock
     private DirectDebitRepo directDebitRepo;
-
     @Mock
     private AccountRepository accountRepository;
-
     @Mock
     private AccountServiceImpl accountService;
-
     @Mock
     private UserUtils userUtils;
-
     @Mock
     private SecurityContext securityContext;
-
     @Mock
     private Authentication authentication;
+    @Mock
+    private TransactionServiceImpl transactionService;
 
     @InjectMocks
     private DirectDebitServiceImpl directDebitService;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
 
     private Account fromAccount;
     private Account toAccount;
@@ -62,7 +58,6 @@ public  class DirectDebitServiceTest {
                 .firstName("to")
                 .lastName("User")
                 .email("fromuser@gmail.com")
-//                .password(passwordEncoder.encode("Password123"))
                 .active(true)
                 .role(Role.USER)
                 .build();
@@ -70,23 +65,19 @@ public  class DirectDebitServiceTest {
                 .firstName("from")
                 .lastName("User")
                 .email("touser@gmail.com")
-//                .password(passwordEncoder.encode("Password123"))
                 .active(true)
                 .role(Role.USER)
                 .build();
 
-
         fromAccount = Account.builder()
                 .id(1L)
                 .user(fromUser)
-//                .accountUsername("user1")
                 .balance(BigDecimal.valueOf(1000.0))
                 .build();
 
         toAccount = Account.builder()
                 .id(2L)
                 .user(toUser)
-//                .accountUsername("user2")
                 .balance(BigDecimal.valueOf(500.0))
                 .build();
 
@@ -98,6 +89,8 @@ public  class DirectDebitServiceTest {
     @Test
     void createDirectDebit_ShouldSaveDirectDebitAndTransferImmediately() {
         when(accountRepository.findByIban(toAccount.getIban())).thenReturn(Optional.of(toAccount));
+        when(accountRepository.findById(fromAccount.getId())).thenReturn(Optional.of(fromAccount));
+        when(accountRepository.findById(toAccount.getId())).thenReturn(Optional.of(toAccount));
 
         BigDecimal amount = BigDecimal.valueOf(100.0);
 

@@ -12,11 +12,7 @@ import java.util.List;
 @Repository
 public interface DirectDebitRepo extends JpaRepository<DirectDebit, Long> {
     List<DirectDebit> findByActiveTrueAndNextPaymentDate(LocalDate date);
-    Page<DirectDebit> findByFromAccountAndActiveTrue(Account fromAccount, Pageable pageable);
     DirectDebit findByFromAccountAndToAccount(Account fromAccount, Account toAccount);
-
     Page<DirectDebit> findByActiveTrue(Pageable pageable);
-//    DirectDebit findAll(Account account, int pageNo, int pageSize );
-
-//    Page<DirectDebit> findAll(Pageable pageable);
+    Page<DirectDebit> findByFromAccount(Account accountToQuery, Pageable pageable);
 }

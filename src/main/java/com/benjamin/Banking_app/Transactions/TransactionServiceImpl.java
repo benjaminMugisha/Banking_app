@@ -15,9 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,19 +60,20 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void recordTransaction(Account account, TransactionType type,
                                   BigDecimal amount,
-                                  Account toAccount) {
+                                  Account toAccount, BigDecimal balance) {
 
         Transaction transaction = Transaction.builder()
                 .account(account).type(type)
                 .amount(amount)
                 .time(LocalDateTime.now())
                 .toAccount(toAccount)
+                .balance(balance)
                 .build();
 
         try{
             transactionRepository.save(transaction);
-            logger.info("Transaction saved successfully. AccountId: {}, Type: {}, Amount: {}",
-                    account.getId(), type, amount );
+            logger.info("Transaction saved successfully. AccountId: {}, Type: {}, Amount: {}, balance:{}",
+                    account.getId(), type, amount, balance );
 
         } catch (Exception e) {
             logger.error("Failed to save transaction. AccountId: {}, Type: {}, Amount: {}, Error: {}",

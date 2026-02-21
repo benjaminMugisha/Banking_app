@@ -51,8 +51,9 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("https://cash-1zdo-git-main-benjamin-mugishas-projects.vercel.app",
-                "https://cash-eight-rust.vercel.app/",
-                "https://cash-1zdo.vercel.app"
+                "https://cash-eight-rust.vercel.app",
+                "https://cash-1zdo.vercel.app",
+                "http://localhost:5173", "http://localhost:8080"
                 ));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));

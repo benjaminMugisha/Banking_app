@@ -59,10 +59,10 @@ public class DirectDebitController {
                 directDebitService.updateDirectDebit(id, amount), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
-    public String d(@PathVariable Long id){
-        return directDebitService.deleteById(id);
-    }
+//    @DeleteMapping("/{id}")
+//    public String d(@PathVariable Long id){
+//        return directDebitService.deleteById(id);
+//    }
 
     @GetMapping("/dd")
     public ResponseEntity<DirectDebitPageResponse> getAllDirectDebits(

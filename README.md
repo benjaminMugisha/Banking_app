@@ -1,130 +1,132 @@
 Banking Application 💳
 
-A banking application with a RESTful API built using Spring Boot,
-containerized using Docker, deployed on Kubernetes (AWS EKS), and provisioned via Terraform on AWS EKS.
+A full-stack banking application with a RESTful API built using Spring Boot.
+backend is containerized using Docker, and frontend is deployed separately.
 
-Supports full banking operations such as account creation, deposits, withdrawals, transfers, loans,
-direct debits, transaction tracking and JWT based authentication.
+Frontend(Vercel):  
+Backend(Railway): https://bankingapp-production-8d32.up.railway.app/
+
+This project also includes IaC Infrastructure-as-Code provisioning for AWS EKS using
+terraform and a CI/CD using Github Actions.
+
+This web app simulates a real banking platform with authentication, account management, 
+loans, recurring payments(Direct debits) and an administrator control panel.
+it focuses on:
+    - secure financial operations
+    - transactions traceability
+    - role-based access control
+    - cloud-ready deployment
 
 ## Tech Stack
 
-- Backend: Java + Spring Boot
-- Database: PostgreSQL
-- API Security: Spring Security + JWT
-- Infrastructure as Code: Terraform
-- Containerization: Docker
-- Orchestration: Kubernetes (on AWS EKS)
-- Cloud Hosting: AWS (EKS, RDS, S3, DynamoDB, etc.)
-- Testing: JUnit 5, Spring Boot Test and Mockito.
-- CICD: GitHub Actions.
+Backend:
+  - Java 21 
+  - Spring Boot 3
+  - Spring Security + JWT
+  - JPA/Hibernate
+  - PostgreSQL
 
-## Features
+Frontend:
+  - React(Vite)
 
-- User registration and authentication (JWT)
-- Account management: create, view and delete accounts.
-- Transactions: deposit, withdraw, transfer,
-- Direct debits: create and cancel.
-- Loans: apply, delete, view, repay monthly or full amount, affordability checks.
-- Role-based access control(admin,user)
-- Docker + Docker Compose for local development
-- Fully automated infrastructure via Terraform
-- Kubernetes deployment with autoscaling
-- Version control: Git&GitHub
-- CICD pipeline using Github Actions to automatically test, Docker build and deploy.
-- Global Exception handling with custom error responses.
-- Pagination and logging.
-- Docker Compose setup for local development
+Infrastructure & Devops:
+  - Docker & Docker compose
+  - Kubernetes(AWS EKS)
+  - Terraform(dev & prod environments) see ./Terraform
+  - Github Actions CI/CD see .github/workflows for scripts.
+
+Cloud services AWS:
+  - AWS EKS, AWS RDS, AWS S3, AWS DynamoDB, Route53 & Networking.
+
+Testing:
+ - Junit
+ - Mockito
+ - Spring Boot Test
+
+Version control: Git&GitHub
 
 
-## Getting Started
+## Core Features
+
+- Auth: User registration & login with JWT + refresh token.
+- Accounts: Auto created on registration, deposit, withdraw, transfer via IBAN, Balance tracking per transaction.
+- Transactions: Complete history with timestamp, transaction type and resulting balance.
+- Direct debits: create, update and cancel recurring payments between accounts.
+- Loans: apply with affordability/DTI checks, monthly auto-repayments and early repayment.
+- Admin: Create admins, view statistics and manages users, accounts, loans, transactions.
+- Security: Role-based access control(USER/ADMIN), JWT filter chain.
+- Global exception handling with custom error responses.
+- Structured logging and pagination throughout.
+
+## Getting Started locally
 
 ### Prerequisites
 - Docker & Docker Compose
 - Java 17+ and Maven
-- AWS CLI & Terraform (for cloud provisioning)
-- Kubernetes CLI (kubectl)
 
 ### Building and Running the Application locally
 
-1. Clone the repository:
+# (1. Clone the repository:)
    ` git clone git@github.com:benjaminMugisha/Banking_app.git && cd Banking_app `
 
-2. create a .env file:
+# 2. create a .env file:
    ` echo "POSTGRES_USER=postgres
    POSTGRES_PASSWORD=00000
    POSTGRES_DB=banking" > .env `
 
-3. build and start the application using Docker Compose:
+# 3. build and start the application using Docker Compose:
    ` docker-compose up --build `
 
-4. to view endpoints visit Swagger UI:
+# 4. to view endpoints visit Swagger UI:
    ` http://localhost:8080/swagger-ui/index.html `
+
+# 5. Run tests:
+    ` ./mvnw clean test `
 
 ###  ** Sample CURL examples**
 Below are example requests to test the API. 
-Replace <JWT TOKEN> with the token received after registering or logging in. 
+Replace <JWT TOKEN> with the token received after registering or logging in.
 
 **Register a User(returns JWT + refresh token + account details)**
 ```bash
 curl -X POST http://localhost:8080/api/v2/auth/register \
 -H "Content-Type: application/json" \
 -d '{"firstName":"John","lastName":"Doe",
-"accountUsername":"johndoe12345",
-"balance":500,
-"email":"john@example.com",
-"password":"Password123",
-"role":"ADMIN"}'
+"balance":500,"email":"john@mybank.com",
+"password":"Password123"}'
 ```
 example response:
 {
-"refreshToken":"eyJhbGciOiJIUzI1NiJ9...",
-"token":"eyJhbGciOiJIUzI1NiJ9...",
-"accountUsername":"johndoe12345"
+"refreshToken":"...",
+"token":"...",
+"accountUsername":"john@mybank.com",
+"iban": "..."
 }
 
-**Login( optional if you already registered):**
+**Login( automatic for user when you registered):**
 ```bash
 curl -X POST http://localhost:8080/api/v2/auth/login \
 -H "Content-Type: application/json" \
--d '{"email":"john@example.com","password":"Password123"}'
+-d '{"email":"john@mybank.com","password":"Password123"}'
 ```
 
-**Get all accounts(Admin only).**
-```bash
-curl -X GET http://localhost:8080/api/v2/accounts/all \
- -H "Authorization: Bearer <JWT TOKEN>"
-```
-
-**transfer between accounts**
+**setting up a direct debit**
 You have to first Register another user:
 ```bash
 curl -X POST http://localhost:8080/api/v2/auth/register \
 -H "Content-Type: application/json" \
--d '{"firstName":"Peter","lastName":"Pan","accountUsername":"peterpan123",
-"balance":50,"email":"peterpan@gmail.com","password":"Password123"}'
+-d '{"firstName":"secondary","lastName":"user",
+"balance":100,"email":"secondary@mybank.com",
+"password":"Password123"}'
 ```
-then transfer:
-```bash
-curl -X PATCH http://localhost:8080/api/v2/accounts/transfer \
- -H "Authorization: Bearer <JWT TOKEN>" \
- -H "Content-Type: application/json" \
- -d '{"toAccountUsername":"peterpan123", "amount":1.5}'  
-```
+use the iban you receive from this registration down here:
 
 **Direct Debit setup**
 ```bash
 curl -X POST http://localhost:8080/api/v2/dd/create \
- -H "Authorization: Bearer <JWT TOKEN>" \
+-H "Authorization: Bearer <JWT TOKEN>" \
  -H "Content-Type: application/json" \
- -d '{"toAccountUsername":"peterpan123", "amount":1.5}'  
-```
-
-**deposit**
-```bash
-curl -X PATCH http://localhost:8080/api/v2/accounts/deposit \
- -H "Authorization: Bearer <JWT TOKEN>" \
- -H "Content-Type: application/json" \
- -d '{"amount":1.50}'  
+ -d '{"toIban":"IBAN", "amount":10}' 
 ```
 
 **Loan application**
@@ -135,10 +137,52 @@ curl -X POST http://localhost:8080/api/v2/loans/apply \
  -d '{"income":10000, "principal":100, "monthsToRepay":12}'  
 ```
 
-**View all your transaction history**
+**View your transaction history**
 ```bash
 curl -X GET http://localhost:8080/api/v2/auth/me/transactions \
  -H "Authorization: Bearer <JWT TOKEN>"
+```
+
+
+**ADMIN ENDPOINTS**
+A default admin is created on application startup
+```bash
+curl -X POST http://localhost:8080/api/v2/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email":"root@mybank.com","password":"root123"}'
+```
+copy the returned JWT token
+
+**create a new admin**
+```bash
+curl -X POST http://localhost:8080/api/v2/auth/create-admin \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer <JWT TOKEN"
+-d '{
+"firstName":"Admin","lastName":"User",
+"balance":500,"email":"admin@mybank.com",
+"password":"Password123"
+}'
+```
+Only admins can create other admins. This endpoint does not return a JWT so
+newly created admins must log in separately.
+
+*bank stats like how many users, accounts, loans, etc...*
+``` bash 
+curl -X get http://localhost:8080/api/v2/admin/stats \
+-H "Authorization: Bearer <JWT TOKEN>"
+```
+
+**Get all accounts.**
+```bash
+curl -X GET http://localhost:8080/api/v2/accounts/all \
+ -H "Authorization: Bearer <JWT TOKEN>"
+```
+
+**view only active users**
+``` bash 
+curl -X get http://localhost:8080/api/v2/auth/stats \
+-H "Authorization: Bearer <JWT TOKEN>"
 ```
 
 
@@ -151,20 +195,19 @@ Press Ctrl + C in your terminal, or run: ` docker compose down `
 
 
 ### Docker Image, Infrastructure on AWS(Terraform) and Deploying to Kubernetes(EKS):
-This project uses GitHub Actions to automatically build the Docker image and push it to Dockerhub,
-deploy the app to AWS EKS and Kubernetes.
-No manual deployment steps are required, just push to Github and the CICD pipeline will handle everything.  
-see .github/workflows for code and scripts.
+full infrastructure provisioning for AWS EKS inside /Terraform.
 
+Originally deployed via Github Actions CI/CD pipeline:
+ - build Docker image
+ - Push to dockerhub
+ - Deploy to kubernetes
 
-### COMING NEXT:
-- currently working on frontend in React JSX.
+**This deployment path is currently disabled for cost reasons but remains fully reproducible**
+see ./github/workflows.
 
 📄 License
+MIT License. Copyright (c) 2026 Benjamin Mugisha
 
-MIT License.
-Copyright (c) 2025 Benjamin Mugisha
-
+📦 [GitHub](https://github.com/benjaminMugisha/Banking_app)
 🔗 [LinkedIn](https://www.linkedin.com/in/benjamin-mugisha-9b2397299/)
 🐳 [Docker Hub](https://hub.docker.com/r/mugisha99benjamin/banking_app)
-📦 [GitHub](https://github.com/benjaminMugisha/Banking_app)

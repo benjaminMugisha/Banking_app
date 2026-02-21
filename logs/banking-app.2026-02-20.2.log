@@ -1,0 +1,121 @@
+"2026-02-20 20:20:44 [INFO] c.b.B.S.AuthenticationService - User user5user5@gmail.com logged in successfully
+""2026-02-20 20:22:06 [INFO] c.b.B.S.AuthenticationService - admin creation underway...
+""2026-02-20 20:22:06 [INFO] c.b.B.S.AuthenticationService - admin: asdsfdgds@gmail.com successfully registered
+""2026-02-20 20:23:30 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 20:23:32 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 20:50:29 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 20:56:45 [INFO] c.b.B.L.LoanServiceImpl - adminemail@mybank.com is applying for loan
+""2026-02-20 20:56:45 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: DEPOSIT, Amount: 12, balance:512.00
+""2026-02-20 20:56:45 [INFO] c.b.B.T.TransactionServiceImpl - Transaction saved successfully. AccountId: 328, Type: LOAN_APPLICATION, Amount: 12.20, balance:512.00
+""2026-02-20 20:57:23 [INFO] c.b.B.S.AuthenticationService - User user5user5@gmail.com logged in successfully
+""2026-02-20 20:57:39 [INFO] c.b.B.L.LoanServiceImpl - user5user5@gmail.com is applying for loan
+""2026-02-20 20:58:31 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user5user5@gmail.com
+""2026-02-20 20:58:37 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 21:12:16 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 21:12:36 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 21:12:47 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 21:15:07 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user5user5@gmail.com
+""2026-02-20 21:17:17 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user5user5@gmail.com
+""2026-02-20 21:28:39 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 21:55:28 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 21:55:30 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 21:55:30 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 21:55:30 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 21:55:31 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 21:56:22 [INFO] c.b.B.S.AuthenticationService - User user1122@gmail.com logged in successfully
+""2026-02-20 21:56:31 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:56:33 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:57:19 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:57:33 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:57:41 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:58:20 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:58:24 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:58:26 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:58:27 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:59:10 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:59:20 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:59:23 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:59:28 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 21:59:30 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:04:40 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:04:40 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:04:45 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:21 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:21 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:21 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:05:43 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:46 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:53 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:05:53 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:05:57 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:06:00 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:00 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:06:01 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:06 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:13 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:16 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:24 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:36 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:38 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:39 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:42 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:43 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:06:43 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:06:46 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:07:42 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:07:42 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:07:44 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:07:49 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:08:43 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:09:14 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:11:07 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:11:13 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:17:07 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:17:08 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:17:08 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:17:10 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:17:11 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:17:13 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user1122@gmail.com
+""2026-02-20 22:17:13 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:21:19 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:32:03 [INFO] c.b.B.T.TransactionServiceImpl - Returned 0 transactions history for account ID: 330
+""2026-02-20 22:32:16 [INFO] c.b.B.S.AuthenticationService - User user5user5@gmail.com logged in successfully
+""2026-02-20 22:36:55 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 22:38:14 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:31:52 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user5user5@gmail.com
+""2026-02-20 23:33:35 [INFO] c.b.B.L.LoanServiceImpl - returning all loans of user: user5user5@gmail.com
+""2026-02-20 23:36:15 [INFO] c.b.B.A.AccountServiceImpl - user5user5@gmail.com is retrieving all accounts ...
+""2026-02-20 23:36:21 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:36:35 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:38:42 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:44:54 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:45:13 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:46:37 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:47:42 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:48:01 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:48:07 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:48:41 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:48:44 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:48:44 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:48:49 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:49:46 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:49:49 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:49:53 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:49:56 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:50:10 [WARN] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "[objectObject]"]
+""2026-02-20 23:51:10 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:53:03 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:53:09 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:53:33 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:53:34 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:53:37 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:05 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:08 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:10 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:11 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:17 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:21 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:23 [INFO] c.b.B.T.TransactionServiceImpl - Returned 10 transactions history for account ID: 294
+""2026-02-20 23:54:34 [INFO] c.b.B.T.TransactionServiceImpl - Returned 4 transactions history for account ID: 15
+""2026-02-20 23:54:34 [INFO] c.b.B.T.TransactionServiceImpl - Returned 4 transactions history for account ID: 15
+"

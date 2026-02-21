@@ -81,6 +81,7 @@ class TransactionServiceTest {
                 .type(TransactionType.WITHDRAW)
                 .amount(BigDecimal.valueOf(100))
                 .time(LocalDateTime.now())
+                .balance(toAccount.getBalance())
                 .build();
 
         SecurityContext context = mock(SecurityContext.class);
@@ -104,7 +105,7 @@ class TransactionServiceTest {
     @Test
     void recordTransaction_shouldSaveTransaction() {
         transactionService.recordTransaction(account,
-                TransactionType.DEPOSIT, BigDecimal.valueOf(300), null);
+                TransactionType.DEPOSIT, BigDecimal.valueOf(300), null, account.getBalance());
 
         verify(transactionRepository).save(any(Transaction.class));
     }
@@ -116,7 +117,8 @@ class TransactionServiceTest {
 
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
                         transactionService.recordTransaction(account,
-                                TransactionType.DEPOSIT, BigDecimal.valueOf(300), null))
+                                TransactionType.DEPOSIT,
+                                BigDecimal.valueOf(300), null,account.getBalance()))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("DB error");
     }

@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
         Account savedAccount = accountRepository.save(account);
 
         transactionService.recordTransaction(account, TransactionType.DEPOSIT,
-                amount, null);
+                amount, null, savedAccount.getBalance());
 
         return AccountMapper.MapToAccountDto(savedAccount);
     }
@@ -95,12 +95,12 @@ public class AccountServiceImpl implements AccountService {
 
         transactionService.recordTransaction(
                 fromAccount, TransactionType.TRANSFER_OUT, amount,
-                toAccount
+                toAccount, fromAccount.getBalance()
         );
 
         transactionService.recordTransaction(
                 toAccount, TransactionType.TRANSFER_IN, amount,
-                null
+                null, toAccount.getBalance()
         );
 
         return fromAccount;
@@ -118,16 +118,10 @@ public class AccountServiceImpl implements AccountService {
         Account savedAccount = accountRepository.save(account);
 
         transactionService.recordTransaction(account, TransactionType.WITHDRAW, amount,
-                 null);
+                 null, savedAccount.getBalance());
 
         return AccountMapper.MapToAccountDto(savedAccount);
     }
-
-//    @Override
-//    public void deleteAccount(Long id) {
-//        accountRepository.deleteById(id);
-//        logger.info("account: {} deleted successfully", id);
-//    }
 
     //ensure only currently authenticated user or admin have access.
     public void authorizeAccess(Account account) {

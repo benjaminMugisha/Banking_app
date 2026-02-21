@@ -1,0 +1,143 @@
+todo:
+    next in this order: oauth then caching with redis.
+    1. multi threads.
+    2. caching. maybe use nginx.
+    3. API Gateway: centralized entry point(rate limiting, authentication).
+    4. Performance optimization: N+1 problems, batching requests, compression.
+    5. what if user want to change their email?
+    6. secure with HTTPS(ACM+ALB).
+    7. extras:
+        centralized logging(logback + CloudWatch).
+        Metrics: Actuator + Prometheus/Grafana.
+        Alerts(SNS or Email).
+    8. 3 loans max per account. or limit the loans.
+
+
+
+
+
+
+$GITHUB_OUTPUT:
+: are allowed in values part not keys part: echo "api_url=https://api.example.com:8080" >> $GITHUB_OUTPUT
+ echo "result:code=123" >> $GITHUB_OUTPUT    ❌ Invalid
+
+terraform_wrapper: false
+
+INFRA:
+ 1. build and push your docker image
+ 2. apply terraform: cd, terraform init and apply
+ 3. configure kubectl to connect to the eks cluster:
+    aws eks update-kubeconfig --name your-cluster-name --region your-region
+    kubectl get nodes
+ 4. kubectl to apply your app, deployment and services: kubectl apply -f resources
+
+ each step in cicd pipeline runs in its own shell(unless explicitly told otherwise using working-directory) and starts from the default working directory
+
+👉 Running the infrastructure:
+ 1. Terraform:
+    export TF_VAR_db_username=postgres
+    export TF_VAR_db_password=Password@12345
+    terraform apply
+
+ 2. kubernetes
+    1. aws eks update-kubeconfig --name <cluster-name> --region <region>
+    aws eks update-kubeconfig --name dev-cluster --region eu-west-1
+    2. secrets:
+    kubectl create secret generic db-secret --from-literal=SPRING_DATASOURCE_USERNAME=Benjamin --from-literal=SPRING_DATASOURCE_PASSWORD=Lefhdcvdvgf12345
+    3. kubectl describe secret db-secret => to verify the secret.
+
+    4. kubectl apply -f resource.yaml => start with config, then service then deployment as it depends on the other services.
+
+ 3. Docker:
+    docker buildx build --platform linux/amd64,linux/arm64 -t username/app --push .
+    docker buildx build --platform linux/amd64,linux/arm64 -t mugisha99benjamin/banking_app --push .
+
+
+ aws rds describe-db-subnet-groups --query 'DBSubnetGroups[*].DBSubnetGroupName' --output text
+ aws rds delete-db-subnet-group --db-subnet-group-name rds-subnet-dev
+
+
+ stuff to make sure you deleted in aws:
+  subnet group
+  iam roles
+  s3
+  dynamodb
+  5 elastic ip
+  cluster
+  vpc
+
+  before pushing to github hence running cicd:
+      1. make sure all tests are passing and application.properties is not using localhost.
+      2. put this in terraform.tfvars:
+          db_username = "ben_da_goat"
+          db_password = "ben_da_goat"
+          db_name     = "prod_db"
+          bucket_name = "s3benstatefvpsvrf"
+      3. keep backend.tf commented out, then terraform apply.
+      4. uncomment backend.tf then terraform init -migrate-state so we use remote state.
+      3. once the infra is up and working, remove the above, then commit github actions will create the image and everything else.
+
+
+
+
+
+👉 admin:
+so admins don't need to have an account thats all we're going to change.
+
+we currently have an architecture where admin is just another user with admin role. 
+we are enforcing admin to have an account which is not neccessary since they dont do transactions. 
+users is equal to authentication+role and Account should be equal to banking data. 1-1 model.
+
+we have a mapping thats ok if account=null because:
+    1. no database constraint forcing it. 
+    2. no @NotNull in validation.
+    3. no optional=false on both Users and Account entity class.
+so JPA treats this as Users MAY have an account. 
+P.S the Account entity class owns the relationship because of the line: @JoinColumn(name="user_id")
+that means users table has no foreign key and account table references users. 
+so no account row => no contstraint violated. so admins without accounts are 100% safe. 
+
+
+
+how creation shoud work:
+1. normal users registers normally: Register -> USER -> create Account
+
+2. admins should create other admins. 
+but first, bootstrap admin at application startup. 
+app checks if admin exists, if not then create one. 
+on app startup should have a create admin thing or script so that we have a beginer admin to use to create other admins. 
+
+so we create admin on bootstrap, and createUser with admin role is locked to only admins.
+
+
+
+old dockerfile:
+FROM eclipse-temurin:21-jdk-jammy
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+
+application.properties of localhost:
+spring.datasource.url=jdbc:postgresql://localhost:5432/benjamin
+spring.datasource.username=postgres
+spring.datasource.password=00000
+app.bootstrap.admin.email=admin@mybank.com
+app.bootstrap.admin.password=admin123
+
+
+todo functionalities:
+    automatic refresh token?
+    seeding the data to fill the db for testers.
+
+todo frontend:
+    contact me at the top in navbar.
+    user sidebar
+
+before commiting:
+edit application.properties

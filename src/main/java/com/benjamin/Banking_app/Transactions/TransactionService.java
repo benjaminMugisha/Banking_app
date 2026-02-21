@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 public interface TransactionService {
     TransactionResponse transactions(int pageNo, int pageSize, String accountUsername);
     void recordTransaction(Account account, TransactionType type, BigDecimal amount,
-                            Account toAccount);
+                            Account toAccount, BigDecimal balance);
     TransactionPageResponse getAllTransactions(int pageNo, int pageSize);
-
 }

@@ -3,6 +3,7 @@ package com.benjamin.Banking_app.Loans;
 import com.benjamin.Banking_app.Accounts.Account;
 import com.benjamin.Banking_app.Accounts.AccountRepository;
 import com.benjamin.Banking_app.Accounts.AccountServiceImpl;
+import com.benjamin.Banking_app.Exception.BadRequestException;
 import com.benjamin.Banking_app.Exception.EntityNotFoundException;
 import com.benjamin.Banking_app.Exception.InsufficientFundsException;
 import com.benjamin.Banking_app.UserUtils;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +42,20 @@ public class LoanServiceImpl implements LoanService {
 
     @Transactional
     public LoanResponse applyForLoan(LoanRequest request) {
-        logger.info("Loan application initiated for principal: {}", request.getPrincipal());
 
         Account account = userUtils.getCurrentUserAccount();
+        logger.info("{} is applying for loan", account.getUser().getEmail());
+
+        List<Loan> activeLoans = loanRepository.findByAccountIdAndActiveTrue(account.getId());
+        if(activeLoans.size() >= 3) {
+            throw new BadRequestException("You have reached the maximum of 3 active loans");
+        }
+        Loan recentLoan = loanRepository.findTopByAccountIdOrderByStartDateDesc(account.getId());
+        if(recentLoan != null) {
+            LocalDateTime nextTimeLoan = recentLoan.getStartDate().plusHours(24);
+            if(LocalDateTime.now().isBefore(nextTimeLoan))
+                throw new BadRequestException("you must wait 24 hours before next loan application");
+        }
 
         BigDecimal monthlyPayment = calculateMonthlyInstallment(request.getPrincipal(), request.getMonthsToRepay());
         BigDecimal yearlyPayment = monthlyPayment.multiply(BigDecimal.valueOf(12));
@@ -52,8 +65,6 @@ public class LoanServiceImpl implements LoanService {
         if (!eligibility.isAffordable()) {
             logger.warn("Loan denied of account: {} because their DTI is: {}%",
                     account.getUser().getEmail(), eligibility.dti());
-//            return new LoanResponse("Loan denied. your Debt-to-income ratio is too high:" +
-//                    "  (" + eligibility.dti() + "%). maximum is 40% of your yearly income )");
             throw new InsufficientFundsException("Your Debt-to-income ratio of " + eligibility.dti() +
                     "% is too high maximum dti allowed is 40%");
         }
@@ -61,14 +72,14 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = Loan.builder()
                 .account(account).principal(request.principal)
                 .amountToPayEachMonth(monthlyPayment)
-                .remainingBalance(fullLoanBalance).startDate(LocalDate.now())
+                .remainingBalance(fullLoanBalance).startDate(LocalDateTime.now())
                 .build();
         loan.setNextPaymentDate(LocalDate.now().plusDays(30));
 
         loanRepository.save(loan);
         accountService.deposit(request.principal);
         recordLoanTransaction(account,
-                loan.getRemainingBalance(), TransactionType.LOAN_APPLICATION);
+                loan.getRemainingBalance(), TransactionType.LOAN_APPLICATION, account.getBalance());
 
         return new LoanResponse(
                 "Loan accepted: ", LoanMapper.mapToDto(loan)
@@ -122,7 +133,8 @@ public class LoanServiceImpl implements LoanService {
                 accountRepository.save(account);
                 loanRepository.save(loan);
 
-                recordLoanTransaction(account, loan.getAmountToPayEachMonth(), TransactionType.LOAN_REPAYMENT);
+                recordLoanTransaction(account, loan.getAmountToPayEachMonth(),
+                        TransactionType.LOAN_REPAYMENT, account.getBalance());
             } catch (Exception e) {
                 logger.error("Failed to process repayment for Loan ID: {}",
                         loan.getLoanId(), e);
@@ -132,6 +144,8 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanPageResponse getLoansOfAnAccount(int pageNo, int pageSize, String email) {
+//        Account account = accountRepository.findByUserEmail(email)
+//                .orElseThrow(() -> new EntityNotFoundException("Account not found: " + email));
         Account account;
         if (isAdmin() && email != null ) {
             account = accountRepository.findByUserEmail(email)
@@ -184,10 +198,9 @@ public class LoanServiceImpl implements LoanService {
         loan.setRemainingBalance(BigDecimal.valueOf(0));
         loan.setActive(false);
 
-        recordLoanTransaction(account, loanBalance, TransactionType.LOAN_REPAYMENT);
-
         loanRepository.save(loan);
         accountRepository.save(account);
+        recordLoanTransaction(account, loanBalance, TransactionType.FULL_LOAN_REPAYMENT, account.getBalance());
 
         return new LoanResponse(
                 "Loan of €" + loanBalance +
@@ -233,10 +246,10 @@ public class LoanServiceImpl implements LoanService {
         account.setBalance(accountBalance.subtract(amount));
         loan.setRemainingBalance(loanBalance.subtract(amount));
 
-        recordLoanTransaction(account, loanBalance, TransactionType.LOAN_REPAYMENT);
-
         loanRepository.save(loan);
         accountRepository.save(account);
+
+        recordLoanTransaction(account, amount, TransactionType.LOAN_REPAYMENT, account.getBalance());
 
         logger.info("user: {}, amount of: {}, loan balance: {}", currentUser.getUser().getEmail(),
                 amount, loan.getRemainingBalance());
@@ -269,12 +282,10 @@ public class LoanServiceImpl implements LoanService {
         return totalLoan.divide(BigDecimal.valueOf(monthsToRepay), 2, RoundingMode.HALF_UP);
     }
 
-    private void recordLoanTransaction(Account account, BigDecimal amount, TransactionType type) {
+    private void recordLoanTransaction(Account account, BigDecimal amount, TransactionType type, BigDecimal balance) {
         transactionService.recordTransaction(
-                account,
-                type,
-                amount,
-                null
+                account, type,
+                amount, null, balance
         );
     }
 
